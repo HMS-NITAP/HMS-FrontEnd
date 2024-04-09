@@ -2,6 +2,7 @@ import React from 'react'
 import { View,Text, Button } from 'react-native'
 
 const Home = ({navigation}) => {
+
   return(
     <View style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
         <Text style={{fontSize:2,fontWeight:'900',}}>Home</Text>
@@ -11,8 +12,12 @@ const Home = ({navigation}) => {
           <Button onPress={() => navigation.navigate("CreateAnnouncement")} title='Create Announcement' />
           <Button onPress={() => navigation.navigate("HostelBlocks")} title='Hostel Blocks' />
           <Button onPress={() => navigation.navigate("ContactUs")} title='Contact Us' />
-          <Button onPress={() => navigation.navigate("DevelopmentTeam")} title='DevelopmentTeam' />
-          <Button onPress={() => navigation.navigate("ResetPasswordEmailSent")} title='ResetPasswordEmailSent' />
+          <Button onPress={() => navigation.navigate("DevelopmentTeam")} title='Development Team' />
+          <Button onPress={() => navigation.navigate("ResetPasswordEmailSent")} title='Reset Password Email Sent' />
+          <Button onPress={() => navigation.navigate("ResetPassword")} title="Reset Password" />
+          <Button onPress={() => navigation.navigate("OtpInput")}  title='Otp Input' />
+          <Button onPress={() => navigation.navigate("Dashboard")} title="Dashboard" />
+          <Button onPress={() => navigation.navigate("ResetPasswordSuccess")} title='Reset Password Success' />
         </View>
     </View>
   )

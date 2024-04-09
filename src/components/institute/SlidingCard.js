@@ -34,13 +34,13 @@ const SlidingCard = ({ data }) => {
                     elevation: 10,
                 },
             }),
-            overflow:'hidden',
+            overflow:'scroll',
         },
         image: {
             width: "100%",
             height: 220,
             borderRadius: 10,
-            resizeMode: 'cover',
+            resizeMode:'stretch',
             zIndex: 1,
         },
         textContainer1: {
@@ -58,15 +58,16 @@ const SlidingCard = ({ data }) => {
             position: 'absolute',
             backgroundColor: "white",
             width: '100%',
-            height: 380,
+            // height: 380,
+            overflow:"scroll",
             minHeight:380,
             borderRadius: 10,
             paddingHorizontal: 15,
             paddingVertical: 30,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
+            // justifyContent: 'space-between',
+            // alignItems: 'flex-start',
             zIndex: 10,
             gap: 30,
         },
@@ -108,8 +109,24 @@ const SlidingCard = ({ data }) => {
                 </View>
                 <TouchableOpacity onPress={handleAnimationView}><Text style={{ textAlign: 'right', fontWeight: '700' }}>Know More...</Text></TouchableOpacity>
             </View>
-            <Animated.View style={[styles.textContainer2,cardAnimation]}>
-                    <View style={{display:'flex',justifyContent:'space-between',height:'100%'}}>
+            <Animated.ScrollView style={[styles.textContainer2,cardAnimation]}>
+                    <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{display:'flex',height:'100%'}}>
+                        {/* <View style={{gap:50}}>
+                            <View>
+                                <Text style={styles.name}>{data?.name}</Text>
+                                <Text style={styles.caption}>{data?.designation}</Text>
+                            </View>
+                            <View style={{gap:15, width : "100%"}}>
+                                <Text style={{ fontSize: 16, fontWeight: 700, color: 'black' }}>Contact Details :</Text>
+                                <View style={{gap:5,width : "100%"}}>
+                                    <Text style={{color:"black",fontWeight:"400"}}>Phone : <Text style={styles.values} onPress={() => (Linking.openURL(`tel:${data?.phone}`))}>{data?.phone}</Text></Text>
+                                    <Text style={{color:"black",fontWeight:"400"}}>Email : <Text style={styles.values} onPress={() => (Linking.openURL(`mailto:${data?.email}`))}>{data?.email}</Text></Text>
+                                    {
+                                        data?.linkedIn ? (<Text style={{color:"black",fontWeight:"400"}}>LinkedIn : <Text style={styles.values} onPress={() => (Linking.openURL(`${data?.linkedIn}`))}>{data?.linkedIn}</Text></Text>) : (<Text />)
+                                    }
+                                </View>
+                            </View>
+                        </View> */}
                         <View style={{gap:50}}>
                             <View>
                                 <Text style={styles.name}>{data?.name}</Text>
@@ -127,8 +144,8 @@ const SlidingCard = ({ data }) => {
                             </View>
                         </View>
                         <Text style={{ textAlign: 'right', fontWeight: '700', textAlign:'right' }} onPress={handleAnimationView} >Know Less...</Text>
-                    </View>
-            </Animated.View>
+                    </ScrollView>
+            </Animated.ScrollView>
         </Animated.View>
     );
 

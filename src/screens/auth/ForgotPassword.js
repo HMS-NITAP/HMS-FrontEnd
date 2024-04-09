@@ -1,23 +1,45 @@
 import React from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
-import MainButtton from '../../components/common/MainButtton'
+import MainButton from '../../components/common/MainButton'
+import { useForm,Controller } from 'react-hook-form'
+import {useDispatch} from 'react-redux'
+import { sendResetPasswordEmail } from '../../services/operations/AuthAPI'
 
-const ForgotPassword = () => {
+const ForgotPassword = ({navigation}) => {
 
-    const handlePress = () => {
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
 
-    }
+  const onSubmit = (data) => {
+    dispatch(sendResetPasswordEmail(data.email,navigation));
+  }
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Sign Up</Text></View>
+        <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Forgot Password</Text></View>
         <View style={styles.form}>
         <View style={styles.subFormView}>
             <Text style={styles.label} >Email ID<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-            <TextInput style={styles.input} placeholder='Enter your college email ID' />
+            <Controller
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your Institute Email ID"
+                  placeholderTextColor={"#adb5bd"}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+              />
+            )}
+            name="email"
+            defaultValue=""
+          />
+          {errors.email && <Text style={styles.errorText}>Email ID is required.</Text>}
         </View>
         <View style={styles.subFormView}>
-            <MainButtton text={"Send Reset Password Email"} onPress={() => setText("")} />
+            <MainButton text={"Send Reset Password Link"} onPress={handleSubmit(onSubmit)} />
         </View>
         </View>
     </View>
@@ -71,6 +93,7 @@ const styles = StyleSheet.create({
       borderWidth:1,
       borderRadius:10,
       borderColor:"#adb5bd",
+      color:"black",
     },
     button:{
       textAlign:'center',
