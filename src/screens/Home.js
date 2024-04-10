@@ -18,6 +18,7 @@ const Home = ({navigation}) => {
           <Button onPress={() => navigation.navigate("OtpInput")}  title='Otp Input' />
           <Button onPress={() => navigation.navigate("Dashboard")} title="Dashboard" />
           <Button onPress={() => navigation.navigate("ResetPasswordSuccess")} title='Reset Password Success' />
+          <Button onPress={() => navigation.navigate("StudentTab")} title='StudentTab' />
         </View>
     </View>
   )

@@ -16,8 +16,20 @@ import OtpInput from './src/screens/auth/OtpInput';
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from './src/reducer';
-import Dashboard from './src/screens/student/Dashboard';
+// import Dashboard from './src/screens/student/Dashboard';
 import ResetPasswordSuccess from './src/screens/auth/ResetPasswordSuccess';
+
+// student screens import
+import Dashboard from './src/screens/student/Dashboard';
+import Announcements from './src/screens/student/Announcements';
+import AttendanceHistory from './src/screens/student/AttendanceHistory';
+import MedicalIssue from './src/screens/student/MedicalIssue';
+import MessFeedback from './src/screens/student/MessFeedback';
+import OutingApplication from './src/screens/student/OutingApplication';
+import OutingHistory from './src/screens/student/OutingHistory';
+import RegisterComplaint from './src/screens/student/RegisterComplaint';
+import VacationHistory from './src/screens/student/VacationHistory';
+import StudentTab from './src/screens/StudentTab';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +43,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          {/* Home Screens  */}
           <Stack.Screen name="LaunchScreen" component={LaunchScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
@@ -43,8 +56,20 @@ const App = () => {
           <Stack.Screen name="ResetPasswordEmailSent" component={ResetPasswordMailSent} options={{headerShown:false}} />
           <Stack.Screen name="ResetPassword" component={ResetPassword} options={{headerShown:false}} />
           <Stack.Screen name="OtpInput" component={OtpInput} options={{headerShown:false}} />
-          <Stack.Screen name='Dashboard' component={Dashboard} options={{headerShown:false}} />
+          {/* <Stack.Screen name='Dashboard' component={Dashboard} options={{headerShown:false}} /> */}
           <Stack.Screen name='ResetPasswordSuccess' component={ResetPasswordSuccess} options={{headerShown:false}} />
+          <Stack.Screen name="StudentTab" component={StudentTab} options={{headerShown:false}} />
+
+          {/* Student Screens  */}
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+          <Stack.Screen name="Announcements" component={Announcements} options={{ headerShown: false }} />
+          <Stack.Screen name="AttendanceHistory" component={AttendanceHistory} options={{ headerShown:false }} />
+          <Stack.Screen name="MedicalIssue" component={MedicalIssue} options={{headerShown:false}} />
+          <Stack.Screen name="MessFeedback" component={MessFeedback} options={{headerShown:false}} />
+          <Stack.Screen name="OutingApplication" component={OutingApplication} options={{headerShown:false}} />
+          <Stack.Screen name="OutingHistory" component={OutingHistory} options={{headerShown:false}} />
+          <Stack.Screen name="RegisterComplaint" component={RegisterComplaint} options={{headerShown:false}} />
+          <Stack.Screen name="VacationHistory" component={VacationHistory} options={{headerShown:false}} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
