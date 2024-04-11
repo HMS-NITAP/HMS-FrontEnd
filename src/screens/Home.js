@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View,Text, Button } from 'react-native'
+import { useToast } from "react-native-toast-notifications"
 
 const Home = ({navigation}) => {
+
+  const toast = useToast();
+  toast.show("HIIIekk");
+
 
   return(
     <View style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
@@ -16,7 +21,7 @@ const Home = ({navigation}) => {
           <Button onPress={() => navigation.navigate("ResetPasswordEmailSent")} title='Reset Password Email Sent' />
           <Button onPress={() => navigation.navigate("ResetPassword")} title="Reset Password" />
           <Button onPress={() => navigation.navigate("OtpInput")}  title='Otp Input' />
-          <Button onPress={() => navigation.navigate("Dashboard")} title="Dashboard" />
+          <Button onPress={() => navigation.navigate("StudentDashboard")} title="StudentDashboard" />
           <Button onPress={() => navigation.navigate("ResetPasswordSuccess")} title='Reset Password Success' />
           <Button onPress={() => navigation.navigate("StudentTab")} title='StudentTab' />
         </View>

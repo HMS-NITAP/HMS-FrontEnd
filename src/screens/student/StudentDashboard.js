@@ -1,10 +1,12 @@
-import { View, Text, StyleSheet, Button, TouchableOpacity, Linking } from 'react-native'
-import React, { useState } from 'react'
-import { StudentData } from '../../static/StudentData'
+import { View, Text, StyleSheet, Button, TouchableOpacity, Linking, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import MainButton from '../../components/common/MainButton'
-import { AnnouncementsData } from '../../static/AnnouncementsData'
+import { getAllAnnouncements } from '../../services/operations/AnnouncementAPI'
+import {useDispatch,useSelector} from 'react-redux'
+import Swiper from 'react-native-swiper'
+import { useToast } from "react-native-toast-notifications"
 
-const Dashboard=()=> {
+const StudentDashboard=()=> {
 
   const StudentData = [
     {
@@ -25,8 +27,22 @@ const Dashboard=()=> {
     },
   ]
 
-  let [index,setIndex] = useState(0);
   const [details,setDetails] = useState(true);
+  const [announcementData,setAnnouncementData] = useState([]);
+  const dispatch = useDispatch();
+  const {token} = useSelector((state) => state.Auth);
+
+  const toast = useToast();
+
+  useEffect(() => {
+    console.log("Token : ",token);
+    const fetchAllAnnouncementData = () => {
+      const response = dispatch(getAllAnnouncements(token,toast));
+      setAnnouncementData(response);
+    };
+
+    fetchAllAnnouncementData();
+  },[token]);
 
   const detailsHandler=() => {
     setDetails(true);
@@ -34,44 +50,23 @@ const Dashboard=()=> {
   const ComplaintsHandler=()=>{
     setDetails(false);
   }
-  const handlePress = ()=>{
-    Linking.openURL(AnnouncementsData[index].url)
-  }
 
-  let previousHandler=()=>{
-    if(index==0){
-      index=AnnouncementsData.length-1;
-    }else{
-      index = index-1;
-    }
-    setIndex(index);
-  }
-
-  let nextHandler=()=>{
-    if(index==AnnouncementsData.length-1){
-      index=0;
-    }else{
-      index = index+1;
-    }
-    setIndex(index);
-  }
   return (
     <View style={styles.container}>
       <View style={styles.top}>
         <Text style={styles.label}>Hi {StudentData[0].name}</Text>
-        <Text style={styles.label}>Outing: {StudentData[0].OutingRating}</Text>
-        <Text style={styles.label}>Discipline: {StudentData[0].DisciplineRating}</Text>
+        <Text style={styles.label}>Outing Rating: {StudentData[0].OutingRating}</Text>
+        <Text style={styles.label}>Discipline Rating: {StudentData[0].DisciplineRating}</Text>
       </View>
 
-
-      <View style={styles.announcement}>
-        <Button onPress={previousHandler} title='prev'/>
-        <TouchableOpacity onPress={handlePress}>
-          <Text style={{ color: 'blue', textDecorationLine: 'underline',flex:1,alignItems:'center',width: 250 }}>{AnnouncementsData[index].title}</Text>
-        </TouchableOpacity>
-        <Button onPress={nextHandler} title='next'/>
-      </View>
-
+      <ScrollView style={styles.announcement}>
+        <Swiper style={{height:200,backgroundColor:"red",color:"white"}}>
+          <Text style={styles.slides}>1</Text>
+          <Text style={styles.slides}>2</Text>
+          <Text style={styles.slides}>3</Text>
+          <Text style={styles.slides}>4</Text>
+        </Swiper>
+      </ScrollView>
 
       <View style={styles.middle}>
         <Text style={styles.label}>No of days present: {StudentData[0].DaysPresent}</Text>
@@ -112,7 +107,7 @@ const Dashboard=()=> {
   )
 }
 
-export default Dashboard
+export default StudentDashboard
 
 const styles = StyleSheet.create({
   container:{
@@ -219,13 +214,11 @@ const styles = StyleSheet.create({
     gap : 10,
 
   },
-  announcement :{
-    // width:"50%",
-    display : 'flex',
-    alignItems : 'center',
-    flexDirection : 'row',
-    justifyContent : 'space-between',
-    paddingVertical:30,
-    gap:1
+  slides:{
+    width:"100%",
+    height:"100%",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
   }
 })

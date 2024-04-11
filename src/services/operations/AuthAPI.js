@@ -53,7 +53,7 @@ export const login = (email,password,navigation) => {
             AsyncStorage.setItem("user",JSON.stringify(response?.data?.user));
 
             dispatch(setUser(response?.data?.user));
-            navigation.navigate("Dashboard");
+            navigation.navigate("StudentDashboard");
         }catch(e){
             console.log("ERROR");
             console.log(e);
@@ -88,6 +88,21 @@ export const resetPassword = (token,newPassword,confirmNewPassword,navigation) =
             }
 
             navigation.navigate("ResetPasswordSuccess");
+        }catch(e){
+            console.log("Error");
+            console.log(e);
+        }
+    }
+}
+
+export const logout = () => {
+    return async() => {
+        try{
+            dispatch(setToken(null));
+            dispatch(setUser(null));
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            navigate("/Home");
         }catch(e){
             console.log("Error");
             console.log(e);

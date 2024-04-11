@@ -10,7 +10,7 @@ export default function StudentTab({navigation}) {
     <View style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
         <Text style={{fontSize:2,fontWeight:'900',}}>Home</Text>
         <View style={{width:"100%",height:"100%",display:"flex",justifyContent:"center",alignItems:"center",gap:15}}>
-          <Button onPress={() => navigation.navigate("Dashboard")} title='Dashboard' />
+          <Button onPress={() => navigation.navigate("StudentDashboard")} title='StudentDashboard' />
           <Button onPress={() => navigation.navigate("Announcements")} title='Announcements' />
           <Button onPress={() => navigation.navigate("OutingApplication")} title='OutingApplication' />
           <Button onPress={() => navigation.navigate("AttendanceHistory")} title='AttendanceHistory' />
