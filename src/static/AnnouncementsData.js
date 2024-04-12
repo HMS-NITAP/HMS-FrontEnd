@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // TEMPORARY FILE - TO BE DELETED
 export const AnnouncementsData = [
     {

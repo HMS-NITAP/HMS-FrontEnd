@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import { AnnouncementsData } from '../../static/AnnouncementsData'

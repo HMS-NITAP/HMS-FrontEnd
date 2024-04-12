@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react'
 import { View,Image,Text } from 'react-native'
 
@@ -5,7 +6,7 @@ const LaunchScreen = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => (
-      navigation.navigate("Home")
+      navigation.navigate("Start")
     ),10);
   });
 

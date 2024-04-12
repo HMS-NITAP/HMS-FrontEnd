@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -32,6 +33,10 @@ import RegisterComplaint from './src/screens/student/RegisterComplaint';
 import VacationHistory from './src/screens/student/VacationHistory';
 import StudentTab from './src/screens/StudentTab';
 
+// start screen 
+import StartScreen from './src/screens/StartScreen';
+import Gallery from './src/screens/institute/Gallery';
+
 const Stack = createNativeStackNavigator();
 
 const store = configureStore({
@@ -47,10 +52,15 @@ const App = () => {
           <Stack.Navigator>
             {/* Home Screens  */}
             <Stack.Screen name="LaunchScreen" component={LaunchScreen} options={{ headerShown: false }} />
+
+            {/*start screen*/}
+            <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
+
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={Signup} options={{ headerShown: false }} />
             <Stack.Screen name="CreateAnnouncement" component={CreateAnnouncement} options={{ headerShown:false }} />
+            <Stack.Screen name="Gallery" component={Gallery} options={{ headerShown:false }} />
             <Stack.Screen name="HostelBlocks" component={HostelsBlocks} options={{headerShown:false}} />
             <Stack.Screen name="ContactUs" component={ContactUs} options={{headerShown:false}} />
             <Stack.Screen name="DevelopmentTeam" component={DevelopmentTeam} options={{headerShown:false}} />
@@ -63,6 +73,7 @@ const App = () => {
             <Stack.Screen name="StudentTab" component={StudentTab} options={{headerShown:false}} />
 
             {/* Student Screens  */}
+
             <Stack.Screen name="StudentDashboard" component={StudentDashboard} options={{ headerShown: false }} />
             <Stack.Screen name="Announcements" component={Announcements} options={{ headerShown: false }} />
             <Stack.Screen name="AttendanceHistory" component={AttendanceHistory} options={{ headerShown:false }} />

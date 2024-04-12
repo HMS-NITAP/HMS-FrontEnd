@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, ToastAndroid, View } from 'react-native'
 import MainButton from '../../components/common/MainButton'

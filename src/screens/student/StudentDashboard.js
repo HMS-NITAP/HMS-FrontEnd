@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { View, Text, StyleSheet, Button, TouchableOpacity, Linking, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import MainButton from '../../components/common/MainButton'

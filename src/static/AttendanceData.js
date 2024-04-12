@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // TO BE DELETED
 
 export const  presentDays = [

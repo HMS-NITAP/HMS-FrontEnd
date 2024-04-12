@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Button, Platform, DatePickerAndroid, TouchableOpacity } from 'react-native'
 import MainButton from '../../components/common/MainButton'

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Srilatha from '../assets/developmentTeam/srilatha.jpg'
 import Dinesh from '../assets/developmentTeam/dinesh.jpeg'
 

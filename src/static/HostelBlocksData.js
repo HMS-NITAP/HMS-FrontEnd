@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Swarnamukhi from '../assets/hostels/Swarnamukhi.jpg'
 import Vamsadhara from '../assets/hostels/Vamsadhara.jpg'
 import Krishnaveni from '../assets/hostels/Krishnaveni.jpg'

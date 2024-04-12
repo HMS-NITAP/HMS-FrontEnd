@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import HostelBlockCard from '../../components/institute/HostelBlockCard'
@@ -8,7 +9,7 @@ const ContactUs = () => {
   return (
     <ScrollView>
         <View style={styles.heading}>
-            <Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Contact Us</Text>
+            <Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Hostel Blocks</Text>
         </View>
         <View style={styles.container}>
             <View style={styles.subContainer}>
