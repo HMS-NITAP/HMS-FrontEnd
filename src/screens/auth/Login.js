@@ -4,8 +4,11 @@ import MainButton from '../../components/common/MainButton'
 import { useForm,Controller } from 'react-hook-form'
 import {useDispatch} from 'react-redux'
 import { login } from '../../services/operations/AuthAPI'
+import { useToast } from "react-native-toast-notifications"
 
 const Login = ({navigation}) => {
+
+  const toast = useToast();
 
   const { control, handleSubmit, formState: { errors } } = useForm();
 
@@ -16,12 +19,12 @@ const Login = ({navigation}) => {
   }
 
   const onSubmit = (data) => {
-    dispatch(login(data.email,data.password,navigation));
+    dispatch(login(data.email,data.password,navigation,toast));
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Login</Text></View>
+      {/* <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Login</Text></View> */}
       <View style={styles.form}>
         <View style={styles.subFormView}>
           <Text style={styles.label} >Email ID<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>

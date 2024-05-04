@@ -55,7 +55,7 @@ const MessFeedback = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text>MessFeedback</Text></View>
+        {/* <View style={styles.heading}><Text>MessFeedback</Text></View> */}
         <View style={styles.form}>
         <View>
           <Text style={styles.label}>Date: {currentDate}</Text>

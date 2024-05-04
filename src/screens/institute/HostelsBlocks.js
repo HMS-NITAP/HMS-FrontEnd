@@ -7,9 +7,9 @@ const ContactUs = () => {
 
   return (
     <ScrollView>
-        <View style={styles.heading}>
+        {/* <View style={styles.heading}>
             <Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Contact Us</Text>
-        </View>
+        </View> */}
         <View style={styles.container}>
             <View style={styles.subContainer}>
                 <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Girls Hostel Blocks</Text>

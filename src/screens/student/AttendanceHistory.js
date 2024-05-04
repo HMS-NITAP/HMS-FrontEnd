@@ -32,7 +32,7 @@ const AttendanceHistory = () => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text>AttendanceHistory</Text></View>
+        {/* <View style={styles.heading}><Text>AttendanceHistory</Text></View> */}
         <View style={styles.form}>
 
         <View style={styles.subFormView}>

@@ -20,7 +20,7 @@ const OutingApplication = ({navigation}) => {
                        
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text>OutingApplication</Text></View>
+        {/* <View style={styles.heading}><Text>OutingApplication</Text></View> */}
         <View style={styles.form}>
 
         <View style={styles.subFormView}>

@@ -23,7 +23,7 @@ const RegisterComplaint = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text>Register Complaint</Text></View>
+        {/* <View style={styles.heading}><Text>Register Complaint</Text></View> */}
         <View style={styles.form}>
 
         <View style={styles.subFormView}>

@@ -7,8 +7,12 @@ import {useDispatch} from 'react-redux';
 import { setSignUpData } from '../../reducer/slices/AuthSlice'
 import { sendOTP } from '../../services/operations/AuthAPI'
 import { AccountType } from '../../static/AccountType'
+import { useToast } from "react-native-toast-notifications";
+
 
 const Signup = ({navigation}) => {
+
+  const toast = useToast();
 
   const { control,setValue, handleSubmit, formState: { errors } } = useForm();
 
@@ -31,111 +35,112 @@ const Signup = ({navigation}) => {
     navigation.navigate("Login");
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async(data) => {
     console.log("Form Data:", data);
     if(data.password != data.confirmPassword){
-      ToastAndroid.show("Passwords are not matching",1000);
+      toast.show("Both passwords are not Matching", {type: "danger",placement: "top",duration: 3000,offset: 30,animationType: "slide-in",});
     }else{
       const signupData = {
         ...data,accountType
       }
-      console.log("signup data",signupData);
-      dispatch(setSignUpData(signupData));
-      dispatch(sendOTP(data.email,navigation));
+      // console.log("signup data",signupData);
+      let id = toast.show("Please Wait...",{type: "normal",placement: "top",animationType: "zoom-in"});
+      await dispatch(setSignUpData(signupData));
+      await dispatch(sendOTP(data.email,navigation,toast,id));
+      // toast.update(id, "OTP Sent Successfully", {type: "success",placement: "top",animationType: "zoom-in"});
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.heading}>
-        <Text style={styles.headingText}>Sign Up</Text>
-      </View>
-      <View style={styles.form}>
-        <View style={styles.subFormView}>
-          <Text style={styles.label}>Email ID<Text style={styles.required}>*</Text>:</Text>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your college Email ID"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="email"
-            defaultValue=""
-          />
-          {errors.email && <Text style={styles.errorText}>Email is required.</Text>}
-        </View>
-        <View style={styles.subFormView}>
-          <Text style={styles.label}>Password<Text style={styles.required}>*</Text>:</Text>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your password"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry
-              />
-            )}
-            name="password"
-            defaultValue=""
-          />
-          {errors.password && <Text style={styles.errorText}>Password is required.</Text>}
-        </View>
-        <View style={styles.subFormView}>
-          <Text style={styles.label}>Confirm Password<Text style={styles.required}>*</Text>:</Text>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Re-enter your password"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry
-              />
-            )}
-            name="confirmPassword"
-            defaultValue=""
-          />
-          {errors.confirmPassword && <Text style={styles.errorText}>Please confirm your password.</Text>}
-        </View>
-        <View style={styles.subFormView}>
-          <Text style={styles.label}>Account Type<Text style={styles.required}>*</Text>:</Text>
-          <View style={styles.radioGroup}>
-            {
-              AccountType.map((account,index) => (
-              <View key={index} style={styles.radioButtonContainer}>
-                <RadioButton
-                  value={account.value}
-                  status={accountType === account.value ? 'checked' : 'unchecked'}
-                  onPress={() => handleRadioPress(account.value)}
+    <>
+      <View style={styles.container}>
+        <View style={styles.form}>
+          <View style={styles.subFormView}>
+            <Text style={styles.label}>Email ID<Text style={styles.required}>*</Text>:</Text>
+            <Controller
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your college Email ID"
+                  placeholderTextColor={"#adb5bd"}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
                 />
-                <Text style={styles.radioLabel}>{account.name}</Text>
-              </View>
-            ))
-            }
+              )}
+              name="email"
+              defaultValue=""
+            />
+            {errors.email && <Text style={styles.errorText}>Email is required.</Text>}
+          </View>
+          <View style={styles.subFormView}>
+            <Text style={styles.label}>Password<Text style={styles.required}>*</Text>:</Text>
+            <Controller
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your password"
+                  placeholderTextColor={"#adb5bd"}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                />
+              )}
+              name="password"
+              defaultValue=""
+            />
+            {errors.password && <Text style={styles.errorText}>Password is required.</Text>}
+          </View>
+          <View style={styles.subFormView}>
+            <Text style={styles.label}>Confirm Password<Text style={styles.required}>*</Text>:</Text>
+            <Controller
+              control={control}
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Re-enter your password"
+                  placeholderTextColor={"#adb5bd"}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  secureTextEntry
+                />
+              )}
+              name="confirmPassword"
+              defaultValue=""
+            />
+            {errors.confirmPassword && <Text style={styles.errorText}>Please confirm your password.</Text>}
+          </View>
+          <View style={styles.subFormView}>
+            <Text style={styles.label}>Account Type<Text style={styles.required}>*</Text>:</Text>
+            <View style={styles.radioGroup}>
+              {
+                AccountType.map((account,index) => (
+                <View key={index} style={styles.radioButtonContainer}>
+                  <RadioButton
+                    value={account.value}
+                    status={accountType === account.value ? 'checked' : 'unchecked'}
+                    onPress={() => handleRadioPress(account.value)}
+                  />
+                  <Text style={styles.radioLabel}>{account.name}</Text>
+                </View>
+              ))
+              }
+            </View>
+          </View>
+          <View style={styles.subFormView}>
+            <MainButton text="Sign Up" onPress={handleSubmit(onSubmit)} />
           </View>
         </View>
-        <View style={styles.subFormView}>
-          <MainButton text="Sign Up" onPress={handleSubmit(onSubmit)} />
-        </View>
+        <Text style={styles.createAccount} onPress={handlePress}>Already have an Account? Click Here</Text>
       </View>
-      <Text style={styles.createAccount} onPress={handlePress}>Already have an Account? Click Here</Text>
-    </View>
+    </>
   )
 }
 

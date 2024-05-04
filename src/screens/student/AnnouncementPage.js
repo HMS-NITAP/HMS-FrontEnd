@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 const AnnouncementPage = ({data}) => {
   return (
     <ScrollView style={styles.container}>
-        <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Announcement</Text></View>
+        {/* <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Announcement</Text></View> */}
         <View style={styles.subContainer}>
             <Text style={{fontSize:40,fontWeight:"700",color:"black"}}>{data.title}</Text>
             <Text style={{fontSize:30,fontWeight:"600",color:"black"}}>{data.textContent}</Text>

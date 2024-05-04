@@ -16,7 +16,7 @@ const ForgotPassword = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Forgot Password</Text></View>
+        {/* <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Forgot Password</Text></View> */}
         <View style={styles.form}>
         <View style={styles.subFormView}>
             <Text style={styles.label} >Email ID<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>

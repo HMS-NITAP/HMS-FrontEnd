@@ -4,8 +4,11 @@ import OTPTextInput from 'react-native-otp-textinput';
 import MainButton from '../../components/common/MainButton';
 import {useSelector,useDispatch} from 'react-redux';
 import { signUp } from '../../services/operations/AuthAPI';
+import { useToast } from 'react-native-toast-notifications';
 
 const OtpInput = ({navigation}) => {
+
+    const toast = useToast();
 
     const [otp, setOTP] = useState('');
     const {signUpData} = useSelector((state) => state.Auth);
@@ -23,15 +26,13 @@ const OtpInput = ({navigation}) => {
     }
 
     const submitHandler = () => {
-        console.log("OTP SUBMITTED : ",otp);
-        dispatch(signUp(signUpData,otp,navigation));
+        dispatch(signUp(signUpData,otp,navigation,toast));
     }
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Verify OTP</Text></View>
         <View style={styles.subContainer}>
-            <Text style={{fontSize:18, fontWeight:"600", color:"#495057"}}>Enter the OTP received in your EmailID, to complete verification of your account.</Text>
+            <Text style={{fontSize:18, fontWeight:"600", color:"#495057"}}>Enter the OTP received in your Email ID, to complete verification of your account.</Text>
             <OTPTextInput
                 containerStyle={{ marginTop: 20 }}
                 inputCount={6}

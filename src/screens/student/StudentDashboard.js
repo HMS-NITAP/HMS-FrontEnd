@@ -5,6 +5,7 @@ import { getAllAnnouncements } from '../../services/operations/AnnouncementAPI'
 import {useDispatch,useSelector} from 'react-redux'
 import Swiper from 'react-native-swiper'
 import { useToast } from "react-native-toast-notifications"
+import AnnouncementLink from '../../components/student/AnnouncementLink'
 
 const StudentDashboard=()=> {
 
@@ -35,12 +36,10 @@ const StudentDashboard=()=> {
   const toast = useToast();
 
   useEffect(() => {
-    console.log("Token : ",token);
-    const fetchAllAnnouncementData = () => {
-      const response = dispatch(getAllAnnouncements(token,toast));
+    const fetchAllAnnouncementData = async() => {
+      const response = await dispatch(getAllAnnouncements(token,toast));
       setAnnouncementData(response);
     };
-
     fetchAllAnnouncementData();
   },[token]);
 
@@ -59,14 +58,11 @@ const StudentDashboard=()=> {
         <Text style={styles.label}>Discipline Rating: {StudentData[0].DisciplineRating}</Text>
       </View>
 
-      <ScrollView style={styles.announcement}>
-        <Swiper style={{height:200,backgroundColor:"red",color:"white"}}>
-          <Text style={styles.slides}>1</Text>
-          <Text style={styles.slides}>2</Text>
-          <Text style={styles.slides}>3</Text>
-          <Text style={styles.slides}>4</Text>
-        </Swiper>
-      </ScrollView>
+      {/* <Swiper autoplay={true}>
+        {
+          announcementData && announcementData.map((data,index) => <AnnouncementLink data={data} key={index} />)
+        }
+      </Swiper> */}
 
       <View style={styles.middle}>
         <Text style={styles.label}>No of days present: {StudentData[0].DaysPresent}</Text>

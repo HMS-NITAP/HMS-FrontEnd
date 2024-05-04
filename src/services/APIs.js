@@ -1,5 +1,6 @@
-SERVER_BASE_URL = "http://192.168.177.208:4000/api/v1"
-// NOTE : USE YOUR LAPTOP IPv4 host Address
+SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
+// SERVER_BASE_URL = "http://172.180.11.85:4000/api/v1"
+// NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",

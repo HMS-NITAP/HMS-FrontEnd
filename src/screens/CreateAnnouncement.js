@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TextInput, Alert } from 'react-native'
 import MainButton from '../components/common/MainButton'
 // import DocumentPicker from 'react-native-document-picker';
 // import RNFS from 'react-native-fs';
-import { Button } from 'react-native-paper';
 
 const CreateAnnouncement = () => {
 
@@ -32,7 +31,7 @@ const CreateAnnouncement = () => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text style={{fontSize:24,fontWeight:'700',color:'#000000'}}>Create New Announcement</Text></View>
+        {/* <View style={styles.heading}><Text style={{fontSize:24,fontWeight:'700',color:'#000000'}}>Create New Announcement</Text></View> */}
         <View style={styles.form}>
         <View style={styles.subFormView}>
           <Text style={styles.label} >About<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>

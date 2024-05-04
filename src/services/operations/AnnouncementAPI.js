@@ -38,15 +38,11 @@ export const deleteAnnouncement = (id,token) => {
 export const getAllAnnouncements = (token,toast) => {
     return async() => {
         try{
-            console.log("first");
-            // const toast = useToast();
-            toast.show("HIIIfdgfgfgtgekk");
-            console.log("OKKKK");
             const response = await APIconnector("GET",GET_ALL_ANNOUNCEMENTS_API,null,{Authorization : `Bearer ${token}`});
             if(!response.data.success){
                 throw new Error(response.data.message);
             }
-            return response?.data?.announcements
+            return (response?.data?.announcements);            
         }catch(e){
             console.log(e);
             return null;

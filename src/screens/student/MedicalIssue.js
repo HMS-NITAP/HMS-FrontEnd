@@ -10,7 +10,7 @@ const MedicalIssue = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-        <View style={styles.heading}><Text>Register Medical Issue</Text></View>
+        {/* <View style={styles.heading}><Text>Register Medical Issue</Text></View> */}
         <View style={styles.form}>
         <View style={styles.subFormView}>
           <Text style={styles.label} >Summary<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>

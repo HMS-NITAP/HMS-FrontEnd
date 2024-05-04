@@ -5,9 +5,9 @@ import AnnouncementLink from '../../components/student/AnnouncementLink'
 const Announcements = () => {
   return (
     <ScrollView>
-      <View style={styles.heading}>
+      {/* <View style={styles.heading}>
             <Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Announcements</Text>
-      </View>
+      </View> */}
 
       <View style={styles.linkContainer}>
           {
