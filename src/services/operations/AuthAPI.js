@@ -26,8 +26,8 @@ export const sendOTP = (email,navigation,toast,id) => {
 
 export const signUp = (data,otp,navigation) => {
     return async() => {
+        let id = toast.show("Creating your Account...",{type: "normal",placement: "top",animationType: "slide-in"});
         try{
-            let id = toast.show("Creating your Account...",{type: "normal",placement: "top",animationType: "slide-in"});
             const {email,password,confirmPassword,accountType} = data;
             const response = await APIconnector("POST",SIGNUP_API,{email,password,confirmPassword,accountType,otp});
             if(!response.data.success){

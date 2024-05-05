@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 import Login from './src/screens/auth/Login';
 import Signup from './src/screens/auth/Signup';
-import CreateAnnouncement from './src/screens/CreateAnnouncement';
+import CreateAnnouncement from './src/screens/official/CreateAnnouncement';
 import HostelsBlocks from './src/screens/institute/HostelsBlocks';
 import ContactUs from './src/screens/institute/ContactUs';
 import DevelopmentTeam from './src/screens/institute/DevelopmentTeam';
@@ -17,7 +17,7 @@ import ResetPasswordMailSent from './src/screens/auth/ResetPasswordMailSent';
 import ResetPassword from './src/screens/auth/ResetPassword';
 import ResetPasswordSuccess from './src/screens/auth/ResetPasswordSuccess';
 import StudentDashboard from './src/screens/student/StudentDashboard';
-import Announcements from './src/screens/student/Announcements';
+// import Announcements from './src/screens/student/Announcements';
 import AttendanceHistory from './src/screens/student/AttendanceHistory';
 import MedicalIssue from './src/screens/student/MedicalIssue';
 import MessFeedback from './src/screens/student/MessFeedback';
@@ -28,6 +28,9 @@ import VacationHistory from './src/screens/student/VacationHistory';
 import OtpInput from './src/screens/auth/OtpInput';
 import Gallery from './src/screens/institute/Gallary';
 import LogoutModal from './src/screens/common/LogoutModal';
+import Announcements from './src/screens/common/Announcements';
+import OutingRequest from './src/screens/official/OutingRequest';
+import ApplicationHistory from './src/screens/student/ApplicationHistory';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -54,6 +57,7 @@ const App = () => {
               <Drawer.Screen name="ContactUs" component={ContactUs} options={{drawerLabel:"Contact Us", drawerIcon: ({ size }) => (<Icon name='address-book' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="DevelopmentTeam" component={DevelopmentTeam} options={{drawerLabel:"Development Team", drawerIcon: ({ size }) => (<Icon name='users-line' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="Gallary" component={Gallery} options={{drawerLabel:"Gallary", drawerIcon: ({ size }) => (<Icon name='image' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+              <Drawer.Screen name="Announcements" component={Announcements} options={{drawerLabel:"Show Announcements", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }}  />
 
               {/* Non Visible Home Screens */}
               <Drawer.Screen name="ResetPasswordEmailSent" component={ResetPasswordMailSent} options={{drawerItemStyle:{display:'none'}}} />
@@ -70,12 +74,12 @@ const App = () => {
           <NavigationContainer independent={true} initialRouteName='StudentDashboard'>
             <Drawer.Navigator>
                 <Drawer.Screen name="StudentDashboard" component={StudentDashboard} options={{drawerLabel:"Dashboard", drawerIcon: ({ size }) => (<Icon name='id-badge' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
-                <Drawer.Screen name="Announcements" component={Announcements} options={{drawerLabel:"Announcements", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+                <Drawer.Screen name="Announcements" component={Announcements} options={{drawerLabel:"Show Announcements", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }}  />
                 <Drawer.Screen name="AttendanceHistory" component={AttendanceHistory} options={{drawerLabel:"Attendence History", drawerIcon: ({ size }) => (<Icon name='table-list' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="MedicalIssue" component={MedicalIssue} options={{drawerLabel:"Medical Issue", drawerIcon: ({ size }) => (<Icon name='file-medical' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="MessFeedback" component={MessFeedback} options={{drawerLabel:"Mess Feedback", drawerIcon: ({ size }) => (<Icon name='bowl-food' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="OutingApplication" component={OutingApplication} options={{drawerLabel:"Outing Application", drawerIcon: ({ size }) => (<Icon name='wpforms' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
-                <Drawer.Screen name="OutingHistory" component={OutingHistory} options={{drawerLabel:"Outing History", drawerIcon: ({ size }) => (<Icon name='clock-rotate-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+                <Drawer.Screen name="ApplicationHistory" component={ApplicationHistory} options={{drawerLabel:"Application History", drawerIcon: ({ size }) => (<Icon name='clock-rotate-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="RegisterComplaint" component={RegisterComplaint} options={{drawerLabel:"Register Complaint", drawerIcon: ({ size }) => (<Icon name='right-to-bracket' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="VacationHistory" component={VacationHistory} options={{drawerLabel:"Vacation History", drawerIcon: ({ size }) => (<Icon name='timeline' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="HostelBlocks" component={HostelsBlocks} options={{drawerLabel:"Hostel Blocks", drawerIcon: ({ size }) => (<Icon name='building-user' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
@@ -91,9 +95,12 @@ const App = () => {
           <NavigationContainer independent={true} initialRouteName='CreateAnnouncement'>
             <Drawer.Navigator>
               <Drawer.Screen name="CreateAnnouncement" component={CreateAnnouncement} />
+              <Drawer.Screen name="Announcements" component={Announcements} options={{drawerLabel:"Show Announcements", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }}  />
               <Drawer.Screen name="HostelBlocks" component={HostelsBlocks} options={{drawerLabel:"Hostel Blocks", drawerIcon: ({ size }) => (<Icon name='building-user' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="ContactUs" component={ContactUs} options={{drawerLabel:"Contact Us", drawerIcon: ({ size }) => (<Icon name='address-book' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="DevelopmentTeam" component={DevelopmentTeam} options={{drawerLabel:"Development Team", drawerIcon: ({ size }) => (<Icon name='users-line' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+              <Drawer.Screen name="Logout" component={LogoutModal} options={{drawerLabel:"Log Out", drawerIcon: ({ size }) => (<Icon name='circle-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+              <Drawer.Screen name="OutingRequest" component={OutingRequest} options={{drawerLabel:"Outing Request", drawerIcon: ({ size }) => (<Icon name='circle-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />)}} />
             </Drawer.Navigator> 
           </NavigationContainer>
         )

@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, Button, Platform, DatePickerAndroid, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TextInput, DatePickerAndroid } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import ModalDropdown from 'react-native-modal-dropdown';
+import { useForm,Controller } from 'react-hook-form'
+import { useSelector, useDispatch } from 'react-redux';
+import { createOutingApplication } from '../../services/operations/OutingApplicationAPI';
 
 const OutingApplication = ({navigation}) => {
   const dropdownOptions = [
@@ -9,18 +12,22 @@ const OutingApplication = ({navigation}) => {
                             'Non Local'
                           ];
 
-  //states
-  const [type, setType] = useState('');
-  const [summary, setSummary] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [complaineeID, setComplaineeID] = useState('');
-  const [place, setPlace] = useState('');
-  const [purpose, setPurpose] = useState('');
-                       
+
+  const [type,setType] = useState("Local");
+  const dispatch = useDispatch();
+
+  const {token} = useSelector((state) => state.Auth);
+
+  const { control, handleSubmit, formState: { errors } } = useForm();
+
+  const submitHanlder = async(data) => {
+    console.log("Data",data);
+    await dispatch(createOutingApplication(type,data.from,data.to,data.placeOfVisit,data.purpose));
+  }
+
+
   return (
     <View style={styles.container}>
-        {/* <View style={styles.heading}><Text>OutingApplication</Text></View> */}
         <View style={styles.form}>
 
         <View style={styles.subFormView}>
@@ -29,50 +36,97 @@ const OutingApplication = ({navigation}) => {
             options={dropdownOptions}
             style={styles.input}
             dropdownStyle={styles.dropdownOptions}
-            defaultValue="---------"
-            onSelect={(index, value) => setType(value)}
+            defaultValue="Local"
+            onSelect={(_, value) => setType(value)}
           />
         </View>
 
         <View style={styles.subFormView}>
-          <Text style={styles.label} >From date & time<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput 
-          value={fromDate}
-          onChangeText={setFromDate}
-          style={styles.input} placeholder='Enter your ID'
-          keyboardType='Numeric' 
+          <Text style={styles.label} >From<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="From Date"
+                placeholderTextColor={"#adb5bd"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="from"
+            defaultValue=""
           />
+          {errors.from && <Text style={styles.errorText}>From Date is required.</Text>}
         </View>
 
         <View style={styles.subFormView}>
-          <Text style={styles.label} >To date & time<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput 
-          value={toDate}
-          onChangeText={setToDate}
-          style={styles.input} placeholder='Enter your ID'
-          keyboardType='Numeric' 
+          <Text style={styles.label} >To <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Enter to Date"
+                placeholderTextColor={"#adb5bd"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="to"
+            defaultValue=""
           />
+          {errors.to && <Text style={styles.errorText}>To Date is required.</Text>}
         </View>
+        
         <View style={styles.subFormView}>
-          <Text style={styles.label} >Place of visit<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput 
-          value={place}
-          onChangeText={setPlace}
-          style={styles.input} placeholder='Place of visit' 
+          <Text style={styles.label} >Place of Visit<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Enter place of Visit"
+                placeholderTextColor={"#adb5bd"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="placeOfVisit"
+            defaultValue=""
           />
+          {errors.placeOfVisit && <Text style={styles.errorText}>place of visit is required.</Text>}
         </View>
 
         <View style={styles.subFormView}>
-          <Text style={styles.label} >Purpose<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput 
-          style={styles.input}
-          value={purpose}
-          onChangeText={setPurpose} 
-          placeholder='Purpose of visit' 
+          <Text style={styles.label} >Purpose of Visit<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your purpose of Visit"
+                placeholderTextColor={"#adb5bd"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="purpose"
+            defaultValue=""
           />
+          {errors.purpose && <Text style={styles.errorText}>Purpose of Visit is required.</Text>}
         </View>
+
         <View style={styles.subFormView}>
-          <MainButton text={"Register"}/>
+          <MainButton text={"Apply"} onPress={handleSubmit(submitHanlder)}/>
         </View>
 
         </View>

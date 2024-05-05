@@ -1,11 +1,9 @@
-import { View, Text, StyleSheet, Button, TouchableOpacity, Linking, ScrollView } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import MainButton from '../../components/common/MainButton'
 import { getAllAnnouncements } from '../../services/operations/AnnouncementAPI'
 import {useDispatch,useSelector} from 'react-redux'
-import Swiper from 'react-native-swiper'
 import { useToast } from "react-native-toast-notifications"
-import AnnouncementLink from '../../components/student/AnnouncementLink'
 
 const StudentDashboard=()=> {
 
