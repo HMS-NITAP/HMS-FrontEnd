@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSelector } from 'react-redux';
@@ -17,25 +17,33 @@ import ResetPasswordMailSent from './src/screens/auth/ResetPasswordMailSent';
 import ResetPassword from './src/screens/auth/ResetPassword';
 import ResetPasswordSuccess from './src/screens/auth/ResetPasswordSuccess';
 import StudentDashboard from './src/screens/student/StudentDashboard';
-import Announcements from './src/screens/student/Announcements';
 import AttendanceHistory from './src/screens/student/AttendanceHistory';
 import MedicalIssue from './src/screens/student/MedicalIssue';
 import MessFeedback from './src/screens/student/MessFeedback';
 import OutingApplication from './src/screens/student/OutingApplication';
-import OutingHistory from './src/screens/student/OutingHistory';
 import RegisterComplaint from './src/screens/student/RegisterComplaint';
-import VacationHistory from './src/screens/student/VacationHistory';
 import OtpInput from './src/screens/auth/OtpInput';
 import Gallery from './src/screens/institute/Gallary';
 import LogoutModal from './src/screens/common/LogoutModal';
+import Announcements from './src/screens/common/Announcements';
+import OutingRequest from './src/screens/official/OutingRequest';
+import ApplicationHistory from './src/screens/student/ApplicationHistory';
+import RegisterComplaints from './src/screens/student/RegisteredComplaints';
+import HostelComplaints from './src/screens/official/HostelComplaints';
+import StudentAttendance from './src/screens/official/StudentAttendence';
+import EditProfile from './src/screens/student/EditProfile';
+import TakeAttendance from './src/screens/official/TakeAttendance';
 
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator();
 
 const App = () => {
 
   const {token} = useSelector((state) => state.Auth);
   const {user} = useSelector((state) => state.Profile);
+
+  // useEffect(() => {
+  //   console.log("|TKME : ",token,user);
+  // },[token,user]);
 
   useEffect(() => {
     SplashScreen.hide();
@@ -77,11 +85,12 @@ const App = () => {
                 <Drawer.Screen name="OutingApplication" component={OutingApplication} options={{drawerLabel:"Outing Application", drawerIcon: ({ size }) => (<Icon name='wpforms' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="OutingHistory" component={OutingHistory} options={{drawerLabel:"Outing History", drawerIcon: ({ size }) => (<Icon name='clock-rotate-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="RegisterComplaint" component={RegisterComplaint} options={{drawerLabel:"Register Complaint", drawerIcon: ({ size }) => (<Icon name='right-to-bracket' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
-                <Drawer.Screen name="VacationHistory" component={VacationHistory} options={{drawerLabel:"Vacation History", drawerIcon: ({ size }) => (<Icon name='timeline' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+                <Drawer.Screen name="Complaints Registered" component={RegisterComplaints} options={{drawerLabel:"Complaints Registered", drawerIcon: ({ size }) => (<Icon name='person-circle-exclamation' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="HostelBlocks" component={HostelsBlocks} options={{drawerLabel:"Hostel Blocks", drawerIcon: ({ size }) => (<Icon name='building-user' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="ContactUs" component={ContactUs} options={{drawerLabel:"Contact Us", drawerIcon: ({ size }) => (<Icon name='address-book' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="DevelopmentTeam" component={DevelopmentTeam} options={{drawerLabel:"Development Team", drawerIcon: ({ size }) => (<Icon name='users-line' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="Logout" component={LogoutModal} options={{drawerLabel:"Log Out", drawerIcon: ({ size }) => (<Icon name='circle-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+                <Drawer.Screen name="Edit Profile" component={EditProfile} options={{drawerItemStyle:{display:'none'}}} />
             </Drawer.Navigator>
           </NavigationContainer>
         )
@@ -90,10 +99,16 @@ const App = () => {
         token && user && user.accountType==="OFFICIAL" && (
           <NavigationContainer independent={true} initialRouteName='CreateAnnouncement'>
             <Drawer.Navigator>
-              <Drawer.Screen name="CreateAnnouncement" component={CreateAnnouncement} />
+              <Drawer.Screen name="Take Attendance" component={TakeAttendance} options={{drawerLabel:"Take Attendence", drawerIcon: ({ size }) => (<Icon name='people-roof' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />)}} />
+              {/* <Drawer.Screen name="Student Attendence" component={StudentAttendance} options={{drawerLabel:"Student Attendence", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />)}} /> */}
+              <Drawer.Screen name="CreateAnnouncement" component={CreateAnnouncement} options={{drawerLabel:"Create Announcement", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />)}} />
+              <Drawer.Screen name="OutingRequest" component={OutingRequest} options={{drawerLabel:"Outing Request", drawerIcon: ({ size }) => (<Icon name='wpforms' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />)}} />
+              <Drawer.Screen name="Hostel Complaints" component={HostelComplaints} options={{drawerLabel:"Hostel Complaints", drawerIcon: ({ size }) => (<Icon name='circle-exclamation' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />)}} />
+              <Drawer.Screen name="Announcements" component={Announcements} options={{drawerLabel:"Show Announcements", drawerIcon: ({ size }) => (<Icon name='scroll' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }}  />
               <Drawer.Screen name="HostelBlocks" component={HostelsBlocks} options={{drawerLabel:"Hostel Blocks", drawerIcon: ({ size }) => (<Icon name='building-user' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="ContactUs" component={ContactUs} options={{drawerLabel:"Contact Us", drawerIcon: ({ size }) => (<Icon name='address-book' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="DevelopmentTeam" component={DevelopmentTeam} options={{drawerLabel:"Development Team", drawerIcon: ({ size }) => (<Icon name='users-line' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
+              <Drawer.Screen name="Logout" component={LogoutModal} options={{drawerLabel:"Log Out", drawerIcon: ({ size }) => (<Icon name='circle-left' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
             </Drawer.Navigator> 
           </NavigationContainer>
         )

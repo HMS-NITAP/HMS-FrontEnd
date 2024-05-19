@@ -8,15 +8,9 @@ const Gallery = () => {
         <View style={styles.container}>
             <View style={styles.subContainer}>
                 <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>NIT Andhra Pradesh Hostel Galley</Text>
-                {/* <Image source={require('../../assets/gallary/img1.jpg')} 
-                style={{width:'70%',objectFit:'contain',marginHorizontal:'auto',marginVertical:'auto'}} 
-                />
-                <Image source={require('../../assets/gallary/img2.jpg')} 
-                style={{width:'70%',objectFit:'contain',marginHorizontal:'auto',marginVertical:'auto'}} 
-                />
-                <Image source={require('../../assets/gallary/img6.jpg')} 
-                style={{width:'70%',objectFit:'contain',marginHorizontal:'auto',marginVertical:'auto'}} 
-                /> */}
+                {/* <View>
+                    <Text>Siddu</Text>
+                </View> */}
             </View>
         </View>
     </ScrollView>

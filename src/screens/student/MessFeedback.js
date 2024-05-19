@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput } from 'react-native'
 import MainButton from '../../components/common/MainButton';
 import ModalDropdown from 'react-native-modal-dropdown';
+import { useDispatch, useSelector } from 'react-redux';
+import { useToast } from 'react-native-toast-notifications';
+import { createMessFeedBack } from '../../services/operations/StudentAPI';
 
 const MessFeedback = ({navigation}) => {
   
@@ -51,11 +54,22 @@ const MessFeedback = ({navigation}) => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const dispatch = useDispatch();
+  const {token} = useSelector((state) => state.Auth);
+  const toast = useToast();
+
+  const onSubmit = async() => {
+    let formData = new FormData();
+    formData.append("rating",rating);
+    formData.append("review",details);
+    formData.append("session",displaySession);
+    await dispatch(createMessFeedBack(formData,token,toast));
+  }
+
 
 
   return (
     <View style={styles.container}>
-        {/* <View style={styles.heading}><Text>MessFeedback</Text></View> */}
         <View style={styles.form}>
         <View>
           <Text style={styles.label}>Date: {currentDate}</Text>
@@ -85,9 +99,13 @@ const MessFeedback = ({navigation}) => {
           />
         </View>
         
-        <View style={styles.subFormView}>
-          <MainButton text={"Submit"}/>
-        </View>
+        {
+          displaySession!=="No Session Available!" ? (
+            <View style={styles.subFormView}>
+              <MainButton text={"Submit"} onPress={onSubmit}/>
+            </View>
+          ) : ("")
+        }
 
         </View>
     </View>

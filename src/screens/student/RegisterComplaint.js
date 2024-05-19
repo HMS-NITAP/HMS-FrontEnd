@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import ModalDropdown from 'react-native-modal-dropdown';
+import { useForm,Controller } from 'react-hook-form'
+import DocumentPicker from 'react-native-document-picker';
+import { useToast } from 'react-native-toast-notifications';
+import { useDispatch, useSelector } from 'react-redux';
+import { createHostelComplaint } from '../../services/operations/StudentAPI';
 
-const RegisterComplaint = ({navigation}) => {
+const RegisterComplaint = () => {
   const dropdownOptions = [
                             'General', 
                             'Food Issues',
@@ -16,63 +21,94 @@ const RegisterComplaint = ({navigation}) => {
                             'Discrimination/Harassment',
                             'Damage to Property'
                           ];
-  const [type, setType] = useState('');
-  const [summary, setSummary] = useState('');
-  const [details, setDetails] = useState('');
-  const [complaineeID, setComplaineeID] = useState('');
+
+  const [category, setCategory] = useState('');
+  const [fileResponse, setFileResponse] = useState(null);
+  const dispatch = useDispatch();
+  const {token} = useSelector((state) => state.Auth);
+
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  const toast = useToast();
+
+  const onSubmit = async(data) => {
+    console.log("DFDF");
+    let formData = new FormData();
+    formData.append("category",category);
+    formData.append("about",data?.about);
+    if(fileResponse){
+      formData.append("file",{uri:fileResponse[0]?.uri, type:fileResponse[0]?.type, name:fileResponse[0]?.name});
+    }
+    await dispatch(createHostelComplaint(formData,token,toast));
+  }
+
+  const pickUpFile = useCallback(async () => {
+    try {
+      const response = await DocumentPicker.pick({
+        // allowMultiSelection:true,
+        presentationStyle: 'fullScreen',
+      });
+      console.log("File Response",response);
+      setFileResponse(response);
+    } catch (err) {
+      console.warn(err);
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
-        {/* <View style={styles.heading}><Text>Register Complaint</Text></View> */}
         <View style={styles.form}>
 
         <View style={styles.subFormView}>
-          <Text style={styles.label} >Type<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <Text style={styles.label} >Category<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
           <ModalDropdown
             options={dropdownOptions}
             style={styles.input}
             dropdownStyle={styles.dropdownOptions}
             defaultValue="General"
-            onSelect={(index, value) => setType(value)}
+            onSelect={(_, value) => setCategory(value)}
           />
         </View>
 
         <View style={styles.subFormView}>
-          <Text style={styles.label} >Complainee ID<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput 
-          value={complaineeID}
-          onChangeText={setComplaineeID}
-          style={styles.input} 
-          placeholder='Enter your ID'
-          keyboardType='Numeric' 
+          <Text style={styles.label} >Description<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                placeholder="Enter the Description about the Complaint"
+                placeholderTextColor={"#adb5bd"}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                numberOfLines={3}
+              />
+            )}
+            name="about"
+            defaultValue=""
           />
-          <Text style={{fontWeight:"100",fontSize:10}}>Only for Indisciplinary, Discrimination/Harassment or Damage to Property Complaints</Text>
-        </View>
-        
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Summary<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput 
-          value={summary}
-          onChangeText={setSummary}
-          style={styles.input} placeholder='Enter your Summary' 
-          />
+          {errors.about && <Text style={styles.errorText}>Description is required.</Text>}
         </View>
         <View style={styles.subFormView}>
-          <Text style={styles.label} >Detailes<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput
-          value={details}
-          onChangeText={setDetails} 
-          editable multiline numberOfLines={4} style={styles.input} 
-          />
+          <Text style={styles.label}>
+            Select Documents to Upload :
+          </Text>
+          <View style={{display:'flex', flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"flex-start", gap:20}}>
+            <MainButton text="Pick File" onPress={pickUpFile} />
+            <View>
+              {
+                fileResponse && 
+                  <View style={{maxWidth:"80%", display:"flex",flexDirection:'column',gap:8}}>
+                    {fileResponse.map((file) => <Text>{file?.name}</Text>)}
+                  </View>
+              }
+            </View>
+          </View>
         </View>
         <View style={styles.subFormView}>
-          <Text style={styles.label} >Upload Related Documents<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput style={styles.input} placeholder='Enter your password' />
+          <MainButton text={"Generate Complaint"} onPress={handleSubmit(onSubmit)}/>
         </View>
-        <View style={styles.subFormView}>
-          <MainButton text={"Register"}/>
-        </View>
-
         </View>
     </View>
   )

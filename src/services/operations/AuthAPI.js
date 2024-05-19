@@ -6,38 +6,42 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {SENDOTP_API,SIGNUP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD} = authEndPoints;
 
-export const sendOTP = (email,navigation,toast,id) => {
+export const sendOTP = (email,navigation,toast) => {
     return async() => {
         try{ 
             const response = await APIconnector("POST",SENDOTP_API,{email});
             if(!response.data.success){
-                toast.update(id, response.data.message, {type: "danger",placement: "top",animationType: "zoom-in"});
+                toast.show(response.data.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
-            toast.update(id, "OTP Sent Successfully", {type: "success",placement: "top",animationType: "zoom-in"});
+            toast.show("OTP Sent Successfully", {type: "success"});
             navigation.navigate("OtpInput");
         }catch(e){
-            toast.update(id, "OTP generation Unsuccessful", {type: "danger",placement: "top",animationType: "zoom-in"});
+            toast.show("OTP generation Unsuccessful", {type: "danger"});
             console.log("ERROR");
             console.log(e);
         }
     }
 }
 
-export const signUp = (data,otp,navigation) => {
+export const signUp = (data,otp,navigation,toast) => {
     return async() => {
+        let id = toast.show("Creating your Account...",{type: "normal"});
         try{
             let id = toast.show("Creating your Account...",{type: "normal",placement: "top",animationType: "slide-in"});
             const {email,password,confirmPassword,accountType} = data;
             const response = await APIconnector("POST",SIGNUP_API,{email,password,confirmPassword,accountType,otp});
             if(!response.data.success){
-                toast.update(id, response.data.message, {type: "danger",placement: "top",animationType: "slide-in"});
+                toast.hide(id);
+                toast.show(response.data.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
-            toast.update(id, "Account created Successfully", {type: "success",placement: "top",animationType: "slide-in"});
+            toast.hide(id);
+            toast.show("Account created Successfully", {type: "success"});
             navigation.navigate("Login");
         }catch(e){
-            toast.update(id, "Account creation failed", {type: "danger",placement: "top",animationType: "slide-in"});
+            toast.hide(id);
+            toast.show("Account creation failed", {type: "danger"});
             console.log(e);
         }
     }
@@ -45,12 +49,13 @@ export const signUp = (data,otp,navigation) => {
 
 export const login = (email,password,navigation,toast) => {
     return async(dispatch) => {
-        let id = toast.show("Please Wait...",{type: "normal",placement: "top",animationType: "slide-in"});
+        let id = toast.show("Please Wait...", {type:"normal"});
         try{
             const response = await APIconnector("POST",LOGIN_API,{email,password});
 
             if(!response.data.success){
-                toast.update(id, response.data.message, {type: "danger",placement: "top",animationType: "slide-in"});
+                toast.hide(id);
+                toast.show(response.data.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
 
@@ -59,10 +64,12 @@ export const login = (email,password,navigation,toast) => {
             await AsyncStorage.setItem("token",JSON.stringify(response.data.token));
             await AsyncStorage.setItem("user",JSON.stringify(response?.data?.user));
             await dispatch(setUser(response?.data?.user));
-            toast.update(id, "Login Successful", {type: "success",placement: "top",animationType: "slide-in"});
+            toast.hide(id);
+            toast.show("Login Successful", {type: "success"});
             navigation.navigate("StudentDashboard");
         }catch(e){
-            toast.update(id, "Login Failed", {type: "danger",placement: "top",animationType: "slide-in"});
+            toast.hide(id);
+            toast.show("Login Failed", {type: "danger"});
             console.log(e);
         }
     }
@@ -109,10 +116,10 @@ export const logout = (navigation,toast) => {
             await dispatch(setUser(null));
             await AsyncStorage.removeItem("token");
             await AsyncStorage.removeItem("user");
-            toast.show("Successfully Logged Out from Account", {type: "success",placement: "top",animationType: "zoom-in"});
+            toast.show("Successfully Logged Out from Account", {type: "success"});
             navigation.navigate("Login");
         }catch(e){
-            toast.show("LogOut Unsuccessful", {type: "danger",placement: "top",animationType: "zoom-in"});
+            toast.show("LogOut Unsuccessful", {type: "danger"});
             console.log(e);
         }
     }

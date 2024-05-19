@@ -1,0 +1,56 @@
+import React, { useEffect, useState } from 'react'
+import { ScrollView,Text, View, TouchableOpacity } from 'react-native'
+import { useDispatch,useSelector } from 'react-redux'
+import { getAllStudentHostelComplaint } from '../../services/operations/StudentAPI';
+import { useToast } from 'react-native-toast-notifications';
+
+const RegisterComplaints = () => {
+
+    const dispatch = useDispatch();
+    
+    const {token} = useSelector((state) => state.Auth);
+    const toast = useToast();
+    const [complaintsRegistered,setComplaintsRegistered] = useState([]);
+
+    const fetchData = async () => {
+        const data = await dispatch(getAllStudentHostelComplaint(token,toast));
+        setComplaintsRegistered(data);
+        console.log("Format",data);
+    }
+
+    useEffect(() => {
+        fetchData();
+    },[token]);
+
+    const getDateFormat = (date) => {
+        const newDate = new Date(date);
+        return newDate.toLocaleString();
+    }
+
+    return (
+        <ScrollView contentContainerStyle={{width:"100%", paddingHorizontal:10,paddingVertical:10,justifyContent:'start',alignItems:"center"}}>
+            {
+                complaintsRegistered.map((complaint) => {
+                    return (
+                        <View key={complaint?.id} style={{width:"100%",padding: 16,marginVertical: 8,backgroundColor: '#f9f9f9',borderRadius: 8,shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1,shadowRadius: 8,elevation: 2,width: '90%'}}>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Registered On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(complaint.createdAt)}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Purpose: <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.category}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Place of Visit: <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.about}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Status: <Text style={{ fontWeight: '800', color: complaint?.status==="RESOLVED" ? "green" : "red"}}>{complaint.status}</Text>
+                            </Text>
+                        </View>
+                    )
+                })
+            }
+    </ScrollView>
+    )
+}
+
+export default RegisterComplaints

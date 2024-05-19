@@ -38,16 +38,14 @@ const Signup = ({navigation}) => {
   const onSubmit = async(data) => {
     console.log("Form Data:", data);
     if(data.password != data.confirmPassword){
-      toast.show("Both passwords are not Matching", {type: "danger",placement: "top",duration: 3000,offset: 30,animationType: "slide-in",});
+      toast.show("Both passwords are not Matching", {type: "danger"});
     }else{
       const signupData = {
         ...data,accountType
       }
-      // console.log("signup data",signupData);
-      let id = toast.show("Please Wait...",{type: "normal",placement: "top",animationType: "zoom-in"});
+      toast.show("Please Wait...",{type: "normal"});
       await dispatch(setSignUpData(signupData));
-      await dispatch(sendOTP(data.email,navigation,toast,id));
-      // toast.update(id, "OTP Sent Successfully", {type: "success",placement: "top",animationType: "zoom-in"});
+      await dispatch(sendOTP(data.email,navigation,toast));
     }
   };
 
@@ -56,7 +54,7 @@ const Signup = ({navigation}) => {
       <View style={styles.container}>
         <View style={styles.form}>
           <View style={styles.subFormView}>
-            <Text style={styles.label}>Email ID<Text style={styles.required}>*</Text>:</Text>
+            <Text style={styles.label}>Email ID<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
             <Controller
               control={control}
               rules={{ required: true }}
@@ -76,7 +74,7 @@ const Signup = ({navigation}) => {
             {errors.email && <Text style={styles.errorText}>Email is required.</Text>}
           </View>
           <View style={styles.subFormView}>
-            <Text style={styles.label}>Password<Text style={styles.required}>*</Text>:</Text>
+            <Text style={styles.label}>Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
             <Controller
               control={control}
               rules={{ required: true }}
@@ -97,7 +95,7 @@ const Signup = ({navigation}) => {
             {errors.password && <Text style={styles.errorText}>Password is required.</Text>}
           </View>
           <View style={styles.subFormView}>
-            <Text style={styles.label}>Confirm Password<Text style={styles.required}>*</Text>:</Text>
+            <Text style={styles.label}>Confirm Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
             <Controller
               control={control}
               rules={{ required: true }}
@@ -118,7 +116,7 @@ const Signup = ({navigation}) => {
             {errors.confirmPassword && <Text style={styles.errorText}>Please confirm your password.</Text>}
           </View>
           <View style={styles.subFormView}>
-            <Text style={styles.label}>Account Type<Text style={styles.required}>*</Text>:</Text>
+            <Text style={styles.label}>Account Type<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
             <View style={styles.radioGroup}>
               {
                 AccountType.map((account,index) => (
