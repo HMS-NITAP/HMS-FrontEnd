@@ -23,7 +23,7 @@ const StudentDashboard=({navigation})=> {
 
   useEffect(() => {
     fetchStudentDashboardData();
-  },[token]);
+  },[]);
 
   const returnDate  = (date) => {
     const newDate = new Date(date);
