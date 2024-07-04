@@ -1,0 +1,498 @@
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import MainButton from '../../components/common/MainButton';
+import ModalDropdown from 'react-native-modal-dropdown';
+import { RadioButton } from 'react-native-paper';
+import { useForm, Controller } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import DocumentPicker from 'react-native-document-picker';
+import { useToast } from 'react-native-toast-notifications';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import DatePicker from 'react-native-date-picker'
+
+const StudentRegistrationForm = () => {
+
+    const yearOptions = [
+        { label: '1st Year', value: 1 },
+        { label: '2nd Year', value: 2 },
+        { label: '3rd Year', value: 3 },
+        { label: '4th Year', value: 4 },
+    ];
+    const branchOptions = ["CSE","ECE","EEE","MECH","CIVIL","BIOTECH","CHEM","MME"];
+    const communityOptions = ["GENERAL","OBC","SC","ST"]
+
+    const { control, handleSubmit, formState: { errors }, reset } = useForm();
+    const dispatch = useDispatch();
+    const toast = useToast();
+
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+    const [imageResponse, setImageResponse] = useState(null);
+    const [feeReceiptResponse, setFeeReceiptResponse] = useState(null);
+
+    const [selectedGender, setSelectedGender] = useState(null);
+    const [dob, setDob] = useState(new Date());
+    const [selectedYear, setSelectedYear] = useState(null);
+    const [selectedBranch, setSelectedBranch] = useState(null);
+    const [selectedCommunity, setSelectedCommunity] = useState(null);
+
+    const pickUpImage = useCallback(async () => {
+        try {
+          const response = await DocumentPicker.pick({
+            type: [DocumentPicker.types.images],
+            presentationStyle: 'fullScreen',
+          });
+          setImageResponse(response);
+        } catch (err) {
+          console.warn(err);
+        }
+    }, []);
+
+    const pickUpFeeReceipt = useCallback(async () => {
+        try {
+          const response = await DocumentPicker.pick({
+            type: [DocumentPicker.types.pdf],
+            presentationStyle: 'fullScreen',
+          });
+          console.log("PDF REsponse  : ", response);
+          setFeeReceiptResponse(response);
+        } catch (err) {
+          console.warn(err);
+        }
+    }, []);
+
+    const [secureText1, setSecureText1] = useState(true);
+    const [secureText2, setSecureText2] = useState(true);
+
+  return (
+    <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center",gap:25}}>
+        <View style={{width:"100%", backgroundColor:"#e9edc9", borderRadius:20, paddingHorizontal:15, paddingVertical:15,gap:2}}>
+            <Text style={{ textAlign: "center", fontSize: 18, fontWeight:"700", color: "black", marginBottom: 10 }}>INSTRUCTIONS:</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Ensure your Institute email address is correct.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Fill the details with atmost care.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload a proper passport size photo of yours not exceeding 200KB size.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload Image in JPG or JPEG format.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload Your fee Receipt in PDF Format</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Contact support under Development Team, if you encounter any issues</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Do not share your OTP and credentials with anyone.</Text>
+        </View>
+        <View style={styles.form}>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Student Name <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your name"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="name"
+                    defaultValue=""
+                />
+                {errors.name && <Text style={styles.errorText}>Student Name is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Institute Email ID <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your institute email ID"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="email"
+                    defaultValue=""
+                />
+                {errors.email && <Text style={styles.errorText}>Institute Email is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your password"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            secureTextEntry={secureText1}
+                        />
+                        <TouchableOpacity
+                            style={styles.iconContainer}
+                            onPress={() => setSecureText1(!secureText1)}
+                        >
+                            <Icon name={secureText1 ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
+                        </TouchableOpacity>
+                        </>
+                    )}
+                    name="password"
+                    defaultValue=""
+                />
+                {errors.password && <Text style={styles.errorText}>Password is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Confirm Password<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Re-Enter your password"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            secureTextEntry={secureText2}
+                        />
+                        <TouchableOpacity
+                            style={styles.iconContainer}
+                            onPress={() => setSecureText2(!secureText2)}
+                        >
+                            <Icon name={secureText2 ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
+                        </TouchableOpacity>
+                        </>
+                    )}
+                    name="confirmPassword"
+                    defaultValue=""
+                />
+                {errors.confirmPassword && <Text style={styles.errorText}>Please confirm your password.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Profile Image <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <View style={{display:'flex', marginTop:5, flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"center",marginHorizontal:"auto", gap:20}}>
+                    <MainButton text="Select Image" onPress={pickUpImage} />
+                    <View>
+                    {
+                        imageResponse ? 
+                            <View style={{maxWidth:"100%", display:"flex",flexDirection:'row',gap:8}}>
+                                <Image source={{ uri: imageResponse[0].uri }} style={{width:80,height:80,borderRadius:40}} />
+                                {/* <Text>{imageResponse[0].name}</Text> */}
+                            </View> : 
+                            <View><Text style={{fontWeight:"800", fontSize:15}}>No Image Selected</Text></View>
+                    }
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Roll Number <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your roll number"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="rollNo"
+                    defaultValue=""
+                />
+                {errors.rollNo && <Text style={styles.errorText}>Roll Number is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Registration Number <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your registration number"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="regNo"
+                    defaultValue=""
+                />
+                {errors.regNo && <Text style={styles.errorText}>Registration Number is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Year <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange } }) => (
+                        <ModalDropdown
+                            options={yearOptions.map(option => option.label)}
+                            style={styles.dropDownStyle}
+                            dropdownStyle={styles.dropdownOptions}
+                            dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                            dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                            textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                            saveScrollPosition={false}
+                            defaultIndex={0}
+                            isFullWidth={true}
+                            onSelect={(index) => {
+                                const selectedOption = yearOptions[index];
+                                onChange(selectedOption.value);
+                                setSelectedYear(selectedOption.value);
+                            }}
+                            defaultValue="Select Year"
+                        />
+                    )}
+                    name="year"
+                    defaultValue={1}
+                />
+                {errors.year && <Text style={styles.errorText}>Year is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Branch <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange } }) => (
+                        <ModalDropdown
+                            options={branchOptions}
+                            style={styles.dropDownStyle}
+                            dropdownStyle={styles.dropdownOptions}
+                            dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                            dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                            textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                            saveScrollPosition={false}
+                            defaultIndex={0}
+                            isFullWidth={true}
+                            onSelect={(index) => {
+                                const selectedOption = yearOptions[index];
+                                onChange(selectedOption);
+                                setSelectedBranch(selectedOption);
+                            }}
+                            defaultValue="Select Branch"
+                        />
+                    )}
+                    name="branch"
+                    defaultValue={1}
+                />
+                {errors.branch && <Text style={styles.errorText}>Branch is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Gender <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange } }) => (
+                        <View style={styles.radioContainer}>
+                            <View style={styles.radioOption}>
+                                <RadioButton
+                                    value="M"
+                                    status={selectedGender === 'M' ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                        onChange('M');
+                                        setSelectedGender('M');
+                                    }}
+                                />
+                                <Text style={styles.radioLabel}>M</Text>
+                            </View>
+                            <View style={styles.radioOption}>
+                                <RadioButton
+                                    value="F"
+                                    status={selectedGender === 'F' ? 'checked' : 'unchecked'}
+                                    onPress={() => {
+                                        onChange('F');
+                                        setSelectedGender('F');
+                                    }}
+                                />
+                                <Text style={styles.radioLabel}>F</Text>
+                            </View>
+                        </View>
+                    )}
+                    name="gender"
+                    defaultValue="M"
+                />
+                {errors.gender && <Text style={styles.errorText}>Gender is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Community <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange } }) => (
+                        <ModalDropdown
+                            options={communityOptions}
+                            style={styles.dropDownStyle}
+                            dropdownStyle={styles.dropdownOptions}
+                            dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                            dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                            textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                            saveScrollPosition={false}
+                            defaultIndex={0}
+                            isFullWidth={true}
+                            onSelect={(index) => {
+                                const selectedOption = communityOptions[index];
+                                onChange(selectedOption);
+                                setSelectedCommunity(selectedOption);
+                            }}
+                            defaultValue="Select Community"
+                        />
+                    )}
+                    name="community"
+                    defaultValue={1}
+                />
+                {errors.community && <Text style={styles.errorText}>Community is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Date of Birth <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <View style={{display:"flex", flexDirection:"row", gap:15, justifyContent:"space-between", alignItems:"center"}}>
+                    <View>
+                    <MainButton text={"From Date"} onPress={() => setIsDatePickerOpen(true)} />
+                    <DatePicker 
+                        modal
+                        mode='date'
+                        open={isDatePickerOpen}
+                        date={dob}
+                        onConfirm={(date) => {
+                        setIsDatePickerOpen(false);
+                        setDob(date);
+                        }}
+                        onCancel={() => {
+                        setIsDatePickerOpen(false);
+                        }}
+                    />
+                    </View>
+                    <View>
+                    {dob && <Text style={{fontWeight:"800", fontSize:15}}>{dob.toLocaleString()}</Text>}
+                    </View>
+                </View>
+            </View>
+
+
+
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Fee Receipt <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <View style={{display:'flex', marginTop:5, flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"center",marginHorizontal:"auto", gap:20}}>
+                    <MainButton text="Select File" onPress={pickUpFeeReceipt} />
+                    <View>
+                    {
+                        feeReceiptResponse ? 
+                            <View style={{maxWidth:"80%", display:"flex",flexDirection:'row',gap:8}}>
+                                <Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:15}}>{feeReceiptResponse[0].name}</Text>
+                            </View> : 
+                            <View><Text style={{fontWeight:"800", fontSize:15}}>No File Selected</Text></View>
+                    }
+                    </View>
+                </View>
+            </View>
+        </View>
+    </View>
+  )
+}
+
+export default StudentRegistrationForm
+
+const styles = StyleSheet.create({
+    subFormView:{
+        display:'flex',
+        justifyContent:'center',
+        flexDirection:'column',
+        alignItems:'start',
+        gap:2,
+    },
+    form:{
+        width:"90%",
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'start',
+        flexDirection:'column',
+        gap:20,
+    },
+    label:{
+        fontSize:15,
+        fontWeight:'500',
+        color:'#000000',
+    },
+    input:{
+        padding:10,
+        paddingHorizontal:10,
+        borderWidth:1,
+        borderRadius:10,
+        borderColor:"#adb5bd",
+    },
+    button:{
+        textAlign:'center',
+        borderRadius:30,
+        fontSize:15,
+        fontWeight:'800',
+        color:"black"
+    },
+    dropDownStyle : {
+        paddingVertical:10,
+        borderWidth:1,
+        borderRadius:10,
+        borderColor:"#adb5bd",
+    },
+    dropdownOptions: {
+        paddingHorizontal:10,
+        paddingVertical:10,
+        marginTop: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '#adb5bd',
+        backgroundColor: '#ffffff',
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+    },
+    radioContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '100%',
+    },
+    radioOption: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    radioLabel: {
+        fontSize: 16,
+        fontWeight:"700",
+        color: '#000',
+    },
+    iconContainer: {
+        position:"absolute",
+        bottom:15,
+        right:10,
+        zIndex:10,
+        elevation:100,
+    },
+})

@@ -18,7 +18,8 @@ const RegisterComplaint = () => {
                             'Restroom Cleaning',
                             'Network Issue', 
                             'Indisciplinary', 
-                            'Discrimination/Harassment',
+                            'Discrimination',
+                            'Harassment',
                             'Damage to Property'
                           ];
 
@@ -31,7 +32,6 @@ const RegisterComplaint = () => {
   const toast = useToast();
 
   const onSubmit = async(data) => {
-    console.log("DFDF");
     let formData = new FormData();
     formData.append("category",category);
     formData.append("about",data?.about);
@@ -62,8 +62,14 @@ const RegisterComplaint = () => {
           <Text style={styles.label} >Category<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
           <ModalDropdown
             options={dropdownOptions}
-            style={styles.input}
+            style={styles.dropDownStyle}
             dropdownStyle={styles.dropdownOptions}
+            dropdownTextStyle={{color:"black", fontSize:14, fontWeight:"600"}}
+            dropdownTextHighlightStyle={{backgroundColor:"#caf0f8"}}
+            textStyle={{color:"black", fontSize:14, paddingHorizontal:10}}
+            saveScrollPosition={false}
+            defaultIndex = {0}
+            isFullWidth={true}
             defaultValue="General"
             onSelect={(_, value) => setCategory(value)}
           />
@@ -176,6 +182,26 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderRadius:10,
     borderColor:"#adb5bd",
+  },
+  dropDownStyle : {
+        paddingVertical:10,
+        borderWidth:1,
+        borderRadius:10,
+        borderColor:"#adb5bd",
+  },
+  dropdownOptions: {
+      paddingHorizontal:10,
+      paddingVertical:10,
+      marginTop: 10,
+      borderWidth: 1,
+      borderRadius: 10,
+      borderColor: '#adb5bd',
+      backgroundColor: '#ffffff',
+      elevation: 3,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
   },
 })
 

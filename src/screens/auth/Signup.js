@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, ToastAndroid, View } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import { RadioButton } from 'react-native-paper'
 import { useForm, Controller } from 'react-hook-form'
@@ -8,7 +8,7 @@ import { setSignUpData } from '../../reducer/slices/AuthSlice'
 import { sendOTP } from '../../services/operations/AuthAPI'
 import { AccountType } from '../../static/AccountType'
 import { useToast } from "react-native-toast-notifications";
-
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const Signup = ({navigation}) => {
 
@@ -49,6 +49,9 @@ const Signup = ({navigation}) => {
     }
   };
 
+  const [secureText1, setSecureText1] = useState(true);
+  const [secureText2, setSecureText2] = useState(true);
+
   return (
     <>
       <View style={styles.container}>
@@ -79,15 +82,23 @@ const Signup = ({navigation}) => {
               control={control}
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter your password"
-                  placeholderTextColor={"#adb5bd"}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  secureTextEntry
-                />
+                <>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    placeholderTextColor={"#adb5bd"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    secureTextEntry={secureText1}
+                  />
+                  <TouchableOpacity
+                    style={styles.iconContainer}
+                    onPress={() => setSecureText1(!secureText1)}
+                  >
+                    <Icon name={secureText1 ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
+                  </TouchableOpacity>
+                </>
               )}
               name="password"
               defaultValue=""
@@ -100,15 +111,23 @@ const Signup = ({navigation}) => {
               control={control}
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder="Re-enter your password"
-                  placeholderTextColor={"#adb5bd"}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  secureTextEntry
-                />
+                <>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Re-Enter your password"
+                    placeholderTextColor={"#adb5bd"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    secureTextEntry={secureText2}
+                  />
+                  <TouchableOpacity
+                    style={styles.iconContainer}
+                    onPress={() => setSecureText2(!secureText2)}
+                  >
+                    <Icon name={secureText2 ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
+                  </TouchableOpacity>
+                </>
               )}
               name="confirmPassword"
               defaultValue=""
@@ -232,7 +251,14 @@ const styles = StyleSheet.create({
   errorText:{
     fontSize:14,
     color:"red",
-  }
+  },
+  iconContainer: {
+    position:"absolute",
+    bottom:15,
+    right:10,
+    zIndex:10,
+    elevation:100,
+  },
 })
 
 export default Signup

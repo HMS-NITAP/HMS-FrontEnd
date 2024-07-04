@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import { ScrollView, Text, View, TouchableOpacity, Linking } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllResolvedHostelComplaints, getAllUnresolvedHostelComplaints, resolveHostelComplaint, unResolveHostelComplaint } from '../../services/operations/OfficialAPI';
 import MainButton from '../../components/common/MainButton';
@@ -59,11 +59,21 @@ const HostelComplaints = () => {
                                 Created On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(complaint.createdAt)}</Text>
                             </Text>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Student Name: <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.instituteStudent.name}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Student Details: <Text style={{ fontWeight: 'normal', color: '#666' }}>Floor-{complaint.instituteStudent.floorNo}, room-{complaint.instituteStudent.roomNo}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
                                 Category: <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.category}</Text>
                             </Text>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
                                 About: <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.about}</Text>
                             </Text>
+                            {
+                                complaint?.fileUrl[0] && 
+                                    <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Attachments : <Text style={{ fontWeight: 'normal', color: 'blue' }} onPress={() => Linking.openURL(complaint?.fileUrl[0])}>Click Here to See</Text></Text>
+                            }
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
                                 Status: <Text style={{ fontWeight: '800', color: complaint?.status==="UNRESOLVED" ? "orange"  : "green"}}>{complaint.status}</Text>
                             </Text>

@@ -7,16 +7,16 @@ export const AccountType = [
         name : "Official",
         value : "OFFICIAL",
     },
-    {
-        name : "Security",
-        value : "SECURITY",
-    },
-    {
-        name : "Staff",
-        value : "STAFF",
-    },
-    {
-        name : "Worker",
-        value : "Worker",
-    }
+    // {
+    //     name : "Security",
+    //     value : "SECURITY",
+    // },
+    // {
+    //     name : "Staff",
+    //     value : "STAFF",
+    // },
+    // {
+    //     name : "Worker",
+    //     value : "Worker",
+    // }
 ]

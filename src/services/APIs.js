@@ -1,5 +1,5 @@
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
-SERVER_BASE_URL = "http://192.168.160.208:4000/api/v1"
+SERVER_BASE_URL = "http://192.168.39.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 export const authEndPoints = {
@@ -8,12 +8,6 @@ export const authEndPoints = {
     LOGIN_API : SERVER_BASE_URL + "/auth/login",
     RESET_PASSWORD_TOKEN : SERVER_BASE_URL + "/auth/resetPasswordToken",
     RESET_PASSWORD : SERVER_BASE_URL + "/auth/resetPassword",
-}
-
-export const announcementEndPoints = {
-    CREATE_ANNOUNCEMENT_API : SERVER_BASE_URL + "/official/createAnnouncement",
-    DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + "/official/deleteAnnouncement",
-    GET_ALL_ANNOUNCEMENTS_API : SERVER_BASE_URL + "/announcement/getAllAnnouncements",
 }
 
 export const studentEndPoints = {
@@ -76,9 +70,15 @@ export const adminEndPoints = {
     // MESS HALL APIs
     CREATE_MESS_HALL_API : SERVER_BASE_URL + '/admin/createMessHall',
     DELETE_MESS_HALL_API : SERVER_BASE_URL + '/admin/deleteMessHall',
+
+    // ACCOUNT HANDLING APIs
+    FETCH_OFFICIAL_ACCOUNTS : SERVER_BASE_URL + '/admin/fetchOfficialAccounts',
+    CREATE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/createOfficialAccount',
+    DELETE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/deleteOfficialAccount',
 }
 
 export const commonEndPoints = {
     GET_ALL_ANNOUNCEMENTS_API : SERVER_BASE_URL + '/common/getAllAnnouncements',
     FETCH_ALL_HOSTEL_DATA_API : SERVER_BASE_URL + '/common/fetchAllHostelData',
+    FETCH_MESS_DATA_AND_FEEDBACK : SERVER_BASE_URL + '/common/fetchMessDataAndFeedback',
 }

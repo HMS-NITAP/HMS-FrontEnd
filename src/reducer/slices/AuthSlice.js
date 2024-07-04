@@ -2,7 +2,9 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
     token: null,
-    signUpData : null
+    signUpData : null,
+    registrationData : null,
+    registrationStep : 1,
 }
 
 
@@ -15,9 +17,15 @@ const AuthSlice = createSlice({
         },
         setSignUpData(state,value){
             state.signUpData = value.payload
+        },
+        setRegistrationData(state,value){
+            state.registrationData = value.payload
+        },
+        setRegistrationStep(state,value){
+            state.registrationStep = value.payload
         }
     }
 })
 
-export const {setToken,setSignUpData} = AuthSlice.actions;
+export const {setToken,setSignUpData,setRegistrationData,setRegistrationStep} = AuthSlice.actions;
 export default AuthSlice.reducer;

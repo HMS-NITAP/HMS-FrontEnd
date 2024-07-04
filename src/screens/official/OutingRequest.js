@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ScrollView, Text, View, TouchableOpacity } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllPendingApplicationByHostelBlock,getAllAcceptedApplicationByHostelBlock, getAllRejectedApplicationByHostelBlock, rejectPendingOutingApplication, approvePendingOutingApplication } from '../../services/operations/OfficialAPI';
 import MainButton from '../../components/common/MainButton';
 import { useToast } from 'react-native-toast-notifications';
+import { useFocusEffect } from '@react-navigation/native';
 
 const OutingRequest = () => {
 
@@ -27,9 +28,11 @@ const OutingRequest = () => {
         setOutingApplication(data);
     }
 
-    useEffect(() => {
-        fetchOutingRequest();
-    },[applicationType]);
+    useFocusEffect(
+        useCallback(() => {
+          fetchOutingRequest();
+        }, [token, toast, applicationType])
+    );
 
     const approveHandler = async (applicationId) => {
         await dispatch(approvePendingOutingApplication(applicationId,token,toast));
@@ -60,6 +63,18 @@ const OutingRequest = () => {
                         <View style={{width:"100%",padding: 16,marginVertical: 8,backgroundColor: '#f9f9f9',borderRadius: 8,shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1,shadowRadius: 8,elevation: 2,width: '90%'}}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
                                 Created On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application.createdAt)}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Name: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.instituteStudent?.name}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Room No: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.instituteStudent?.roomNo}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Reg No: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.instituteStudent?.regNo}</Text>
+                            </Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
+                                Roll No: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application?.instituteStudent?.rollNo}</Text>
                             </Text>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
                                 From: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application.from)}</Text>

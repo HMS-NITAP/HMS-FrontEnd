@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { ScrollView,Text, View, TouchableOpacity } from 'react-native'
 import { useDispatch,useSelector } from 'react-redux'
 import { getStudentAllOutingApplication } from '../../services/operations/StudentAPI';
 import { useToast } from 'react-native-toast-notifications';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ApplicationHistory = () => {
 
@@ -18,9 +19,11 @@ const ApplicationHistory = () => {
         console.log("Format",data);
     }
 
-    useEffect(() => {
-        fetchData();
-    },[token]);
+    useFocusEffect(
+        useCallback(() => {
+          fetchData();
+        }, [token, toast])
+      );
 
     const getDateFormat = (date) => {
         const newDate = new Date(date);

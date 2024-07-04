@@ -292,17 +292,21 @@ const TakeAttendance = () => {
           <MainButton text="Continue" onPress={handleSubmit(onSubmit)} />
         </View>
       </View>
-      <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", overflow:'hidden', borderWidth:1, borderColor:"black", borderRadius:10}}>
+      {
+         !searchDate ? (<View style={{marginHorizontal:"auto"}}><Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:16}}>Please Enter a Date To Proceed</Text></View>) : (
+          <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", overflow:'hidden', borderWidth:1, borderColor:"black", borderRadius:10}}>
             <TouchableOpacity style={{width:"33%", textAlign:"center", paddingVertical:8, backgroundColor:tab==="NOTGIVEN" ? "#ffb703" : "white",}} onPress={() => setTab("NOTGIVEN")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Not Given</Text></TouchableOpacity>
             <TouchableOpacity style={{width:"33%", textAlign:"center", paddingVertical:8, backgroundColor:tab==="PRESENT" ? "#ffb703" : "white",}} onPress={() => setTab("PRESENT")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Present</Text></TouchableOpacity>
             <TouchableOpacity style={{width:"33%", textAlign:"center", paddingVertical:8, backgroundColor:tab==="ABSENT" ? "#ffb703" : "white",}} onPress={() => setTab("ABSENT")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Absent</Text></TouchableOpacity>
-      </View>
+          </View>
+        )
+      }
 
       {
         AttendenceData && tab==="NOTGIVEN" &&
           AttendenceData.map((data) => (
             !data?.presentDays.includes(searchDate) && !data?.absentDays.includes(searchDate) &&
-              <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center", gap:20 ,width:"80%",marginHorizontal:"auto",paddingHorizontal:20,paddingVertical:10,borderRadius:10,borderColor:"black",borderWidth:1}}>
+              <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center",width:"95%",marginHorizontal:"auto",paddingHorizontal:10,paddingVertical:10,borderRadius:10,borderColor:"black",borderWidth:1}}>
                 <View>
                   <Text>Name : {data?.student?.name}</Text>
                   <Text>Year : {data?.student?.year}</Text>
@@ -321,7 +325,7 @@ const TakeAttendance = () => {
         AttendenceData && tab==="PRESENT" &&
           AttendenceData.map((data) => (
             data?.presentDays.includes(searchDate) &&
-              <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center", gap:20 ,width:"80%",marginHorizontal:"auto",paddingHorizontal:20,paddingVertical:10,borderRadius:10,borderColor:"black",borderWidth:1}}>
+              <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center",width:"100%",marginHorizontal:"auto",paddingHorizontal:10,paddingVertical:10,borderRadius:10,borderColor:"black",borderWidth:1}}>
                 <View>
                   <Text>Name : {data?.student?.name}</Text>
                   <Text>Year : {data?.student?.year}</Text>
@@ -339,7 +343,7 @@ const TakeAttendance = () => {
         AttendenceData && tab==="ABSENT" &&
           AttendenceData.map((data) => (
             data?.absentDays.includes(searchDate) &&
-              <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center", gap:20 ,width:"80%",marginHorizontal:"auto",paddingHorizontal:20,paddingVertical:10,borderRadius:10,borderColor:"black",borderWidth:1}}>
+              <View style={{display:"flex",flexDirection:"row",justifyContent:"space-between", alignItems:"center",width:"95%",marginHorizontal:"auto",paddingHorizontal:10,paddingVertical:10,borderRadius:10,borderColor:"black",borderWidth:1}}>
                 <View>
                   <Text>Name : {data?.student?.name}</Text>
                   <Text>Year : {data?.student?.year}</Text>
@@ -383,10 +387,10 @@ const styles = StyleSheet.create({
     paddingBottom:30,
     width:"80%",
     display:'flex',
-    justifyContent:'center',
-    alignItems:'start',
+    justifyContent:'space-between',
+    alignItems:'center',
     flexDirection:'row',
-    gap:30,
+    gap:10,
   },
   subFormView:{
     display:'flex',

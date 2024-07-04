@@ -8,7 +8,7 @@ import DocumentPicker from 'react-native-document-picker';
 import { useToast } from 'react-native-toast-notifications';
 
 const CreateAnnouncement = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit, setValue, formState: { errors } } = useForm();
   const { token } = useSelector((state) => state.Auth);
   const dispatch = useDispatch();
   const [fileResponse, setFileResponse] = useState(null);
@@ -21,7 +21,11 @@ const CreateAnnouncement = () => {
     if(fileResponse){
       formData.append("file",{uri:fileResponse[0]?.uri, type:fileResponse[0]?.type, name:fileResponse[0]?.name});
     }
+    console.log(formData);
     dispatch(createAnnouncement(formData, token, toast));
+    setValue("title","");
+    setValue("textContent","");
+    setFileResponse(null);
   };
 
   const pickUpFile = useCallback(async () => {
@@ -97,7 +101,7 @@ const CreateAnnouncement = () => {
               {
                 fileResponse && 
                   <View style={{maxWidth:"80%", display:"flex",flexDirection:'column',gap:8}}>
-                    {fileResponse.map((file) => <Text>{file?.name}</Text>)}
+                    {fileResponse.map((file,index) => <Text key={index}>{file?.name}</Text>)}
                   </View>
               }
             </View>
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
   form: {
     paddingTop: 60,
     paddingBottom: 30,
-    width: "80%",
+    width: "90%",
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'start',
@@ -149,6 +153,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "#adb5bd",
+    color:"black",
   },
   errorText: {
     color: 'red',

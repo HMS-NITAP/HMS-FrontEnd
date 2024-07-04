@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
 import {hostelCommiteeData,medicalAndSecurityOfficerData,securitySepervisorsData} from '../../static/ContactUsData'
-import SlidingCard from '../../components/institute/SlidingCard'
+import AnimatedCardPerson from '../../components/common/AnimatedCardPerson'
 
 const ContactUs = () => {
 
@@ -16,7 +16,7 @@ const ContactUs = () => {
                 <View style={styles.cardContainer}>
                     {
                         hostelCommiteeData.map((data,index) => (
-                            <SlidingCard key={index} data={data} />
+                            <AnimatedCardPerson key={index} data={data} />
                         ))
                     }  
                 </View>
@@ -27,7 +27,7 @@ const ContactUs = () => {
                 <View style={styles.cardContainer}>
                     {
                         medicalAndSecurityOfficerData.map((data,index) => (
-                            <SlidingCard key={index} data={data} />
+                            <AnimatedCardPerson key={index} data={data} />
                         ))
                     }  
                 </View>
@@ -38,7 +38,7 @@ const ContactUs = () => {
                 <View style={styles.cardContainer}>
                     {
                         securitySepervisorsData.map((data,index) => (
-                            <SlidingCard key={index} data={data} />
+                            <AnimatedCardPerson key={index} data={data} />
                         ))
                     }  
                 </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'flex-start',
         paddingVertical:15,
-        paddingHorizontal:10,
+        paddingHorizontal:0,
         gap:30,
     },
     subContainer:{
@@ -77,10 +77,10 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     cardContainer:{
-        width:"75%",
+        width:"90%",
         gap:20,
         paddingVertical:30,
-        paddingHorizontal:10,
+        paddingHorizontal:0,
     },
     hr:{
         width : "100%",

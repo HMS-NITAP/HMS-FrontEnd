@@ -1,64 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView } from 'react-native'
 import MainButton from '../../components/common/MainButton';
-import ModalDropdown from 'react-native-modal-dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToast } from 'react-native-toast-notifications';
 import { createMessFeedBack } from '../../services/operations/StudentAPI';
+import { AirbnbRating } from 'react-native-ratings';
 
-const MessFeedback = ({navigation}) => {
-  
-  const dropdownOptions = [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5'
-  ];
+const MessFeedback = ({}) => {
+
   const [displaySession, setDisplaySession] = useState('');
   const [rating, setRating] = useState('');
-  const [details, setDetails] = useState('');
+  const [review, setReview] = useState('');
   const [currentDate, setCurrentDate] = useState('');
-  const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const now = new Date();
-      const time = now.toLocaleTimeString();
-      const day = now.getDate();
-      const month = now.toLocaleString('default', { month: 'long' });
-      const year = now.getFullYear();
-    
-      const currentHour = now.getHours(); 
-      const intervals = [
-        { start: 7, end: 10, label: 'BreakFast' },
-        { start: 12, end: 14, label: 'Lunch' },
-        { start: 16, end: 18, label: 'Snacks' },
-        { start: 19, end: 22, label: 'Dinner' },
-      ];
+    const now = new Date();
+    const date = now.getDate();
+    const month = now.getMonth();
+    const year = now.getFullYear();
 
-      let textToShow = '';
-      
-      intervals.forEach(interval => {
-        if (currentHour >= interval.start && currentHour < interval.end) {
-          textToShow = interval.label;
-        } else {
-          textToShow = 'No Session Available!'
-        }
-      });
-      setDisplaySession(textToShow);
-      setCurrentDate(`${day} ${month} ${year}`);
-      setCurrentTime(time);
-    }, 10);
+    setCurrentDate(`${date}/${month}/${year}`);
 
-    return () => clearInterval(intervalId);
-  }, []);
+    const currentHour = now.getHours();
+
+    if(currentHour >= 0 && currentHour < 10){
+      setDisplaySession("Breakfast");
+    }else if(currentHour >= 10 && currentHour < 15){
+      setDisplaySession("Lunch");
+    }else if(currentHour >= 15 && currentHour < 18){
+      setDisplaySession("Snacks");
+    }else{
+      setDisplaySession("Dinner");
+    }
+  },[]);
+
 
   const dispatch = useDispatch();
   const {token} = useSelector((state) => state.Auth);
   const toast = useToast();
 
   const onSubmit = async() => {
+
+    if(review === ""){
+      toast.show("Review field is Empty",{type:"danger"});
+      return;
+    }
+
+    console.log(rating,review,displaySession);
+
     let formData = new FormData();
     formData.append("rating",rating);
     formData.append("review",details);
@@ -66,49 +55,53 @@ const MessFeedback = ({navigation}) => {
     await dispatch(createMessFeedBack(formData,token,toast));
   }
 
-
-
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
+        <View style={{borderRadius:30, width:"90%", justifyContent:"center", padding:15, backgroundColor:"#e9f5db", borderColor:"black", borderWidth:0.25}} >
+          <Text style={{color:"black", textAlign:"center", fontSize:16}}>Let us know how you find the food quality at mess, by sharing your valuable feedback.</Text>
+        </View>
         <View style={styles.form}>
-        <View>
-          <Text style={styles.label}>Date: {currentDate}</Text>
-          <Text>Time: {currentTime}</Text>
-        </View>
 
-        <View>
-          <Text style={styles.label}>Session:<Text style={styles.label}> {displaySession}</Text></Text>
-        </View>
+          <View>
+            <Text style={styles.label}>Date: <Text style={{fontWeight:"600", color:"#6c757d"}}> {currentDate}</Text></Text>
+            <Text style={styles.label}>Session:<Text style={{fontWeight:"600", color:"#6c757d"}}> {displaySession}</Text></Text>
+          </View>
 
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Rating<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <ModalDropdown
-            options={dropdownOptions}
-            style={styles.input}
-            dropdownStyle={styles.dropdownOptions}
-            defaultValue="none"
-            onSelect={(index, value) => setRating(value)}
-          />
-        </View>
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Detailes<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <TextInput
-          value={details}
-          onChangeText={setDetails} 
-          editable multiline numberOfLines={8} style={styles.input} 
-          />
-        </View>
-        
-        {
-          displaySession!=="No Session Available!" ? (
-            <View style={styles.subFormView}>
-              <MainButton text={"Submit"} onPress={onSubmit}/>
+          <View style={styles.subFormView}>
+            <Text style={styles.label} >Review <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+            <TextInput
+              value={review}
+              onChangeText={setReview} 
+              editable multiline numberOfLines={2} style={styles.input}
+              placeholder='Enter your Review' 
+            />
+          </View>
+
+          <View>
+              <Text style={styles.label} >Rating <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+              <AirbnbRating
+                type="star"
+                ratingCount={5}
+                showRating
+                defaultRating={3}
+                ratingBackgroundColor={"white"}
+                size={25}
+                reviewSize={25}
+                style={{
+                  backgroundColor: 'transparent',
+                  paddingVertical: 10,
+                }}
+                onFinishRating={(val) => setRating(val)}
+              />
             </View>
-          ) : ("")
-        }
+
+          <View style={styles.subFormView}>
+            <MainButton text={"Submit"} onPress={onSubmit}/>
+          </View>
+          
 
         </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -120,6 +113,8 @@ const styles = StyleSheet.create({
       alignItems:'center',
       width:'100%',
       height:'100%',
+      paddingHorizontal:15,
+      paddingVertical:15,
   },
   heading:{
       width:'100%',
@@ -139,14 +134,13 @@ const styles = StyleSheet.create({
       gap:10,
   },
   form:{
-      paddingTop:60,
-      paddingBottom:30,
+      paddingVertical:20,
       width:"80%",
       display:'flex',
       justifyContent:'center',
       alignItems:'start',
       flexDirection:'column',
-      gap:30,
+      gap:20,
   },
   label:{
       fontSize:15,

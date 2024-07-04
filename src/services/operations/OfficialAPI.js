@@ -23,7 +23,7 @@ export const createAnnouncement = (formData,token,toast) => {
     return async() => {
         let id = toast.show("Creating announcement...",{type: "normal"});
         try{        
-            const response = await APIconnector("POST",CREATE_ANNOUNCEMENT_API,{formData},{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            const response = await APIconnector("POST",CREATE_ANNOUNCEMENT_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
 
             if(!response.data.success){
                 toast.hide(id);

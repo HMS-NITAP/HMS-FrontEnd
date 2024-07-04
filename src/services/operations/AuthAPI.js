@@ -60,13 +60,12 @@ export const login = (email,password,navigation,toast) => {
             }
 
             await dispatch(setToken(response?.data?.token));
-
             await AsyncStorage.setItem("token",JSON.stringify(response.data.token));
             await AsyncStorage.setItem("user",JSON.stringify(response?.data?.user));
             await dispatch(setUser(response?.data?.user));
+
             toast.hide(id);
             toast.show("Login Successful", {type: "success"});
-            navigation.navigate("StudentDashboard");
         }catch(e){
             toast.hide(id);
             toast.show("Login Failed", {type: "danger"});
@@ -109,7 +108,7 @@ export const resetPassword = (token,newPassword,confirmNewPassword,navigation) =
     }
 }
 
-export const logout = (navigation,toast) => {
+export const logout = (toast) => {
     return async(dispatch) => {
         try{
             await dispatch(setToken(null));
@@ -117,10 +116,9 @@ export const logout = (navigation,toast) => {
             await AsyncStorage.removeItem("token");
             await AsyncStorage.removeItem("user");
             toast.show("Successfully Logged Out from Account", {type: "success"});
-            navigation.navigate("Login");
         }catch(e){
-            toast.show("LogOut Unsuccessful", {type: "danger"});
-            console.log(e);
+            toast.show("Logout Unsuccessful", {type: "danger"});
+            console.log("Logout modal Error",e);
         }
     }
 }

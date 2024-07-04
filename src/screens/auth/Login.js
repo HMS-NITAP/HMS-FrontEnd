@@ -1,10 +1,11 @@
-import React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import { useForm,Controller } from 'react-hook-form'
 import {useDispatch} from 'react-redux'
 import { login } from '../../services/operations/AuthAPI'
 import { useToast } from "react-native-toast-notifications"
+import Icon from 'react-native-vector-icons/FontAwesome6';
 
 const Login = ({navigation}) => {
 
@@ -18,9 +19,11 @@ const Login = ({navigation}) => {
     navigation.navigate("SignUp");
   }
 
-  const onSubmit = (data) => {
-    dispatch(login(data.email,data.password,navigation,toast));
+  const onSubmit = async(data) => {
+    await dispatch(login(data.email,data.password,navigation,toast));
   };
+
+  const [secureText,setSecureText] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -51,27 +54,38 @@ const Login = ({navigation}) => {
             control={control}
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your password"
-                placeholderTextColor={"#adb5bd"}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                secureTextEntry
-              />
+                <>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your password"
+                    placeholderTextColor={"#adb5bd"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    secureTextEntry={secureText}
+                  />
+                  <TouchableOpacity
+                    style={styles.iconContainer}
+                    onPress={() => setSecureText(!secureText)}
+                  >
+                    <Icon name={secureText ? 'eye-slash' : 'eye'} size={20} color="#adb5bd" />
+                  </TouchableOpacity>
+                </>
             )}
             name="password"
             defaultValue=""
           />
           {errors.password && <Text style={styles.errorText}>Password is required.</Text>}
-          <Text style={{...styles.createAccount, textAlign: 'right'}} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
+        </View>
+        <View style={{display:"flex", justifyContent:"space-between"}}>
+            <></>
+            <Text style={{...styles.createAccount, textAlign: 'right'}} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
         </View>
         <View style={styles.subFormView}>
           <MainButton text="Log In" onPress={handleSubmit(onSubmit)} />
         </View>
       </View>
-      <Text style={styles.createAccount} onPress={handlePress}>Create a account? Click Here</Text>
+      <Text style={styles.createAccount} onPress={handlePress}>Don't have an Account? Create One</Text>
     </View>
   )
 }
@@ -141,7 +155,14 @@ const styles = StyleSheet.create({
   errorText:{
     fontSize:14,
     color:"red",
-  }
+  },
+  iconContainer: {
+    position:"absolute",
+    bottom:15,
+    right:10,
+    zIndex:10,
+    elevation:100,
+  },
 })
 
 export default Login

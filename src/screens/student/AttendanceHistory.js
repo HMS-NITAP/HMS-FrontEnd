@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStudentAttendance } from '../../services/operations/StudentAPI';
+import { useFocusEffect } from '@react-navigation/native';
 
 const AttendanceHistory = ({ navigation }) => {
   const [selectedMonth, setSelectedMonth] = useState(new Date());
@@ -37,18 +38,13 @@ const AttendanceHistory = ({ navigation }) => {
   const fetchAttendenceData = async() => {
     const response = await dispatch(getStudentAttendance(token,toast));
     setAttendenceData(response);
-    console.log("Attendence Res",response);
   };
 
-  useEffect(() => {
-    fetchAttendenceData();
-  },[]);
-  
-  // const attendanceData = [
-  //   { date: '2024-01-01', status: 'present' },
-  //   { date: '2024-01-05', status: 'absent' },
-  //   { date: '2024-01-10', status: 'present' },
-  // ];
+  useFocusEffect(
+    useCallback(() => {
+      fetchAttendenceData();
+    }, [token, toast])
+  );
 
   const getBackgroundColor = (status) => {
     switch (status) {
@@ -78,8 +74,8 @@ const AttendanceHistory = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-        <View style={{display:"flex",flexDirection:"row", justifyContent:"space-evenly", alignItems:"center", gap:15}}>
+    <ScrollView contentContainerStyle={styles.container}>
+        <View style={{display:"flex", flexWrap:"wrap",marginVertical:30,flexDirection:"row", justifyContent:"space-evenly", alignItems:"center", gap:15}}>
           <View style={styles.legendContainer}>
             <View style={[styles.legendDot, { backgroundColor: 'lightgreen' }]} />
             <Text style={styles.legendText}>Present Days</Text>
@@ -87,6 +83,10 @@ const AttendanceHistory = ({ navigation }) => {
           <View style={styles.legendContainer}>
             <View style={[styles.legendDot, { backgroundColor: 'salmon' }]} />
             <Text style={styles.legendText}>Absent Days</Text>
+          </View>
+          <View style={styles.legendContainer}>
+            <View style={[styles.legendDot, { backgroundColor: '#f0f0f0' }]} />
+            <Text style={styles.legendText}>Not Marked</Text>
           </View>
         </View>
       
@@ -100,7 +100,7 @@ const AttendanceHistory = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.calendar}>{renderCalendar()}</View>
-    </View>
+    </ScrollView>
   );
 };
 

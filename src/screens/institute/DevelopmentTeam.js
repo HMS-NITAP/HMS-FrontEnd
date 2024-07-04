@@ -1,48 +1,34 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
-import SlidingCard from '../../components/institute/SlidingCard'
-import {hostelOfficeAdvisorsData} from '../../static/DevelopmentTeamData'
+import {hostelOfficeAdvisorsData,developmentTeamData} from '../../static/DevelopmentTeamData'
+import AnimatedCardPerson from '../../components/common/AnimatedCardPerson'
 
 const DevelopmentTeam = () => {
 
   return (
     <ScrollView>
-        {/* <View style={styles.heading}>
-            <Text style={{fontSize:30,fontWeight:'700',color:'#000000'}}>Development Team</Text>
-        </View> */}
         <View style={styles.container}>
             <View style={styles.subContainer}>
                 <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>NIT Andhra Pradesh Hostel Committee</Text>
                 <View style={styles.cardContainer}>
                     {
                         hostelOfficeAdvisorsData.map((data,index) => (
-                            <SlidingCard key={index} data={data} />
-                        ))
-                    }  
-                </View>
-            </View>
-            {/* <View style={styles.hr} /> */}
-            {/* <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Medical and Security Officer</Text>
-                <View style={styles.cardContainer}>
-                    {
-                        medicalAndSecurityOfficerData.map((data,index) => (
-                            <ContactUsCard key={index} data={data} />
+                            <AnimatedCardPerson key={index} data={data} />
                         ))
                     }  
                 </View>
             </View>
             <View style={styles.hr} />
             <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Security Supervisors</Text>
+                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Developers Team</Text>
                 <View style={styles.cardContainer}>
                     {
-                        securitySepervisorsData.map((data,index) => (
-                            <ContactUsCard key={index} data={data} />
+                        developmentTeamData.map((data,index) => (
+                            <AnimatedCardPerson key={index} data={data} />
                         ))
                     }  
                 </View>
-            </View> */}
+            </View>
         </View>
     </ScrollView>
   )
@@ -77,10 +63,9 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     cardContainer:{
-        width:"75%",
+        width:"95%",
         gap:20,
         paddingVertical:30,
-        paddingHorizontal:10,
     },
     hr:{
         width : "100%",
