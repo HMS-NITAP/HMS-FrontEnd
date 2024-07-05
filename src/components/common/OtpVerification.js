@@ -5,6 +5,7 @@ import MainButton from './MainButton';
 import {useSelector,useDispatch} from 'react-redux';
 import { signUp } from '../../services/operations/AuthAPI';
 import { useToast } from 'react-native-toast-notifications';
+import { setRegistrationStep } from '../../reducer/slices/AuthSlice';
 
 const OtpVerification = () => {
 
@@ -25,7 +26,9 @@ const OtpVerification = () => {
         setOTP(value);
     }
 
-    const submitHandler = () => {
+    const submitHandler = async() => {
+        console.log("OTP SUBMIITTED",otp);
+        await dispatch(setRegistrationStep(3));
         // dispatch(signUp(signUpData,otp,navigation,toast));
     }
 

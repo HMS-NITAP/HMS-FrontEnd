@@ -196,9 +196,9 @@ const CreateHostelBlock = () => {
                             defaultValue={2}
                         />
                         {errors.floorCount && <Text style={styles.errorText}>Floor Count is required.</Text>}
-                    </View>
+                </View>
 
-                    <View style={styles.subFormView}>
+                <View style={styles.subFormView}>
                         <Text style={styles.label}>Year Assigned to<Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
                         <Controller
                             control={control}
@@ -226,9 +226,9 @@ const CreateHostelBlock = () => {
                             defaultValue={1}
                         />
                         {errors.year && <Text style={styles.errorText}>Year Assigned is required.</Text>}
-                    </View>
+                </View>
 
-                    <View style={styles.subFormView}>
+                <View style={styles.subFormView}>
                         <Text style={styles.label} >Block Capacity<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
                         <Controller
                             control={control}
@@ -247,7 +247,7 @@ const CreateHostelBlock = () => {
                             defaultValue=""
                         />
                         {errors.capacity && <Text style={styles.errorText}>Block Capacity is required.</Text>}
-                    </View>
+                </View>
 
                 <MainButton text={"Create Block"} onPress={handleSubmit(submitHandler)} />
             </View>

@@ -4,11 +4,13 @@ import MainButton from '../../components/common/MainButton';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { RadioButton } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
 import { useToast } from 'react-native-toast-notifications';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import DatePicker from 'react-native-date-picker'
+import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { sendOtpToStudent } from '../../services/operations/AuthAPI';
 
 const StudentRegistrationForm = () => {
 
@@ -31,10 +33,11 @@ const StudentRegistrationForm = () => {
     const [feeReceiptResponse, setFeeReceiptResponse] = useState(null);
 
     const [selectedGender, setSelectedGender] = useState(null);
-    const [dob, setDob] = useState(new Date());
+    const [dob, setDob] = useState(null);
     const [selectedYear, setSelectedYear] = useState(null);
     const [selectedBranch, setSelectedBranch] = useState(null);
     const [selectedCommunity, setSelectedCommunity] = useState(null);
+    const [pwdStatus, setPwdStatus] = useState(null);
 
     const pickUpImage = useCallback(async () => {
         try {
@@ -54,15 +57,51 @@ const StudentRegistrationForm = () => {
             type: [DocumentPicker.types.pdf],
             presentationStyle: 'fullScreen',
           });
-          console.log("PDF REsponse  : ", response);
           setFeeReceiptResponse(response);
         } catch (err) {
           console.warn(err);
         }
     }, []);
 
+    const formatDate = (date) => {
+        if (!date) return "NO DATE IS SELECTED";
+        return date.toLocaleDateString(); 
+      };
+
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
+
+    const submitHandler = async(data) => {
+
+        if(data.password !== data.confirmPassword){
+            toast.show("Passwords are not matching",{type:"warning"});
+            return;
+        }
+
+        if(!selectedBranch || !selectedCommunity || !selectedGender || !selectedYear || !dob || !pwdStatus){
+            toast.show("Fill all fields",{type:"warning"});
+            return;
+        }
+
+        if(!imageResponse || !feeReceiptResponse){
+            toast.show("Upload the Required Files",{type:"warning"});
+            return;
+        }
+        console.log("DOB",dob);
+        const registrationData = {
+            ...data,selectedBranch,selectedCommunity,selectedGender,selectedYear,dob: dob.toISOString(),pwdStatus,imageResponse,feeReceiptResponse
+        }
+
+        console.log("Reg Data",registrationData);
+        await dispatch(setRegistrationData(registrationData));
+        const response = await dispatch(sendOtpToStudent(data.email,toast));
+        console.log("Response",response);
+        if(response){
+            await dispatch(setRegistrationStep(2));
+        }else{
+            return;
+        }
+    }
 
   return (
     <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center",gap:25}}>
@@ -189,7 +228,6 @@ const StudentRegistrationForm = () => {
                         imageResponse ? 
                             <View style={{maxWidth:"100%", display:"flex",flexDirection:'row',gap:8}}>
                                 <Image source={{ uri: imageResponse[0].uri }} style={{width:80,height:80,borderRadius:40}} />
-                                {/* <Text>{imageResponse[0].name}</Text> */}
                             </View> : 
                             <View><Text style={{fontWeight:"800", fontSize:15}}>No Image Selected</Text></View>
                     }
@@ -198,49 +236,63 @@ const StudentRegistrationForm = () => {
             </View>
 
             <View style={styles.subFormView}>
-                <Text style={styles.label} >Roll Number <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Text style={styles.label}>Roll Number <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
                 <Controller
                     control={control}
-                    rules={{ required: true }}
+                    rules={{ 
+                        required: true,
+                        pattern: {
+                            value: /^[0-9]{6}$/,
+                            message: 'Roll number must be exactly 6 digits and only numbers.'
+                        }
+                    }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter your roll number"
-                        placeholderTextColor={"#adb5bd"}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your roll number"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            keyboardType="numeric"
+                        />
                     )}
                     name="rollNo"
                     defaultValue=""
                 />
-                {errors.rollNo && <Text style={styles.errorText}>Roll Number is required.</Text>}
+                {errors.rollNo && <Text style={styles.errorText}>{errors.rollNo.message}</Text>}
             </View>
 
             <View style={styles.subFormView}>
-                <Text style={styles.label} >Registration Number <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Text style={styles.label}>Registration Number <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
                 <Controller
                     control={control}
-                    rules={{ required: true }}
+                    rules={{ 
+                        required: true,
+                        pattern: {
+                            value: /^[0-9]{7}$/,
+                            message: 'Roll number must be exactly 7 digits and only numbers.'
+                        }
+                    }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Enter your registration number"
-                        placeholderTextColor={"#adb5bd"}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                    />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your registration number"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            keyboardType="numeric"
+                        />
                     )}
                     name="regNo"
                     defaultValue=""
                 />
-                {errors.regNo && <Text style={styles.errorText}>Registration Number is required.</Text>}
+                {errors.regNo && <Text style={styles.errorText}>{errors.regNo.message}</Text>}
             </View>
 
             <View style={styles.subFormView}>
-                <Text style={styles.label}>Year <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Text style={styles.label}>Year of Registration <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
                 <Controller
                     control={control}
                     rules={{ required: true }}
@@ -253,7 +305,7 @@ const StudentRegistrationForm = () => {
                             dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
                             textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
                             saveScrollPosition={false}
-                            defaultIndex={0}
+                            // defaultIndex={0}
                             isFullWidth={true}
                             onSelect={(index) => {
                                 const selectedOption = yearOptions[index];
@@ -271,128 +323,303 @@ const StudentRegistrationForm = () => {
 
             <View style={styles.subFormView}>
                 <Text style={styles.label}>Branch <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange } }) => (
-                        <ModalDropdown
-                            options={branchOptions}
-                            style={styles.dropDownStyle}
-                            dropdownStyle={styles.dropdownOptions}
-                            dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
-                            dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
-                            textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
-                            saveScrollPosition={false}
-                            defaultIndex={0}
-                            isFullWidth={true}
-                            onSelect={(index) => {
-                                const selectedOption = yearOptions[index];
-                                onChange(selectedOption);
-                                setSelectedBranch(selectedOption);
-                            }}
-                            defaultValue="Select Branch"
-                        />
-                    )}
-                    name="branch"
-                    defaultValue={1}
+                <ModalDropdown
+                    options={branchOptions}
+                    style={styles.dropDownStyle}
+                    dropdownStyle={styles.dropdownOptions}
+                    dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                    dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                    textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                    saveScrollPosition={false}
+                    // defaultIndex={0}
+                    isFullWidth={true}
+                    onSelect={(index) => {
+                        setSelectedBranch(branchOptions[index]); 
+                    }}
+                    defaultValue="Select Branch"
                 />
-                {errors.branch && <Text style={styles.errorText}>Branch is required.</Text>}
             </View>
 
-            <View style={styles.subFormView}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginRight: 30 }}>
                 <Text style={styles.label}>Gender <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange } }) => (
-                        <View style={styles.radioContainer}>
-                            <View style={styles.radioOption}>
-                                <RadioButton
-                                    value="M"
-                                    status={selectedGender === 'M' ? 'checked' : 'unchecked'}
-                                    onPress={() => {
-                                        onChange('M');
-                                        setSelectedGender('M');
-                                    }}
-                                />
-                                <Text style={styles.radioLabel}>M</Text>
-                            </View>
-                            <View style={styles.radioOption}>
-                                <RadioButton
-                                    value="F"
-                                    status={selectedGender === 'F' ? 'checked' : 'unchecked'}
-                                    onPress={() => {
-                                        onChange('F');
-                                        setSelectedGender('F');
-                                    }}
-                                />
-                                <Text style={styles.radioLabel}>F</Text>
-                            </View>
-                        </View>
-                    )}
-                    name="gender"
-                    defaultValue="M"
-                />
-                {errors.gender && <Text style={styles.errorText}>Gender is required.</Text>}
-            </View>
-
-            <View style={styles.subFormView}>
-                <Text style={styles.label}>Community <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange } }) => (
-                        <ModalDropdown
-                            options={communityOptions}
-                            style={styles.dropDownStyle}
-                            dropdownStyle={styles.dropdownOptions}
-                            dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
-                            dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
-                            textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
-                            saveScrollPosition={false}
-                            defaultIndex={0}
-                            isFullWidth={true}
-                            onSelect={(index) => {
-                                const selectedOption = communityOptions[index];
-                                onChange(selectedOption);
-                                setSelectedCommunity(selectedOption);
-                            }}
-                            defaultValue="Select Community"
+                <View style={styles.radioContainer}>
+                    <View style={styles.radioOption}>
+                        <RadioButton
+                            value="M"
+                            status={selectedGender === 'M' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedGender('M')}
                         />
-                    )}
-                    name="community"
-                    defaultValue={1}
-                />
-                {errors.community && <Text style={styles.errorText}>Community is required.</Text>}
-            </View>
-
-            <View style={styles.subFormView}>
-                <Text style={styles.label} >Date of Birth <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                <View style={{display:"flex", flexDirection:"row", gap:15, justifyContent:"space-between", alignItems:"center"}}>
-                    <View>
-                    <MainButton text={"From Date"} onPress={() => setIsDatePickerOpen(true)} />
-                    <DatePicker 
-                        modal
-                        mode='date'
-                        open={isDatePickerOpen}
-                        date={dob}
-                        onConfirm={(date) => {
-                        setIsDatePickerOpen(false);
-                        setDob(date);
-                        }}
-                        onCancel={() => {
-                        setIsDatePickerOpen(false);
-                        }}
-                    />
+                        <Text style={styles.radioLabel}>Male</Text>
                     </View>
-                    <View>
-                    {dob && <Text style={{fontWeight:"800", fontSize:15}}>{dob.toLocaleString()}</Text>}
+                    <View style={styles.radioOption}>
+                        <RadioButton
+                            value="F"
+                            status={selectedGender === 'F' ? 'checked' : 'unchecked'}
+                            onPress={() => setSelectedGender('F')}
+                        />
+                        <Text style={styles.radioLabel}>Female</Text>
                     </View>
                 </View>
             </View>
 
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Community <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <ModalDropdown
+                    options={communityOptions}
+                    style={styles.dropDownStyle}
+                    dropdownStyle={styles.dropdownOptions}
+                    dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                    dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                    textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                    saveScrollPosition={false}
+                    isFullWidth={true}
+                    onSelect={(_, selectedOption) => setSelectedCommunity(selectedOption)}
+                    defaultValue="Select Community"
+                />
+            </View>
 
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginRight: 60 }}>
+                <Text style={styles.label}>PWD Status <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <View style={styles.radioContainer}>
+                    <View style={styles.radioOption}>
+                        <RadioButton
+                            value="Yes"
+                            status={pwdStatus === 'Yes' ? 'checked' : 'unchecked'}
+                            onPress={() => setPwdStatus('Yes')}
+                        />
+                        <Text style={styles.radioLabel}>Yes</Text>
+                    </View>
+                    <View style={styles.radioOption}>
+                        <RadioButton
+                            value="No"
+                            status={pwdStatus === 'No' ? 'checked' : 'unchecked'}
+                            onPress={() => setPwdStatus('No')}
+                        />
+                        <Text style={styles.radioLabel}>No</Text>
+                    </View>
+                </View>
+            </View>
 
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Date of Birth <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <View style={{ display: "flex", flexDirection: "row", gap: 15, justifyContent: "space-between", alignItems: "center" }}>
+                    <View>
+                        <MainButton text={"Select Date"} onPress={() => setIsDatePickerOpen(true)} />
+                        <DatePicker
+                            modal
+                            mode='date'
+                            open={isDatePickerOpen}
+                            date={dob || new Date()} 
+                            onConfirm={(date) => {
+                            setIsDatePickerOpen(false);
+                            setDob(date);
+                            }}
+                            onCancel={() => {
+                            setIsDatePickerOpen(false);
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text style={{ fontWeight: "800", fontSize: 15 }}>{formatDate(dob)}</Text>
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Aadhaar Number <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ 
+                        required: true,
+                        pattern: {
+                            value: /^[0-9]{12}$/,
+                            message: 'Aadhaar number must be exactly 12 digits and only numbers.'
+                        }
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your aadhaar number"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            keyboardType="numeric"
+                        />
+                    )}
+                    name="aadhaarNumber"
+                    defaultValue=""
+                />
+                {errors.aadhaarNumber && <Text style={styles.errorText}>{errors.aadhaarNumber.message}</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Blood Group <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your blood group"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="bloodGroup"
+                    defaultValue=""
+                />
+                {errors.bloodGroup && <Text style={styles.errorText}>Blood group is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Student Mobile Number <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ 
+                        required: true,
+                        pattern: {
+                            value: /^[0-9]{10}$/,
+                            message: 'Mobile number must be exactly 10 digits and only numbers.'
+                        }
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your mobile number"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            keyboardType="numeric"
+                        />
+                    )}
+                    name="phone"
+                    defaultValue=""
+                />
+                {errors.phone && <Text style={styles.errorText}>{errors.phone.message}</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Father Name <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your father name"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="fatherName"
+                    defaultValue=""
+                />
+                {errors.fatherName && <Text style={styles.errorText}>Father Name is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Mother Name <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your mother name"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="motherName"
+                    defaultValue=""
+                />
+                {errors.motherName && <Text style={styles.errorText}>Mother Name is required.</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Parent Mobile Number <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ 
+                        required: true,
+                        pattern: {
+                            value: /^[0-9]{10}$/,
+                            message: 'Mobile number must be exactly 10 digits and only numbers.'
+                        }
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter your parent number"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            keyboardType="numeric"
+                        />
+                    )}
+                    name="parentsPhone"
+                    defaultValue=""
+                />
+                {errors.parentsPhone && <Text style={styles.errorText}>{errors.parentsPhone.message}</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Emergency Contact Number <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ 
+                        required: true,
+                        pattern: {
+                            value: /^[0-9]{10}$/,
+                            message: 'Mobile number must be exactly 10 digits and only numbers.'
+                        }
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter emergency contact number"
+                            placeholderTextColor={"#adb5bd"}
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            keyboardType="numeric"
+                        />
+                    )}
+                    name="emergencyPhone"
+                    defaultValue=""
+                />
+                {errors.emergencyPhone && <Text style={styles.errorText}>{errors.emergencyPhone.message}</Text>}
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Address <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your personal address"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                    />
+                    )}
+                    name="address"
+                    defaultValue=""
+                />
+                {errors.address && <Text style={styles.errorText}>Address is required.</Text>}
+            </View>
 
             <View style={styles.subFormView}>
                 <Text style={styles.label} >Fee Receipt <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
@@ -409,6 +636,8 @@ const StudentRegistrationForm = () => {
                     </View>
                 </View>
             </View>
+
+            <MainButton text={"Submit Data"} onPress={handleSubmit(submitHandler)} />
         </View>
     </View>
   )
@@ -494,5 +723,9 @@ const styles = StyleSheet.create({
         right:10,
         zIndex:10,
         elevation:100,
+    },
+    errorText:{
+        fontSize:14,
+        color:"red",
     },
 })

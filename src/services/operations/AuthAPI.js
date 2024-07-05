@@ -122,3 +122,26 @@ export const logout = (toast) => {
         }
     }
 }
+
+export const sendOtpToStudent = (email,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...", {type:'normal'});
+        try{ 
+            const response = await APIconnector("POST",SENDOTP_API,{email});
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, { type: "danger" });
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message, { type: "success" });
+            return true;
+        }catch(e){
+            toast.hide(id);
+            toast.show(e, {type: "danger"});
+            console.log(e);
+            return false;
+        }
+    }
+}

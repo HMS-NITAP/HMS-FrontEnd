@@ -60,9 +60,9 @@ export const fetchHostelData = (toast) => {
             const response = await APIconnector("GET", FETCH_MESS_DATA_AND_FEEDBACK);
     
             if (!response.data.success) {
-            toast.hide(id);
-            toast.show(response?.data?.message, { type: "danger" });
-            throw new Error(response.data.message);
+                toast.hide(id);
+                toast.show(response?.data?.message, { type: "danger" });
+                throw new Error(response.data.message);
             }
     
             toast.hide(id);
