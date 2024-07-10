@@ -1,28 +1,48 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native'
+import React, { useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useToast } from "react-native-toast-notifications"
 import { getStudentDashboardData } from '../../services/operations/StudentAPI'
-import MainButton from '../../components/common/MainButton'
+import { useFocusEffect } from '@react-navigation/native'
+import BirthdayGreetingCard from '../../components/student/BirthdayGreetingCard'
 
-const StudentDashboard = ({ navigation }) => {
+const StudentDashboard = () => {
 
   const [dashboardData, setDashboardData] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [isBirthDay, setIsBirthday] = useState(false);
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.Auth);
   const toast = useToast();
 
-  const fetchStudentDashboardData = async () => {
+  const checkIsDob = (dobString) => {
+
+    const [_, birthMonth, birthDay] = dobString.split('-').map(Number);
+
+    const now = Date.now(); 
+    const currentDate = new Date(now); 
+
+    const date = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; 
+
+    if(birthDay===date && birthMonth===month){
+      setIsBirthday(true);
+    }
+  }
+
+  const fetchData = async () => {
     const response = await dispatch(getStudentDashboardData(token, toast));
-    console.log("Dashboard data : ", response);
+    checkIsDob(response?.data?.dob);
     setDashboardData(response);
   }
 
-  useEffect(() => {
-    fetchStudentDashboardData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [token,toast])
+  );
 
   const returnDate = (date) => {
     const newDate = new Date(date);
@@ -38,52 +58,61 @@ const StudentDashboard = ({ navigation }) => {
       {
         dashboardData ? (
           <ScrollView contentContainerStyle={styles.contentContainer}>
+            {
+              isBirthDay && <BirthdayGreetingCard />
+            }
             <View style={styles.top}>
-              <Text style={styles.label}>Hi {dashboardData.instituteStudentData.name}</Text>
+                <View style={{ width: 80, height: 80, borderRadius: 40, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', }}>
+                    {imageLoading && (
+                        <ActivityIndicator size="large" color="#0000ff" style={{ position: 'absolute', zIndex: 1 }} />
+                    )}
+                    <Image
+                        source={{ uri: dashboardData?.data?.image }}
+                        style={{ width: 80, height: 80, }}
+                        onLoadStart={() => setImageLoading(true)}
+                        onLoad={() => setImageLoading(false)}
+                    />
+                </View>
+              <Text style={styles.label}>Hi {dashboardData?.data?.name}!</Text>
             </View>
 
             <View style={styles.section}>
-              <Text style={styles.label}>Outing Rating: {dashboardData.instituteStudentData.outingRating}</Text>
-              <Text style={styles.label}>Discipline Rating: {dashboardData.instituteStudentData.disciplineRating}</Text>
+              <Text style={styles.label}>Outing Rating: {dashboardData?.outingRating}</Text>
+              <Text style={styles.label}>Discipline Rating: {dashboardData?.disciplineRating}</Text>
             </View>
 
             <View style={styles.middle}>
-              <Text style={styles.label}>No of days present: {dashboardData.attendenceRecords.presentDays.length}</Text>
-              <Text style={styles.label}>No of days absent: {dashboardData.attendenceRecords.absentDays.length}</Text>
-              <Text style={styles.label}>No of Complaints Registered: {dashboardData.numberOfComplaintsRegistered}</Text>
+              <Text style={styles.label}>No of days present: {dashboardData?.data?.attendence?.presentDays.length}</Text>
+              <Text style={styles.label}>No of days absent: {dashboardData?.data?.attendence?.absentDays.length}</Text>
             </View>
 
-            <MainButton text={"Edit Profile Data"} onPress={() => navigation.navigate("Edit Profile")} />
-            <MainButton text={showDetails ? "Hide Details" : "View Details"} onPress={toggleDetails} />
-
-            {
-              showDetails && (
-                <View style={styles.details}>
-                  <Text style={styles.label}>Name: {dashboardData.instituteStudentData.name}</Text>
+            <View style={styles.details}>
                   <Text style={styles.label}>Institute Email: {dashboardData.userData.email}</Text>
-                  <Text style={styles.label}>Registration No: {dashboardData.instituteStudentData.regNo}</Text>
-                  <Text style={styles.label}>Roll No: {dashboardData.instituteStudentData.rollNo}</Text>
-                  <Text style={styles.label}>Year: {dashboardData.instituteStudentData.year}</Text>
-                  <Text style={styles.label}>Branch: {dashboardData.instituteStudentData.branch}</Text>
-                  <Text style={styles.label}>Gender: {dashboardData.instituteStudentData.gender}</Text>
-                  <Text style={styles.label}>Community: {dashboardData.instituteStudentData.community}</Text>
-                  <Text style={styles.label}>Aadhaar Number: {dashboardData.instituteStudentData.aadharNumber}</Text>
-                  <Text style={styles.label}>DOB: {returnDate(dashboardData.instituteStudentData.dob)}</Text>
-                  <Text style={styles.label}>Blood Group: {dashboardData.instituteStudentData.bloodGroup}</Text>
-                  <Text style={styles.label}>Father Name: {dashboardData.instituteStudentData.fatherName}</Text>
-                  <Text style={styles.label}>Mother Name: {dashboardData.instituteStudentData.motherName}</Text>
-                  <Text style={styles.label}>Phone: {dashboardData.instituteStudentData.phone}</Text>
-                  <Text style={styles.label}>Parent's Phone: {dashboardData.instituteStudentData.parentsPhone}</Text>
-                  <Text style={styles.label}>Emergency Phone: {dashboardData.instituteStudentData.emergencyPhone}</Text>
-                  <Text style={styles.label}>Address: {dashboardData.instituteStudentData.address}</Text>
-                  <Text style={styles.label}>Cot No: {dashboardData.instituteStudentData.cotNo}</Text>
+                  <Text style={styles.label}>Registration No: {dashboardData.data.regNo}</Text>
+                  <Text style={styles.label}>Roll No: {dashboardData.data.rollNo}</Text>
+                  <Text style={styles.label}>Year: {dashboardData?.data?.year}</Text>
+                  <Text style={styles.label}>Branch: {dashboardData?.data?.branch}</Text>
+                  <Text style={styles.label}>Gender: {dashboardData?.data?.gender}</Text>
+                  <Text style={styles.label}>Community: {dashboardData?.data?.community}</Text>
+                  <Text style={styles.label}>Aadhaar Number: {dashboardData?.data?.aadharNumber}</Text>
+                  <Text style={styles.label}>DOB: {returnDate(dashboardData?.data?.dob)}</Text>
+                  {/* <Text style={styles.label}>Blood Group: {dashboardData?.data?.bloodGroup}</Text>
+                  <Text style={styles.label}>Father Name: {dashboardData.data.fatherName}</Text>
+                  <Text style={styles.label}>Mother Name: {dashboardData.data.motherName}</Text>
+                  <Text style={styles.label}>Phone: {dashboardData.data.phone}</Text>
+                  <Text style={styles.label}>Parent's Phone: {dashboardData.data.parentsPhone}</Text>
+                  <Text style={styles.label}>Emergency Phone: {dashboardData.data.emergencyPhone}</Text>
+                  <Text style={styles.label}>Address: {dashboardData.data.address}</Text>
+                  <Text style={styles.label}>Cot No: {dashboardData.data.cotNo}</Text>
                   <Text style={styles.label}>Room No: {dashboardData.instituteStudentData.roomNo}</Text>
                   <Text style={styles.label}>Floor No: {dashboardData.instituteStudentData.floorNo}</Text>
                   <Text style={styles.label}>Hostel Block: {dashboardData.hostelBlockData.name}</Text>
-                  <Text style={styles.label}>Mess Hall: {dashboardData.messHallData.name}</Text>
+                  <Text style={styles.label}>Mess Hall: {dashboardData.messHallData.name}</Text> */}
                 </View>
-              )
-            }
+
+            {/* <MainButton text={"Edit Profile Data"} onPress={() => navigation.navigate("Edit Profile")} />
+            <MainButton text={showDetails ? "Hide Details" : "View Details"} onPress={toggleDetails} /> */}
+
           </ScrollView>
         ) : (
           <View><Text>Fetching Data, please wait...</Text></View>
@@ -107,9 +136,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     width: "100%",
     marginHorizontal: "auto",
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
     paddingHorizontal: 20,
     paddingVertical: 20,
     gap: 20,

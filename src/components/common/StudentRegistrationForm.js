@@ -21,16 +21,26 @@ const StudentRegistrationForm = () => {
         { label: '4th Year', value: 4 },
     ];
     const branchOptions = ["CSE","ECE","EEE","MECH","CIVIL","BIOTECH","CHEM","MME"];
-    const communityOptions = ["GENERAL","OBC","SC","ST"]
+    const communityOptions = ["GENERAL","OBC","SC","ST"];
+    const paymentOption = [
+        { label : "NET BANKING", value : "NET_BANKING"},
+        { label : "DEBIT CARD", value : "DEBIT_CARD"},
+        { label : "CREDIT CARD", value : "CREDIT_CARD"},
+        { label : "UPI", value : "UPI"},
+        { label : "NEFT", value : "NEFT"},
+        { label : "OTHER", value : "OTHER"},
+    ]
 
     const { control, handleSubmit, formState: { errors }, reset } = useForm();
     const dispatch = useDispatch();
     const toast = useToast();
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const [isPaymentDatePickerOpen, setIsPaymentDatePickerOpen] = useState(false);
 
     const [imageResponse, setImageResponse] = useState(null);
-    const [feeReceiptResponse, setFeeReceiptResponse] = useState(null);
+    const [hostelfeeReceiptResponse, setHostelFeeReceiptResponse] = useState(null);
+    const [instituteFeeReceiptResponse, setInstituteFeeReceiptResponse] = useState(null);
 
     const [selectedGender, setSelectedGender] = useState(null);
     const [dob, setDob] = useState(null);
@@ -38,6 +48,8 @@ const StudentRegistrationForm = () => {
     const [selectedBranch, setSelectedBranch] = useState(null);
     const [selectedCommunity, setSelectedCommunity] = useState(null);
     const [pwdStatus, setPwdStatus] = useState(null);
+    const [paymentMode, setPaymentMode] = useState(null);
+    const [paymentDate, setPaymentDate] = useState(null);
 
     const pickUpImage = useCallback(async () => {
         try {
@@ -51,13 +63,25 @@ const StudentRegistrationForm = () => {
         }
     }, []);
 
-    const pickUpFeeReceipt = useCallback(async () => {
+    const pickUpHostelFeeReceipt = useCallback(async () => {
         try {
           const response = await DocumentPicker.pick({
             type: [DocumentPicker.types.pdf],
             presentationStyle: 'fullScreen',
           });
-          setFeeReceiptResponse(response);
+          setHostelFeeReceiptResponse(response);
+        } catch (err) {
+          console.warn(err);
+        }
+    }, []);
+
+    const pickUpInstituteFeeReceipt = useCallback(async () => {
+        try {
+          const response = await DocumentPicker.pick({
+            type: [DocumentPicker.types.pdf],
+            presentationStyle: 'fullScreen',
+          });
+          setInstituteFeeReceiptResponse(response);
         } catch (err) {
           console.warn(err);
         }
@@ -73,29 +97,31 @@ const StudentRegistrationForm = () => {
 
     const submitHandler = async(data) => {
 
-        if(data.password !== data.confirmPassword){
+        if(data?.password !== data?.confirmPassword){
             toast.show("Passwords are not matching",{type:"warning"});
             return;
         }
 
-        if(!selectedBranch || !selectedCommunity || !selectedGender || !selectedYear || !dob || !pwdStatus){
+        if(!selectedBranch || !selectedCommunity || !selectedGender || !selectedYear || !dob || !pwdStatus || !paymentMode || !paymentDate){
             toast.show("Fill all fields",{type:"warning"});
             return;
         }
 
-        if(!imageResponse || !feeReceiptResponse){
+        if(!instituteFeeReceiptResponse){
+            toast.show("Upload Institute Fee Receipt",{type:"warning"});
+            return;
+        }
+
+        if(!imageResponse || !hostelfeeReceiptResponse){
             toast.show("Upload the Required Files",{type:"warning"});
             return;
         }
-        console.log("DOB",dob);
         const registrationData = {
-            ...data,selectedBranch,selectedCommunity,selectedGender,selectedYear,dob: dob.toISOString(),pwdStatus,imageResponse,feeReceiptResponse
+            ...data,branch:selectedBranch,community:selectedCommunity,gender:selectedGender,year:selectedYear,dob: dob.toISOString(),pwd:pwdStatus,image:imageResponse,instituteFeeReceipt:instituteFeeReceiptResponse,hostelFeeReceipt:hostelfeeReceiptResponse,paymentMode,paymentDate:paymentDate.toISOString()
         }
 
-        console.log("Reg Data",registrationData);
         await dispatch(setRegistrationData(registrationData));
         const response = await dispatch(sendOtpToStudent(data.email,toast));
-        console.log("Response",response);
         if(response){
             await dispatch(setRegistrationStep(2));
         }else{
@@ -107,6 +133,7 @@ const StudentRegistrationForm = () => {
     <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center",gap:25}}>
         <View style={{width:"100%", backgroundColor:"#e9edc9", borderRadius:20, paddingHorizontal:15, paddingVertical:15,gap:2}}>
             <Text style={{ textAlign: "center", fontSize: 18, fontWeight:"700", color: "black", marginBottom: 10 }}>INSTRUCTIONS:</Text>
+            <Text style={{ fontSize: 16, fontWeight:"600", color: "black" }}>{'\u2022'} Please complete your Institute Registration before proceeding with the Hostel Registration.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Ensure your Institute email address is correct.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Fill the details with atmost care.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload a proper passport size photo of yours not exceeding 200KB size.</Text>
@@ -292,33 +319,22 @@ const StudentRegistrationForm = () => {
             </View>
 
             <View style={styles.subFormView}>
-                <Text style={styles.label}>Year of Registration <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
-                <Controller
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field: { onChange } }) => (
-                        <ModalDropdown
-                            options={yearOptions.map(option => option.label)}
-                            style={styles.dropDownStyle}
-                            dropdownStyle={styles.dropdownOptions}
-                            dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
-                            dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
-                            textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
-                            saveScrollPosition={false}
-                            // defaultIndex={0}
-                            isFullWidth={true}
-                            onSelect={(index) => {
-                                const selectedOption = yearOptions[index];
-                                onChange(selectedOption.value);
-                                setSelectedYear(selectedOption.value);
-                            }}
-                            defaultValue="Select Year"
-                        />
-                    )}
-                    name="year"
-                    defaultValue={1}
+                <Text style={styles.label}>Year <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <ModalDropdown
+                    options={yearOptions.map((year) => year.label)}
+                    style={styles.dropDownStyle}
+                    dropdownStyle={styles.dropdownOptions}
+                    dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                    dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                    textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                    saveScrollPosition={false}
+                    // defaultIndex={0}
+                    isFullWidth={true}
+                    onSelect={(index) => {
+                        setSelectedYear(yearOptions[index].value); 
+                    }}
+                    defaultValue="Select Your Enrollment Year"
                 />
-                {errors.year && <Text style={styles.errorText}>Year is required.</Text>}
             </View>
 
             <View style={styles.subFormView}>
@@ -622,14 +638,14 @@ const StudentRegistrationForm = () => {
             </View>
 
             <View style={styles.subFormView}>
-                <Text style={styles.label} >Fee Receipt <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Text style={styles.label} >Institute Fee Receipt <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
                 <View style={{display:'flex', marginTop:5, flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"center",marginHorizontal:"auto", gap:20}}>
-                    <MainButton text="Select File" onPress={pickUpFeeReceipt} />
+                    <MainButton text="Select File" onPress={pickUpInstituteFeeReceipt} />
                     <View>
                     {
-                        feeReceiptResponse ? 
+                        instituteFeeReceiptResponse ? 
                             <View style={{maxWidth:"80%", display:"flex",flexDirection:'row',gap:8}}>
-                                <Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:15}}>{feeReceiptResponse[0].name}</Text>
+                                <Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:15}}>{instituteFeeReceiptResponse[0].name}</Text>
                             </View> : 
                             <View><Text style={{fontWeight:"800", fontSize:15}}>No File Selected</Text></View>
                     }
@@ -637,8 +653,90 @@ const StudentRegistrationForm = () => {
                 </View>
             </View>
 
-            <MainButton text={"Submit Data"} onPress={handleSubmit(submitHandler)} />
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Hostel Fee Receipt <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <View style={{display:'flex', marginTop:5, flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"center",marginHorizontal:"auto", gap:20}}>
+                    <MainButton text="Select File" onPress={pickUpHostelFeeReceipt} />
+                    <View>
+                    {
+                        hostelfeeReceiptResponse ? 
+                            <View style={{maxWidth:"80%", display:"flex",flexDirection:'row',gap:8}}>
+                                <Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:15}}>{hostelfeeReceiptResponse[0].name}</Text>
+                            </View> : 
+                            <View><Text style={{fontWeight:"800", fontSize:15}}>No File Selected</Text></View>
+                    }
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label}>Hostel Fee Payment Mode <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                <ModalDropdown
+                    options={paymentOption.map((mode) => mode.label)}
+                    style={styles.dropDownStyle}
+                    dropdownStyle={styles.dropdownOptions}
+                    dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                    dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                    textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                    saveScrollPosition={false}
+                    // defaultIndex={0}
+                    isFullWidth={true}
+                    onSelect={(index) => {
+                        setPaymentMode(paymentOption[index].value); 
+                    }}
+                    defaultValue="Select Your Payment Mode"
+                />
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Hostel Fee Payment Date <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <View style={{ display: "flex", flexDirection: "row", gap: 15, justifyContent: "space-between", alignItems: "center" }}>
+                    <View>
+                        <MainButton text={"Select Date"} onPress={() => setIsPaymentDatePickerOpen(true)} />
+                        <DatePicker
+                            modal
+                            mode='date'
+                            open={isPaymentDatePickerOpen}
+                            date={paymentDate || new Date()} 
+                            onConfirm={(date) => {
+                                setIsPaymentDatePickerOpen(false);
+                                setPaymentDate(date);
+                            }}
+                            onCancel={() => {
+                                setIsPaymentDatePickerOpen(false);
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text style={{ fontWeight: "800", fontSize: 15 }}>{formatDate(paymentDate)}</Text>
+                    </View>
+                </View>
+            </View>
+
+            <View style={styles.subFormView}>
+                <Text style={styles.label} >Hostel Fee Payment Amount <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Controller
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter amount paid"
+                        placeholderTextColor={"#adb5bd"}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                        keyboardType='numeric'
+                    />
+                    )}
+                    name="amountPaid"
+                    defaultValue=""
+                />
+                {errors.amountPaid && <Text style={styles.errorText}>Amount Paid is required.</Text>}
+            </View>
+            
         </View>
+        <MainButton text={"Submit Data"} backgroundColor={"#b5e48c"} onPress={handleSubmit(submitHandler)} />
     </View>
   )
 }

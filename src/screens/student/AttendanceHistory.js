@@ -25,24 +25,25 @@ const AttendanceHistory = ({ navigation }) => {
   };
 
   const getAttendanceStatus = (date) => {
-    const formattedDate = date.toISOString().split('T')[0];
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     const attendance = attendanceData.find((item) => item.date === formattedDate);
     return attendance ? attendance.status : 'N/A';
   };
 
   const dispatch = useDispatch();
-  const {token} = useSelector((state) => state.Auth);
+  const { token } = useSelector((state) => state.Auth);
   const toast = useToast();
-  const [attendanceData,setAttendenceData] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
 
-  const fetchAttendenceData = async() => {
-    const response = await dispatch(getStudentAttendance(token,toast));
-    setAttendenceData(response);
+  const fetchAttendanceData = async () => {
+    const response = await dispatch(getStudentAttendance(token, toast));
+    console.log("ATTENDANCE DATA", response);
+    setAttendanceData(response);
   };
 
   useFocusEffect(
     useCallback(() => {
-      fetchAttendenceData();
+      fetchAttendanceData();
     }, [token, toast])
   );
 
@@ -75,20 +76,20 @@ const AttendanceHistory = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        <View style={{display:"flex", flexWrap:"wrap",marginVertical:30,flexDirection:"row", justifyContent:"space-evenly", alignItems:"center", gap:15}}>
-          <View style={styles.legendContainer}>
-            <View style={[styles.legendDot, { backgroundColor: 'lightgreen' }]} />
-            <Text style={styles.legendText}>Present Days</Text>
-          </View>
-          <View style={styles.legendContainer}>
-            <View style={[styles.legendDot, { backgroundColor: 'salmon' }]} />
-            <Text style={styles.legendText}>Absent Days</Text>
-          </View>
-          <View style={styles.legendContainer}>
-            <View style={[styles.legendDot, { backgroundColor: '#f0f0f0' }]} />
-            <Text style={styles.legendText}>Not Marked</Text>
-          </View>
+      <View style={{display:"flex", flexWrap:"wrap",marginVertical:30,flexDirection:"row", justifyContent:"space-evenly", alignItems:"center", gap:15}}>
+        <View style={styles.legendContainer}>
+          <View style={[styles.legendDot, { backgroundColor: 'lightgreen' }]} />
+          <Text style={styles.legendText}>Present Days</Text>
         </View>
+        <View style={styles.legendContainer}>
+          <View style={[styles.legendDot, { backgroundColor: 'salmon' }]} />
+          <Text style={styles.legendText}>Absent Days</Text>
+        </View>
+        <View style={styles.legendContainer}>
+          <View style={[styles.legendDot, { backgroundColor: '#f0f0f0' }]} />
+          <Text style={styles.legendText}>Not Marked</Text>
+        </View>
+      </View>
       
       <View style={styles.header}>
         <TouchableOpacity onPress={handlePrevMonth} style={styles.navButton}>

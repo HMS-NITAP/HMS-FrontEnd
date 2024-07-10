@@ -52,14 +52,14 @@ const StudentRegistration = () => {
             }
         </View>
 
-        <View style={{display:"flex", marginTop:40, flexDirection:"row", justifyContent:"center", gap:20}}>
+        {/* <View style={{display:"flex", marginTop:40, flexDirection:"row", justifyContent:"center", gap:20}}>
             {
                 registrationStep>1 && registrationStep<5 && <MainButton text={"Back"} onPress={handleBack} />
             }
             {
                 registrationStep<5 && <MainButton text={"Next"} onPress={handleNext} />
             }
-        </View>
+        </View> */}
         
     </ScrollView>
   )

@@ -122,11 +122,12 @@ export const createHostelComplaint = (formData,token,toast) => {
             
             toast.hide(id);
             toast.show("Created Hostel Complaint Successfully",{type:"success"});
-            return response.data.data;
+            return true;
         }catch(e){
             toast.hide(id);
             toast.show("Unable to create hostel Complaint",{type:"danger"});
-            console.log(e)
+            console.log(e);
+            return false;
         }
     }
 }
@@ -204,7 +205,6 @@ export const createMessFeedBack = (formData,token,toast) => {
     return async() => {
         let id = toast.show("Creating Mess Feedback...",{type: "normal"});
         try{
-            console.log("FORMDAdTA",formData);
             const response = await APIconnector("POST",CREATE_MESS_FEEDBACK_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
 
             if(!response.data.success){

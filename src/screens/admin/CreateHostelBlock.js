@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, Image } from 'react-native';
 import MainButton from '../../components/common/MainButton';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { RadioButton } from 'react-native-paper';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import DocumentPicker from 'react-native-document-picker';
-import { editStudentProfile } from '../../services/operations/StudentAPI';
 import { useToast } from 'react-native-toast-notifications';
 import { createHostelBlock } from '../../services/operations/AdminAPI';
 
@@ -37,6 +36,7 @@ const CreateHostelBlock = () => {
     const pickUpFile = useCallback(async () => {
         try {
           const response = await DocumentPicker.pick({
+            type: [DocumentPicker.types.images],
             presentationStyle: 'fullScreen',
           });
           setFileResponse(response);
@@ -88,17 +88,18 @@ const CreateHostelBlock = () => {
 
                 <View style={styles.subFormView}>
                     <Text style={styles.label} >Hostel Block Image <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-                    <View style={{display:'flex', flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"flex-start", gap:20}}>
-                        <MainButton text="Pick File" onPress={pickUpFile} />
-                        <View>
-                        {
-                            fileResponse ? 
-                            <View style={{maxWidth:"80%", display:"flex",flexDirection:'column',gap:8}}>
-                                {fileResponse.map((file,index) => <Text key={index}>{file?.name}</Text>)}
-                            </View> : <View><Text style={{fontWeight:"800", fontSize:15}}>No Image Selected</Text></View>
-                        }
-                        </View>
+                    <View style={{display:'flex', marginTop:5, flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"center",marginHorizontal:"auto", gap:20}}>
+                    <MainButton text="Select Image" onPress={pickUpFile} />
+                    <View>
+                    {
+                        fileResponse ? 
+                            <View style={{maxWidth:"100%", display:"flex",flexDirection:'row',gap:8}}>
+                                <Image source={{ uri: fileResponse[0].uri }} style={{width:80,height:80,borderRadius:40}} />
+                            </View> : 
+                            <View><Text style={{fontWeight:"800", fontSize:15}}>No Image Selected</Text></View>
+                    }
                     </View>
+                </View>
                 </View>
 
                 <View style={styles.subFormView}>
@@ -166,7 +167,6 @@ const CreateHostelBlock = () => {
                     />
                     {errors.gender && <Text style={styles.errorText}>Gender is required.</Text>}
                 </View>
-
 
                 <View style={styles.subFormView}>
                         <Text style={styles.label}>Floor Count <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
@@ -339,6 +339,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight:"700",
         color: '#000',
+    },
+    errorText:{
+        fontSize:14,
+        color:"red",
     },
 })
   

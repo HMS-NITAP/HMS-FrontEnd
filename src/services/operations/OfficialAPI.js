@@ -17,6 +17,8 @@ const {CREATE_ANNOUNCEMENT_API,
     MARK_STUDENT_ABSENT_API,
     UNMARK_STUDENT_PRESENT_API,
     UNMARK_STUDENT_ABSENT_API,
+    FETCH_ROOMS_IN_HOSTEL_BLOCK_API,
+    UPDATE_STUDENT_ATTENDENCE_RECORDS_API,
 } = officialEndPoints;
 
 export const createAnnouncement = (formData,token,toast) => {
@@ -350,6 +352,50 @@ export const unmarkStudentAbsent = (absentDate,attendenceRecordId,token,toast) =
             console.log(e);
             toast.hide(id);
             toast.show("Unable to unmark absent",{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const fetchHostelBlockRoomsForAttendance = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("GET",FETCH_ROOMS_IN_HOSTEL_BLOCK_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Unable to fetch Data",{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const updateAttendanceRecords = (formdata,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",UPDATE_STUDENT_ATTENDENCE_RECORDS_API,formdata,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Unable to Update Attendance",{type:"danger"});
             return null;
         }
     }

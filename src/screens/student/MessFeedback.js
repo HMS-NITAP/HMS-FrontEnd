@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TextInput, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native'
 import MainButton from '../../components/common/MainButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useToast } from 'react-native-toast-notifications';
@@ -56,7 +56,7 @@ const MessFeedback = ({}) => {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
         <View style={{borderRadius:30, width:"90%", justifyContent:"center", padding:15, backgroundColor:"#e9f5db", borderColor:"black", borderWidth:0.25}} >
           <Text style={{color:"black", textAlign:"center", fontSize:16}}>Let us know how you find the food quality at mess, by sharing your valuable feedback.</Text>
         </View>
@@ -101,7 +101,7 @@ const MessFeedback = ({}) => {
           
 
         </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   )
 }
 

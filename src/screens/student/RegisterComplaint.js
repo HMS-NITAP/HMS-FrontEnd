@@ -28,17 +28,30 @@ const RegisterComplaint = () => {
   const dispatch = useDispatch();
   const {token} = useSelector((state) => state.Auth);
 
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit, formState: { errors }, reset } = useForm();
   const toast = useToast();
 
   const onSubmit = async(data) => {
+    if(!category){
+      toast.show("Select a Category",{type:"warning"});
+      return;
+    }
+    if(data?.about === ""){
+      toast.show("Give description of complaint",{type:"warning"});
+      return;
+    }
     let formData = new FormData();
     formData.append("category",category);
     formData.append("about",data?.about);
     if(fileResponse){
       formData.append("file",{uri:fileResponse[0]?.uri, type:fileResponse[0]?.type, name:fileResponse[0]?.name});
     }
-    await dispatch(createHostelComplaint(formData,token,toast));
+    const response = await dispatch(createHostelComplaint(formData,token,toast));
+    if(response){
+      setCategory(null);
+      setFileResponse(null);
+      reset();
+    }
   }
 
   const pickUpFile = useCallback(async () => {
@@ -70,7 +83,7 @@ const RegisterComplaint = () => {
             saveScrollPosition={false}
             defaultIndex = {0}
             isFullWidth={true}
-            defaultValue="General"
+            defaultValue="Pick A Category"
             onSelect={(_, value) => setCategory(value)}
           />
         </View>

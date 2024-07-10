@@ -10,7 +10,10 @@ const {
     DELETE_MESS_HALL_API,
     FETCH_OFFICIAL_ACCOUNTS,
     CREATE_OFFICIAL_ACCOUNT,
-    DELETE_OFFICIAL_ACCOUNT
+    DELETE_OFFICIAL_ACCOUNT,
+    FETCH_REGISTRATION_APPLICATIONS_API,
+    ACCEPT_REGISTRATION_APPLICATION_API,
+    REJECT_REGISTRATION_APPLICATION_API,
 } = adminEndPoints;
 
 const {
@@ -186,6 +189,75 @@ export const removeWardenFromHostelBlock = (formData,token,toast) => {
             console.log(e);
             toast.hide(id);
             toast.show("Unable to make changes",{type:"danger"});
+        }
+    }
+}
+
+export const fetchStudentRegistrationApplications = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("GET",FETCH_REGISTRATION_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            console.log(e);
+            toast.hide(id);
+            toast.show("Unable to fetch Application",{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const acceptRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",ACCEPT_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            console.log(e);
+            toast.hide(id);
+            toast.show("Unable to Accept Application",{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const rejectRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",REJECT_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            console.log(e);
+            toast.hide(id);
+            toast.show("Unable to Reject Application",{type:"danger"});
+            return false;
         }
     }
 }

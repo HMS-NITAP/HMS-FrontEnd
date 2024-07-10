@@ -1,5 +1,5 @@
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
-SERVER_BASE_URL = "http://192.168.39.208:4000/api/v1"
+SERVER_BASE_URL = "http://192.168.81.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 export const authEndPoints = {
@@ -8,6 +8,8 @@ export const authEndPoints = {
     LOGIN_API : SERVER_BASE_URL + "/auth/login",
     RESET_PASSWORD_TOKEN : SERVER_BASE_URL + "/auth/resetPasswordToken",
     RESET_PASSWORD : SERVER_BASE_URL + "/auth/resetPassword",
+    VERIFY_OTP : SERVER_BASE_URL + "/auth/verifyOTP",
+    CREATE_STUDENT_ACCOUNT_API : SERVER_BASE_URL + "/auth/createStudentAccount",
 }
 
 export const studentEndPoints = {
@@ -58,6 +60,10 @@ export const officialEndPoints = {
     MARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/markStudentAbsent',
     UNMARK_STUDENT_PRESENT_API : SERVER_BASE_URL + '/official/unMarkStudentPresent',
     UNMARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/unMarkStudentAbsent',
+
+    // NEW ATTENDENCE APIs
+    FETCH_ROOMS_IN_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/official/fetchRoomsInHostelBlock',
+    UPDATE_STUDENT_ATTENDENCE_RECORDS_API : SERVER_BASE_URL + '/official/updateAttendanceRecords',
 }
 
 export const adminEndPoints = {
@@ -75,10 +81,17 @@ export const adminEndPoints = {
     FETCH_OFFICIAL_ACCOUNTS : SERVER_BASE_URL + '/admin/fetchOfficialAccounts',
     CREATE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/createOfficialAccount',
     DELETE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/deleteOfficialAccount',
+
+    // REGISTRATION APPLICATION APIs
+    FETCH_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchRegistrationApplications',
+    ACCEPT_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/acceptRegistrationApplication',
+    REJECT_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/rejectRegistrationApplication',
 }
 
 export const commonEndPoints = {
     GET_ALL_ANNOUNCEMENTS_API : SERVER_BASE_URL + '/common/getAllAnnouncements',
     FETCH_ALL_HOSTEL_DATA_API : SERVER_BASE_URL + '/common/fetchAllHostelData',
     FETCH_MESS_DATA_AND_FEEDBACK : SERVER_BASE_URL + '/common/fetchMessDataAndFeedback',
+    FETCH_HOSTEL_BLOCKS_NAME : SERVER_BASE_URL + '/common/fetchHostelBlockNames',
+    FETCH_HOSTEL_BLOCKS_ROOMS : SERVER_BASE_URL + '/common/fetchHostelBlockRooms',
 }

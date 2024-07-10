@@ -3,8 +3,9 @@ import { setUser } from "../../reducer/slices/ProfileSlice";
 import { APIconnector } from "../APIconnector";
 import { authEndPoints } from "../APIs";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const {SENDOTP_API,SIGNUP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD} = authEndPoints;
+const {SENDOTP_API,SIGNUP_API,LOGIN_API,RESET_PASSWORD_TOKEN,RESET_PASSWORD,VERIFY_OTP,CREATE_STUDENT_ACCOUNT_API} = authEndPoints;
 
 export const sendOTP = (email,navigation,toast) => {
     return async() => {
@@ -139,8 +140,54 @@ export const sendOtpToStudent = (email,toast) => {
             return true;
         }catch(e){
             toast.hide(id);
-            toast.show(e, {type: "danger"});
+            toast.show("Unable to Send OTP to Student", {type: "danger"});
             console.log(e);
+            return false;
+        }
+    }
+}
+
+export const verifyOtp = (formData,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...", {type:'normal'});
+        try{ 
+            const response = await APIconnector("POST",VERIFY_OTP,formData,{"Content-Type": "multipart/form-data"});
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, { type: "danger" });
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message, { type: "success" });
+            return true;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Invalid OTP", {type: "danger"});
+            console.log("Error",e);
+            return false;
+        }
+    }
+}
+
+export const createStudentAccount = (formData,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...", {type:'normal'});
+        try{ 
+            const response = await APIconnector("POST",CREATE_STUDENT_ACCOUNT_API,formData,{"Content-Type": "multipart/form-data"});
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, { type: "danger" });
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message, { type: "success" });
+            return true;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Unable to Complete Registration", {type: "danger"});
+            console.log("Error",e);
             return false;
         }
     }

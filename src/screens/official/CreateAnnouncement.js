@@ -82,7 +82,8 @@ const CreateAnnouncement = () => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
-                numberOfLines={3}
+                numberOfLines={5}
+                multiline
               />
             )}
             name="textContent"
