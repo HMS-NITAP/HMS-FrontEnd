@@ -13,12 +13,6 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
     const { control, handleSubmit, reset, formState: { errors } } = useForm();
     const dispatch = useDispatch();
 
-    const onSubmit = data => {
-        console.log(data);
-        setRejectModalVisible(false);
-        reset();
-    };
-
     const acceptHandler = async() => {
         let formdata = new FormData();
         formdata.append("userId",application?.id);

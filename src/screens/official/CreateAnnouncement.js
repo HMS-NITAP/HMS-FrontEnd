@@ -21,7 +21,6 @@ const CreateAnnouncement = () => {
     if(fileResponse){
       formData.append("file",{uri:fileResponse[0]?.uri, type:fileResponse[0]?.type, name:fileResponse[0]?.name});
     }
-    console.log(formData);
     dispatch(createAnnouncement(formData, token, toast));
     setValue("title","");
     setValue("textContent","");
@@ -34,7 +33,6 @@ const CreateAnnouncement = () => {
         // allowMultiSelection:true,
         presentationStyle: 'fullScreen',
       });
-      console.log("File Response",response);
       setFileResponse(response);
     } catch (err) {
       console.warn(err);

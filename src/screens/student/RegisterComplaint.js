@@ -60,7 +60,6 @@ const RegisterComplaint = () => {
         // allowMultiSelection:true,
         presentationStyle: 'fullScreen',
       });
-      console.log("File Response",response);
       setFileResponse(response);
     } catch (err) {
       console.warn(err);

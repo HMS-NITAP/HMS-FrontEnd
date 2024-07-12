@@ -36,7 +36,6 @@ const Signup = ({navigation}) => {
   };
 
   const onSubmit = async(data) => {
-    console.log("Form Data:", data);
     if(data.password != data.confirmPassword){
       toast.show("Both passwords are not Matching", {type: "danger"});
     }else{

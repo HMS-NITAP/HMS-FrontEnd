@@ -16,7 +16,6 @@ const ApplicationHistory = () => {
     const fetchData = async () => {
         const data = await dispatch(getStudentAllOutingApplication(token,toast));
         setOutingApplication(data);
-        console.log("Format",data);
     }
 
     useFocusEffect(
@@ -31,6 +30,7 @@ const ApplicationHistory = () => {
     }
 
     return (
+        // HERE SHOW NO APPLICATIONS OR PLEASE WAIT ALSO
         <ScrollView contentContainerStyle={{width:"100%", paddingHorizontal:10,paddingVertical:10,justifyContent:'start',alignItems:"center"}}>
             {
                 outingApplication.map((application) => {

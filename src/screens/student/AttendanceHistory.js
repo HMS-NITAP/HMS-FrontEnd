@@ -37,7 +37,6 @@ const AttendanceHistory = ({ navigation }) => {
 
   const fetchAttendanceData = async () => {
     const response = await dispatch(getStudentAttendance(token, toast));
-    console.log("ATTENDANCE DATA", response);
     setAttendanceData(response);
   };
 

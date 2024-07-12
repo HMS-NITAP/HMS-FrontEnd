@@ -6,13 +6,13 @@ import Pavan from '../assets/developmentTeam/Pavan.jpeg'
 import Sreeram from '../assets/developmentTeam/Sreeram.jpeg'
 
 export const hostelOfficeAdvisorsData = [
-    {
-        image : Srilatha,
-        name : "Dr. Srilatha Chebrolu",
-        designation : "Assistant Professor, Department of CSE",
-        phone : "+91-8330967036",
-        email : "srilatha.chebrolu@nitandhra.ac.in"
-    },
+    // {
+    //     image : Srilatha,
+    //     name : "Dr. Srilatha Chebrolu",
+    //     designation : "Assistant Professor, Department of CSE",
+    //     phone : "+91-8330967036",
+    //     email : "srilatha.chebrolu@nitandhra.ac.in"
+    // },
     {
         image : Dinesh,
         name : "Mr. Venkata Dinesh Babu K",

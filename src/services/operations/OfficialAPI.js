@@ -1,7 +1,8 @@
 import { APIconnector } from "../APIconnector";
 import { officialEndPoints } from "../APIs";
 
-const {CREATE_ANNOUNCEMENT_API,
+const {FETCH_DASHBOARD_DATA_API,
+    CREATE_ANNOUNCEMENT_API,
     DELETE_ANNOUNCEMENT_API,
     GET_PENDING_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
     GET_ACCEPTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
@@ -12,14 +13,35 @@ const {CREATE_ANNOUNCEMENT_API,
     GET_ALL_RESOLVED_COMPLAINTS_BY_HOSTEL_BLOCK_API,
     RESOLVE_HOSTEL_COMPLAINT_API,
     UNRESOLVE_HOSTEL_COMPLAINT_API,
-    GET_ALL_STUDENT_FOR_ATTENDENCE_BY_HOSTEL_BLOCK_API,
     MARK_STUDENT_PRESENT_API,
     MARK_STUDENT_ABSENT_API,
     UNMARK_STUDENT_PRESENT_API,
     UNMARK_STUDENT_ABSENT_API,
-    FETCH_ROOMS_IN_HOSTEL_BLOCK_API,
-    UPDATE_STUDENT_ATTENDENCE_RECORDS_API,
+    FETCH_ATTENDANCE_DATA_IN_HOSTEL_BLOCK,
 } = officialEndPoints;
+
+export const fetchDashboardData = (token,toast) => {
+    return async() => {
+        let id = toast.show("Fetching Data...",{type: "normal"});
+        try{        
+            const response = await APIconnector("GET",FETCH_DASHBOARD_DATA_API,null,{Authorization: `Bearer ${token}`});
+
+            if(!response.data.success){
+                toast.hide(id);
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            toast.show(response.data.message,{type: "success"});
+            return response?.data?.data;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Unable to Fetch Dashbaord Data", {type: "danger"});
+            console.log(e);
+            return null;
+        }
+    }
+}
 
 export const createAnnouncement = (formData,token,toast) => {
     return async() => {
@@ -243,28 +265,6 @@ export const unResolveHostelComplaint = (complaintId,token,toast) => {
     }
 }
 
-export const getAllStudentsByHostelBlockForAttendence = (token,toast) => {
-    return async() => {
-        let id = toast.show("Please Wait...",{type:"normal"});
-        try{    
-            const response = await APIconnector("GET",GET_ALL_STUDENT_FOR_ATTENDENCE_BY_HOSTEL_BLOCK_API,null,{Authorization: `Bearer ${token}`});
-            if(!response?.data?.success){
-                toast.hide(id);
-                toast.show(response?.data?.message,{type:"danger"});
-                throw new Error(response?.data?.message);
-            }
-
-            toast.hide(id);
-            toast.show(response?.data?.message,{type:"success"});
-            return response?.data?.data;
-        }catch(e){
-            toast.hide(id);
-            toast.show("Unable to fetch student Attendence",{type:"danger"});
-            return null;
-        }
-    }
-}
-
 export const markStudentPresent = (presentDate,attendenceRecordId,token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
@@ -278,12 +278,12 @@ export const markStudentPresent = (presentDate,attendenceRecordId,token,toast) =
 
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
-            return response?.data?.data;
+            return true;
         }catch(e){
             console.log(e);
             toast.hide(id);
             toast.show("Unable to mark present",{type:"danger"});
-            return null;
+            return false;
         }
     }
 }
@@ -301,12 +301,12 @@ export const markStudentAbsent = (absentDate,attendenceRecordId,token,toast) => 
 
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
-            return response?.data?.data;
+            return true;
         }catch(e){
             console.log(e);
             toast.hide(id);
             toast.show("Unable to mark absent",{type:"danger"});
-            return null;
+            return false;
         }
     }
 }
@@ -324,12 +324,12 @@ export const unmarkStudentPresent = (presentDate,attendenceRecordId,token,toast)
 
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
-            return response?.data?.data;
+            return true;
         }catch(e){
             console.log(e);
             toast.hide(id);
             toast.show("Unable to unmark present",{type:"danger"});
-            return null;
+            return false;
         }
     }
 }
@@ -347,12 +347,12 @@ export const unmarkStudentAbsent = (absentDate,attendenceRecordId,token,toast) =
 
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
-            return response?.data?.data;
+            return true;
         }catch(e){
             console.log(e);
             toast.hide(id);
             toast.show("Unable to unmark absent",{type:"danger"});
-            return null;
+            return false;
         }
     }
 }
@@ -361,7 +361,7 @@ export const fetchHostelBlockRoomsForAttendance = (token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
         try{    
-            const response = await APIconnector("GET",FETCH_ROOMS_IN_HOSTEL_BLOCK_API,null,{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("GET",FETCH_ATTENDANCE_DATA_IN_HOSTEL_BLOCK,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.hide(id);
                 toast.show(response?.data?.message,{type:"danger"});
@@ -374,28 +374,6 @@ export const fetchHostelBlockRoomsForAttendance = (token,toast) => {
         }catch(e){
             toast.hide(id);
             toast.show("Unable to fetch Data",{type:"danger"});
-            return null;
-        }
-    }
-}
-
-export const updateAttendanceRecords = (formdata,token,toast) => {
-    return async() => {
-        let id = toast.show("Please Wait...",{type:"normal"});
-        try{    
-            const response = await APIconnector("PUT",UPDATE_STUDENT_ATTENDENCE_RECORDS_API,formdata,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
-            if(!response?.data?.success){
-                toast.hide(id);
-                toast.show(response?.data?.message,{type:"danger"});
-                throw new Error(response?.data?.message);
-            }
-
-            toast.hide(id);
-            toast.show(response?.data?.message,{type:"success"});
-            return response?.data?.data;
-        }catch(e){
-            toast.hide(id);
-            toast.show("Unable to Update Attendance",{type:"danger"});
             return null;
         }
     }

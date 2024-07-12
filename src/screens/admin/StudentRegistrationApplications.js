@@ -18,7 +18,6 @@ const StudentRegistrationApplications = () => {
 
     const fetchData = async() => {
         const response = await dispatch(fetchStudentRegistrationApplications(token,toast));
-        console.log("APPLICATIONs",response);
         setApplications(response);
         setLoading(false);
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import { useForm,Controller } from 'react-hook-form'
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,7 +7,7 @@ import { CreateOutingApplication } from '../../services/operations/StudentAPI';
 import DatePicker from 'react-native-date-picker'
 import { useToast } from 'react-native-toast-notifications';
 
-const OutingApplication = ({navigation}) => {
+const OutingApplication = ({}) => {
   
   const [type,setType] = useState("Local");
   const toast = useToast();
@@ -44,7 +44,7 @@ const OutingApplication = ({navigation}) => {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.form}>
 
         <View style={styles.subFormView}>
@@ -52,54 +52,6 @@ const OutingApplication = ({navigation}) => {
           <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", overflow:'hidden', borderWidth:1, borderColor:"black", borderRadius:10}}>
             <TouchableOpacity style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:type==="Local" ? "#ffb703" : "white",}} onPress={() => setType("Local")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Local</Text></TouchableOpacity>
             <TouchableOpacity style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:type==="NonLocal" ? "#ffb703" : "white",}} onPress={() => setType("NonLocal")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Non Local</Text></TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Select From Date<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <View style={{display:"flex", flexDirection:"row", gap:15, justifyContent:"space-evenly", alignItems:"center"}}>
-            <View>
-              <MainButton text={"From Date"} onPress={() => setFromOpen(true)} />
-              <DatePicker 
-                modal
-                open={fromOpen}
-                date={fromDate}
-                onConfirm={(date) => {
-                  setFromOpen(false);
-                  setFromDate(date);
-                }}
-                onCancel={() => {
-                  setFromOpen(false);
-                }}
-              />
-            </View>
-            <View>
-            {fromDate && <Text>{fromDate.toLocaleString()}</Text>}
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.subFormView}>
-          <Text style={styles.label} >Select To Date<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
-          <View style={{display:"flex", flexDirection:"row", gap:15, justifyContent:"space-evenly", alignItems:"center"}}>
-            <View>
-              <MainButton text={"To Date"} onPress={() => setToOpen(true)} />
-              <DatePicker 
-                modal
-                open={toOpen}
-                date={toDate}
-                onConfirm={(date) => {
-                  setToOpen(false);
-                  setToDate(date);
-                }}
-                onCancel={() => {
-                  setToOpen(false);
-                }}
-              />
-            </View>
-            <View>
-              {toDate && <Text>{toDate.toLocaleString()}</Text>}
-            </View>
           </View>
         </View>
 
@@ -144,11 +96,60 @@ const OutingApplication = ({navigation}) => {
           />
           {errors.purpose && <Text style={styles.errorText}>Purpose is required.</Text>}
         </View>
+
+        <View style={styles.subFormView}>
+          <Text style={styles.label} >Select From Date<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <View style={{display:"flex", flexDirection:"row", gap:15, justifyContent:"space-between", alignItems:"center"}}>
+            <View>
+              <MainButton text={"From Date"} backgroundColor={"#b7e4c7"} onPress={() => setFromOpen(true)} />
+              <DatePicker 
+                modal
+                open={fromOpen}
+                date={fromDate}
+                onConfirm={(date) => {
+                  setFromOpen(false);
+                  setFromDate(date);
+                }}
+                onCancel={() => {
+                  setFromOpen(false);
+                }}
+              />
+            </View>
+            <View>
+            {fromDate && <Text>{fromDate.toLocaleString()}</Text>}
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.subFormView}>
+          <Text style={styles.label} >Select To Date<Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+          <View style={{display:"flex", flexDirection:"row", gap:15, justifyContent:"space-between", alignItems:"center"}}>
+            <View>
+              <MainButton text={"To Date"} backgroundColor={"#b7e4c7"} onPress={() => setToOpen(true)} />
+              <DatePicker 
+                modal
+                open={toOpen}
+                date={toDate}
+                onConfirm={(date) => {
+                  setToOpen(false);
+                  setToDate(date);
+                }}
+                onCancel={() => {
+                  setToOpen(false);
+                }}
+              />
+            </View>
+            <View>
+              {toDate && <Text>{toDate.toLocaleString()}</Text>}
+            </View>
+          </View>
+        </View>
+
         <View style={styles.subFormView}>
           <MainButton text={"Apply"} onPress={handleSubmit(submitHanlder)}/>
         </View>
         </View>
-    </View>
+    </ScrollView>
   )
 }
 

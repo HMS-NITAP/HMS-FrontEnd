@@ -1,5 +1,10 @@
+// OLD SERVER (Backend)
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
-SERVER_BASE_URL = "http://192.168.81.208:4000/api/v1"
+
+// NEW SERVER (Backend1)
+SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
+
+// SERVER_BASE_URL = "http://192.168.226.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 export const authEndPoints = {
@@ -37,6 +42,10 @@ export const studentEndPoints = {
 }
 
 export const officialEndPoints = {
+
+    // DASHBOARD APIs
+    FETCH_DASHBOARD_DATA_API : SERVER_BASE_URL + '/official/getDashboardData',
+
     // ANNOUNCEMENTS APIs
     CREATE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/official/createAnnouncement',
     DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/official/deleteAnnouncement',
@@ -55,15 +64,14 @@ export const officialEndPoints = {
     UNRESOLVE_HOSTEL_COMPLAINT_API : SERVER_BASE_URL + '/official/unresolveHostelComplaint',
 
     // ATTENDENCE APIs
-    GET_ALL_STUDENT_FOR_ATTENDENCE_BY_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/official/getAllStudentsByHostelBlockForAttendence',
+    FETCH_ATTENDANCE_DATA_IN_HOSTEL_BLOCK : SERVER_BASE_URL + '/official/fetchAttendanceDataInHostelBlock',
     MARK_STUDENT_PRESENT_API : SERVER_BASE_URL + '/official/markStudentPresent',
     MARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/markStudentAbsent',
     UNMARK_STUDENT_PRESENT_API : SERVER_BASE_URL + '/official/unMarkStudentPresent',
     UNMARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/unMarkStudentAbsent',
 
     // NEW ATTENDENCE APIs
-    FETCH_ROOMS_IN_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/official/fetchRoomsInHostelBlock',
-    UPDATE_STUDENT_ATTENDENCE_RECORDS_API : SERVER_BASE_URL + '/official/updateAttendanceRecords',
+    
 }
 
 export const adminEndPoints = {

@@ -17,7 +17,6 @@ const RegisterComplaints = () => {
         setComplaintsRegistered(null);
         const data = await dispatch(getAllStudentHostelComplaint(token,toast));
         setComplaintsRegistered(data);
-        console.log("Format",data);
     }
 
     useFocusEffect(

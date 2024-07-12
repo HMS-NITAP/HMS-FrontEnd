@@ -20,7 +20,6 @@ const ViewMessFeedBack = () => {
 
     setData(data);
     setLoading(false);
-    console.log("Feedback data",data);
   }
 
   useFocusEffect(

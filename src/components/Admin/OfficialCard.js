@@ -63,7 +63,7 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
 
   return (
     <View style={styles.card}>
-      <View style={{display:"flex", justifyContent:"flex-start"}}>
+      <View style={{maxWidth:"80%",display:"flex", justifyContent:"flex-start"}}>
         <Text style={{color:"black", fontWeight:"600", fontSize:16}}>User ID : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.user.id}</Text></Text>
         <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Name : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.name}</Text></Text>
         <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Designation : <Text style={{color:"black", fontWeight:"500", fontSize:15}}>{data.designation}</Text></Text>
@@ -78,7 +78,7 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
 
         }
       </View>
-      <View style={{display:"flex", flexDirection:"column", gap:20}}>
+      <View style={{maxWidth:"20%", display:"flex", flexDirection:"column", gap:20}}>
         <TouchableOpacity 
           style={styles.trashButton} 
           onPress={() => setModalVisible(true)}

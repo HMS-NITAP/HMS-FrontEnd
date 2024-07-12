@@ -30,7 +30,6 @@ const OtpVerification = () => {
             return;
         }
         const response = await dispatch(verifyOtp(formData,toast));
-        console.log(response);
         if(response === true){
             dispatch(setRegistrationStep(3));
         }

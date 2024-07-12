@@ -1,94 +1,217 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchHostelBlockRoomsForAttendance } from '../../services/operations/OfficialAPI';
+import { fetchHostelBlockRoomsForAttendance, markStudentAbsent, markStudentPresent, unmarkStudentAbsent, unmarkStudentPresent } from '../../services/operations/OfficialAPI';
 import { useFocusEffect } from '@react-navigation/native';
+import DatePicker from 'react-native-date-picker';
+import MainButton from '../../components/common/MainButton';
 
 const TakeAttendance = () => {
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
   const dispatch = useDispatch();
-  const {token} = useSelector((state) => state.Auth);
+  const { token } = useSelector((state) => state.Auth);
   const toast = useToast();
 
   const [hostelData, setHostelData] = useState(null);
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [floorRooms, setFloorRooms] = useState(null);
-
+  const [dateFormat, setDateFormat] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [floorCount, setFloorCount] = useState(null);
-  const floorsArray = Array.from({ length: floorCount + 1 }, (_, index) => ({
-    id : index,
+
+  const floorsArray = Array.from({ length: (floorCount || 0) + 1 }, (_, index) => ({
+    id: index,
   }));
 
-  const fetchData = async() => {
-    const response = await dispatch(fetchHostelBlockRoomsForAttendance(token,toast));
-    if(response){
+  const fetchData = async () => {
+    setHostelData(null);
+    // setSelectedFloor(null);
+    const response = await dispatch(fetchHostelBlockRoomsForAttendance(token, toast));
+    if (response) {
       setFloorCount(parseInt(response?.floorCount))
-      // console.log("Data", response);
       setHostelData(response);
     }
   }
 
   useEffect(() => {
     const filterRoomsFloorWise = () => {
-      if(!hostelData){
+      if (!hostelData) {
         return;
       }
-      const filterRooms = hostelData?.rooms.filter((room) => room?.floorNumber===selectedFloor);
+      const filterRooms = hostelData?.rooms.filter((room) => room?.floorNumber === selectedFloor);
       setFloorRooms(filterRooms);
-      console.log("Fileter data",JSON.stringify(filterRooms));
     }
     filterRoomsFloorWise();
-  },[selectedFloor,hostelData]);
+  }, [selectedFloor, hostelData]);
 
   useFocusEffect(
     useCallback(() => {
       fetchData();
-    }, [token,toast])
+    }, [token, toast])
   );
 
+  useEffect(() => {
+    const date = new Date(selectedDate);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+    setDateFormat(formattedDate);
+  }, [selectedDate]);
+
+  const findStatus = (presentDays, absentDays) => {
+    const isMarkedPresent = presentDays.includes(dateFormat);
+    const isMarkedAbsent = absentDays.includes(dateFormat);
+    if(isMarkedPresent){
+      return "PRESENT"
+    }else if(isMarkedAbsent){
+      return "ABSENT"
+    }else{
+      return "NM"
+    }
+  }
+
+  const handleMarkPresent = async(id) => {
+    if(dateFormat){
+      const response = await dispatch(markStudentPresent(dateFormat,id,token,toast));
+      if(response){
+        fetchData();
+      }
+    }
+  }
+
+  const handleMarkAbsent = async(id) => {
+    if(dateFormat){
+      const response = await dispatch(markStudentAbsent(dateFormat,id,token,toast));
+      if(response){
+        fetchData();
+      }
+    }
+  }
+
+  const handleUnmarkPresent = async(id) => {
+    if(dateFormat){
+      const response = await dispatch(unmarkStudentPresent(dateFormat,id,token,toast));
+      if(response){
+        fetchData();
+      }
+    }
+  }
+
+  const handleUnmarkAbsent = async(id) => {
+    if(dateFormat){
+      const response = await dispatch(unmarkStudentAbsent(dateFormat,id,token,toast));
+      if(response){
+        fetchData();
+      }
+    }
+  }
+
   return (
-    <ScrollView contentContainerStyle={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:20}}>
+    <ScrollView contentContainerStyle={styles.container}>
       {
-        !hostelData ? (<Text style={{textAlign:"center", color:"black", fontSize:16, fontWeight:"600"}}>No Hostel Block Assigned</Text>) : 
-        (
-          <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20}}>
-            <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
-              <Text style={{color:"black", textAlign:"center", fontSize:16, fontWeight:"700"}}>Assigned Hostel Block : {hostelData?.name}</Text>
+        !hostelData ? (
+          <Text style={styles.noHostelText}>No Hostel Block Assigned</Text>
+        ) : (
+          <View style={styles.hostelContainer}>
+            <View style={styles.hostelHeader}>
+              <Text style={styles.hostelText}>Assigned Hostel Block: {hostelData?.name}</Text>
             </View>
             {
-              floorCount && (
-                <View style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", gap:20}}>
-                  <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Select Floor : </Text>
-                  <View style={{display:"flex", maxWidth:"70%", gap:10, flexDirection:"row", flexWrap:"wrap", justifyContent:"center", alignItems:"center"}}>
+              floorCount !== null && (
+                <View style={styles.floorSelectionContainer}>
+                  <Text style={styles.selectFloorText}>Select Floor: </Text>
+                  <View style={styles.floorButtonsContainer}>
                     {
-                      floorsArray?.map((floor,index) => (
-                        <TouchableOpacity onPress={() => setSelectedFloor(floor?.id)} style={{paddingHorizontal:10, paddingVertical:5, borderRadius:1000, backgroundColor: selectedFloor === floor?.id ? '#b5e48c' : 'white', borderWidth:0.5, borderColor:selectedFloor === floor?.id ? 'transparent' : 'black'}} key={index}>
-                          <Text style={{color: 'black', fontWeight: '700',}}>{floor?.id}</Text>
+                      floorsArray?.map((floor, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => setSelectedFloor(floor?.id)}
+                          style={[
+                            styles.floorButton,
+                            selectedFloor === floor?.id && styles.selectedFloorButton
+                          ]}
+                        >
+                          <Text style={styles.floorButtonText}>{floor?.id}</Text>
                         </TouchableOpacity>
-                      )) 
+                      ))
                     }
                   </View>
                 </View>
               )
             }
+            <View style={styles.subFormView}>
+              <View style={styles.datePickerContainer}>
+                  <MainButton backgroundColor={"#a9d6e5"} text={"Select Date"} onPress={() => setIsDatePickerOpen(true)} />
+                  <DatePicker
+                    modal
+                    mode='date'
+                    locale='en'
+                    open={isDatePickerOpen}
+                    date={selectedDate || new Date()}
+                    onConfirm={(date) => {
+                      setIsDatePickerOpen(false);
+                      setSelectedDate(date);
+                    }}
+                    onCancel={() => {
+                      setIsDatePickerOpen(false);
+                    }}
+                  />
+                  <Text style={styles.selectedDateText}>{selectedDate?.toLocaleDateString() || 'No date selected'}</Text>
+              </View>
+            </View>
             {
-              selectedFloor!==null && floorRooms.map((room,index) => (
-                      <View key={index} style={{width:"90%", borderStyle:"dashed", marginHorizontal:"auto", gap:20, borderWidth:1.5, borderColor:"black", borderRadius:10, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
-                        <Text style={{textAlign:"center", fontWeight:"800", color:"red", fontSize:16, color:"#1b263b"}}>Room {room?.roomNumber}</Text>
-                        <View style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", flexWrap:"wrap", gap:10}}>
-                          {
-                            room.cots.map((cot,index) => (
-                              cot?.status==="BOOKED" && cot?.student!==null && <TouchableOpacity key={index} style={{borderWidth:1, borderStyle:"dotted",borderColor:"black",borderRadius:8, paddingHorizontal:8, paddingVertical:8, backgroundColor:"#ffdd00"}}>
-                                <Text style={{color:"black", fontWeight:"600", fontSize:16}}>Cot {cot?.cotNo}</Text>
-                              </TouchableOpacity>
-                            ))
-                          }
-                        </View>
-                      </View>
+              selectedFloor !== null && selectedDate && floorRooms?.map((room, index) => (
+                <View key={index} style={styles.roomContainer}>
+                  <Text style={styles.roomText}>Room {room?.roomNumber}</Text>
+                  <View style={styles.cotsContainer}>
+                    {
+                      room.cots.map((cot, cotIndex) => (
+                        cot?.status === "BOOKED" && cot?.student !== null && cot?.student?.attendence !== null && (
+                          <View key={cotIndex} style={{backgroundColor:findStatus(cot?.student?.attendence?.presentDays,cot?.student?.attendence?.absentDays)==="NM"?"transparent" : findStatus(cot?.student?.attendence?.presentDays,cot?.student?.attendence?.absentDays)==="PRESENT" ? "#b5e48c" : "#ffccd5", gap:5, display:"flex", flexDirection:"row", justifyContent:"space-between", alignItems:"center", width:"100%", marginHorizontal:"auto", borderColor:"black", borderWidth:1, borderStyle:"dotted", borderRadius:15, padding:10 }}>
+                            <View key={cotIndex} style={{maxWidth:"70%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:2}} >
+                              <Text style={{color:"black", fontWeight:"700", fontSize:18}}>Cot {cot?.cotNo}</Text>
+                              <Text style={{color:"black", fontWeight:"500", fontSize:16}}>{cot?.student?.name}</Text>
+                              <Text style={{color:"black", fontWeight:"500", fontSize:16}}>{cot?.student?.rollNo}</Text>
+                            </View>
+                            <View>
+                              {
+                                findStatus(cot?.student?.attendence?.presentDays,cot?.student?.attendence?.absentDays)==="NM" ? (
+                                  <View style={{display:"flex", flexDirection:"row", justifyContent:"flex-end", alignItems:"center", gap:10}}>
+                                    <TouchableOpacity onPress={() => handleMarkPresent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"#b5e48c", paddingHorizontal:9, paddingVertical:4, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                      <Text style={{color:"black", fontWeight:"700", fontSize:15}}>P</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={() => handleMarkAbsent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"#ffccd5", paddingHorizontal:9, paddingVertical:4, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                      <Text style={{color:"black", fontWeight:"700", fontSize:15}}>A</Text>
+                                    </TouchableOpacity>
+                                  </View>
+                                ) : (
+                                  findStatus(cot?.student?.attendence?.presentDays,cot?.student?.attendence?.absentDays)==="PRESENT" ? (
+                                    <TouchableOpacity onPress={() => handleUnmarkPresent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"white", paddingHorizontal:8, paddingVertical:8, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                      <Text style={{color:"black", fontWeight:"700", fontSize:15}}>UP</Text>
+                                    </TouchableOpacity>
+                                  ) : (
+                                    <TouchableOpacity onPress={() => handleUnmarkAbsent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"white", paddingHorizontal:8, paddingVertical:8, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                      <Text style={{color:"black", fontWeight:"700", fontSize:15}}>UA</Text>
+                                    </TouchableOpacity>
+                                  )
+                                )
+                              }
+                            </View>
+                          </View>
+                        )
+                      ))
+                    }
+                  </View>
+                </View>
               ))
             }
-          </View>      
+          </View>
         )
       }
     </ScrollView>
@@ -96,3 +219,137 @@ const TakeAttendance = () => {
 }
 
 export default TakeAttendance
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 20
+  },
+  noHostelText: {
+    textAlign: "center",
+    color: "black",
+    fontSize: 16,
+    fontWeight: "600"
+  },
+  hostelContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20
+  },
+  hostelHeader: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  hostelText: {
+    color: "black",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "700"
+  },
+  floorSelectionContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20
+  },
+  selectFloorText: {
+    color: "black",
+    fontWeight: "600",
+    fontSize: 16
+  },
+  floorButtonsContainer: {
+    display: "flex",
+    maxWidth: "70%",
+    gap: 10,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  floorButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 1000,
+    backgroundColor: 'white',
+    borderWidth: 0.5,
+    borderColor: 'black'
+  },
+  selectedFloorButton: {
+    backgroundColor: '#b5e48c',
+    borderColor: 'transparent'
+  },
+  floorButtonText: {
+    color: 'black',
+    fontWeight: '700',
+  },
+  subFormView: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'start',
+    gap: 2,
+  },
+  label: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#000000',
+  },
+  requiredMark: {
+    fontSize: 10,
+    color: 'red'
+  },
+  datePickerContainer: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 15,
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  selectedDateText: {
+    color:"black",
+    fontWeight: "800",
+    fontSize: 15
+  },
+  roomContainer: {
+    width: "100%",
+    borderStyle: "dashed",
+    marginHorizontal: "auto",
+    gap: 20,
+    borderWidth: 2.5,
+    borderColor: "black",
+    borderRadius: 10,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 8,
+    paddingVertical: 10,
+  },
+  roomText: {
+    textAlign: "center",
+    fontWeight: "800",
+    color: "#1b263b",
+    fontSize: 18
+  },
+  cotsContainer: {
+    width:"100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 10
+  }
+});

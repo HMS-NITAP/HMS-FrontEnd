@@ -11,7 +11,6 @@ const LogoutModal = ({navigation}) => {
     const toast = useToast();
 
     const {user} = useSelector((state) => state.Profile);
-    console.log("user",user);
 
     const logOutHandler = async() => {
         await(dispatch(logout(navigation,toast)));

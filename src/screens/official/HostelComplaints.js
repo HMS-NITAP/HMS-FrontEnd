@@ -22,7 +22,6 @@ const HostelComplaints = () => {
         }else{
             data = await dispatch(getAllResolvedHostelComplaints(token,toast));
         }
-        console.log("Data",data);
         setRegisteredComplaints(data);
     }
 

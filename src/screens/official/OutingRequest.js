@@ -24,7 +24,6 @@ const OutingRequest = () => {
         }else{
             data = await dispatch(getAllRejectedApplicationByHostelBlock(token,toast));
         }
-        console.log("Data",data);
         setOutingApplication(data);
     }
 

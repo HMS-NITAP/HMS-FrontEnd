@@ -25,7 +25,6 @@ const CreateOfficialAccount = () => {
         formData.append("designation",data.designation);
         formData.append("gender",selectedGender);
         formData.append("phone",data.phone);
-        console.log("data",data);
         await dispatch(createOfficialAccount(formData,token,toast));
         reset();
     };

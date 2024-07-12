@@ -45,9 +45,7 @@ const MessFeedback = ({}) => {
       toast.show("Review field is Empty",{type:"danger"});
       return;
     }
-
-    console.log(rating,review,displaySession);
-
+    
     let formData = new FormData();
     formData.append("rating",rating);
     formData.append("review",details);

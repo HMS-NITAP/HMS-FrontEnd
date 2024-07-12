@@ -131,10 +131,8 @@ const RoomAllotment = ({}) => {
     formdata.append("paymentMode",registrationData?.paymentMode);
     formdata.append("paymentDate",registrationData?.paymentDate);
     formdata.append("amountPaid",registrationData?.amountPaid);
-    console.log("FORMDATA dskfd",formdata);
 
     const response = await dispatch(createStudentAccount(formdata,toast));
-    console.log("FUNCTION RESPONSE : ",response);
     if(response){
       setModalVisible(false);
       await dispatch(setRegistrationStep(4));

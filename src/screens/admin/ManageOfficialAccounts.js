@@ -44,7 +44,7 @@ const ManageOfficialAccounts = ({navigation}) => {
                             <Icon name='user-plus' size={25} color='white' />
                         </TouchableOpacity>
                     </View>
-                    <View style={{display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
+                    <View style={{width:"100%", display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
                         {
                             accounts && accounts.map((account,index) => (
                                 <OfficialCard key={index} data={account} token={token} toast={toast} fetchData={fetchData} />

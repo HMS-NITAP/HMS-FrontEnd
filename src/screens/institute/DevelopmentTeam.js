@@ -9,7 +9,7 @@ const DevelopmentTeam = () => {
     <ScrollView>
         <View style={styles.container}>
             <View style={styles.subContainer}>
-                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>NIT Andhra Pradesh Hostel Committee</Text>
+                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Hostel Office Advisor</Text>
                 <View style={styles.cardContainer}>
                     {
                         hostelOfficeAdvisorsData.map((data,index) => (

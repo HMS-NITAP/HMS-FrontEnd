@@ -31,7 +31,6 @@ const EditProfile = ({ navigation }) => {
 
     const submitHandler = async (data) => {
         await dispatch(editStudentProfile(data,token,toast));
-        console.log("Data", data);
     };
 
   return (
