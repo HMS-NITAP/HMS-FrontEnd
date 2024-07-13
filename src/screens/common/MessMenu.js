@@ -34,7 +34,7 @@ const MessMenu = ({ navigation }) => {
     }, []);
 
     const navigateToMenu = () => {
-        navigation.navigate('DetailedMessMenu');
+        navigation.navigate('Detailed Mess Menu');
     };
 
     return (

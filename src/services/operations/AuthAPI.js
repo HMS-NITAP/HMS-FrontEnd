@@ -48,7 +48,7 @@ export const signUp = (data,otp,navigation,toast) => {
     }
 }
 
-export const login = (email,password,navigation,toast) => {
+export const login = (email,password,toast) => {
     return async(dispatch) => {
         let id = toast.show("Please Wait...", {type:"normal"});
         try{

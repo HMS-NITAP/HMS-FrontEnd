@@ -77,7 +77,7 @@ const StudentDashboardScreen = () => {
     useCallback(() => {
       fetchData();
     }, [token,toast])
-);
+  );
 
   const closeBirthdayModal = () => {
     setShowBirthdayModal(false);

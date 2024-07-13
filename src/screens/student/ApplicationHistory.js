@@ -4,6 +4,7 @@ import { useDispatch,useSelector } from 'react-redux'
 import { getStudentAllOutingApplication } from '../../services/operations/StudentAPI';
 import { useToast } from 'react-native-toast-notifications';
 import { useFocusEffect } from '@react-navigation/native';
+import OutingApplicationCard from '../../components/student/OutingApplicationCard';
 
 const ApplicationHistory = () => {
 
@@ -14,6 +15,7 @@ const ApplicationHistory = () => {
     const [outingApplication,setOutingApplication] = useState([]);
 
     const fetchData = async () => {
+        setOutingApplication(null);
         const data = await dispatch(getStudentAllOutingApplication(token,toast));
         setOutingApplication(data);
     }
@@ -24,41 +26,27 @@ const ApplicationHistory = () => {
         }, [token, toast])
       );
 
-    const getDateFormat = (date) => {
-        const newDate = new Date(date);
-        return newDate.toLocaleString();
-    }
-
     return (
-        // HERE SHOW NO APPLICATIONS OR PLEASE WAIT ALSO
         <ScrollView contentContainerStyle={{width:"100%", paddingHorizontal:10,paddingVertical:10,justifyContent:'start',alignItems:"center"}}>
             {
-                outingApplication.map((application) => {
-                    return (
-                        <View key={application?.id} style={{width:"100%",padding: 16,marginVertical: 8,backgroundColor: '#f9f9f9',borderRadius: 8,shadowColor: '#000',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.1,shadowRadius: 8,elevation: 2,width: '90%'}}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Created On: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application.createdAt)}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                From: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application.from)}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                To: <Text style={{ fontWeight: 'normal', color: '#666' }}>{getDateFormat(application.to)}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Purpose: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application.purpose}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Place of Visit: <Text style={{ fontWeight: 'normal', color: '#666' }}>{application.placeOfVisit}</Text>
-                            </Text>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Status: <Text style={{ fontWeight: '800', color: application?.status==="PENDING" ? "orange"  : application?.status==="ACCEPTED" ? "green" : "red"}}>{application.status}</Text>
-                            </Text>
+                !outingApplication ? (<Text style={{textAlign:"center", color:"black", fontSize:16, fontWeight:"700"}}>Please Wait...</Text>) : (
+                    <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20}}>
+                        <View style={{display:"flex",flexDirection:"row",gap:15,justifyContent:"center",alignItems:"center"}}>
+                            <Text style={{fontWeight:"600",color:"black",fontSize:16}}>Total Applications</Text>
+                            <Text style={{paddingVertical:5, paddingHorizontal:10, backgroundColor:"#9c89b8", color:"white", fontWeight:"800", borderRadius:100}}>{outingApplication.length}</Text>
                         </View>
-                    )
-                })
+                        <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:15, elevation:10}}>
+                            {
+                                outingApplication.map((application,index) => (
+                                    <OutingApplicationCard key={index} application={application} toast={toast} token={token} fetchData={fetchData} />
+                                ))
+                            }
+                        </View>
+                    </View>
+                )
             }
-    </ScrollView>
+        </ScrollView>
+        
     )
 }
 

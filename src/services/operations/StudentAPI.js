@@ -4,9 +4,11 @@ import { studentEndPoints } from "../APIs";
 const { CREATE_OUTING_APPLICATION_API,
     DELETE_PENDING_OUTING_APPLICATION_API,
     GET_STUDENT_ALL_OUTING_APPLICATIONS_API,
+    MARK_RETURN_FROM_OUTING_API,
     CREATE_HOSTEL_COMPLAINT_API,
-    DELETE_HSOTEL_COMPLAINT_API,
+    DELETE_HOSTEL_COMPLAINT_API,
     SHOW_ALL_STUDENT_COMPLAINT_API,
+    FETCH_STUDENT_MESS_HALL_API,
     CREATE_MESS_FEEDBACK_API,
     DELETE_MESS_FEEDBACK_API,
     GET_STUDENT_DASHBOARD_DATA_APT,
@@ -62,48 +64,51 @@ export const getStudentAllOutingApplication = (token,toast) => {
     }
 }
 
-export const getStudentAcceptedApplication = (token) => {
-    return async () => {
-        let id = toast.show("Please Wait...",{type:"normal"});
+export const deletePendingOutingApplication = (applicationId,token,toast) => {
+    return async() => {
+        let id = toast.show("Deleting Outing Application...",{type: "normal"});
         try{
-            const response = await APIconnector("GET",GET_STUDENT_ACCEPTED_OUTING_APPLICATION_API,null,{Authorization: `Bearer ${token}`});
-            
+            const response = await APIconnector("DELETE",DELETE_PENDING_OUTING_APPLICATION_API,{applicationId},{Authorization: `Bearer ${token}`});
+
             if(!response.data.success){
                 toast.hide(id);
-                toast.show(response.data.message, {type: "danger"});
+                toast.show(response?.data?.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
-            
+
             toast.hide(id);
-            toast.show("Fetched All Pending Applications",{type:"success"});
-            return response.data.data;
+            toast.show(response?.data?.message, {type: "success"});
+            return true;
+            
         }catch(e){
             toast.hide(id);
-            toast.show("Unable to fetch Pending Application");
-            console.log(e)
+            toast.show("Unable to Delete Outing Application", {type: "danger"});
+            return false;
         }
     }
 }
 
-export const getStudentRejectedApplication = (token) => {
-    return async () => {
-        let id = toast.show("Please Wait...",{type:"normal"});
+export const markReturnFromOuting = (applicationId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type: "normal"});
         try{
-            const response = await APIconnector("GET",GET_STUDENT_REJECTED_OUTING_APPLICATION_API,null,{Authorization: `Bearer ${token}`});
-            
+            const response = await APIconnector("PUT",MARK_RETURN_FROM_OUTING_API,{applicationId},{Authorization: `Bearer ${token}`});
+
             if(!response.data.success){
                 toast.hide(id);
-                toast.show(response.data.message, {type: "danger"});
+                toast.show(response?.data?.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
+
+            toast.hide(id);
+            toast.show(response?.data?.message, {type: "success"});
+            return true;
             
-            toast.hide(id);
-            toast.show("Fetched All Pending Applications",{type:"success"});
-            return response.data.data;
         }catch(e){
+            console.log(e);
             toast.hide(id);
-            toast.show("Unable to fetch Pending Application");
-            console.log(e)
+            toast.show("Unable to Mark Return", {type: "danger"});
+            return false;
         }
     }
 }
@@ -197,6 +202,28 @@ export const editStudentProfile = (formData,token,toast) => {
             toast.hide(id);
             toast.show("Unable to Edit student Profile data",{type:"danger"});
             console.log(e)
+        }
+    }
+}
+
+export const fetchStudentMessHall = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type: "normal"});
+        try{
+            const response = await APIconnector("GET",FETCH_STUDENT_MESS_HALL_API,null,{Authorization: `Bearer ${token}`});
+
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, {type: "danger"});
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            return response?.data?.data;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Failed to fetch Mess Hall", {type: "danger"});
+            console.log("Eror",e);
         }
     }
 }

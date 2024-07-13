@@ -5,10 +5,13 @@ const {FETCH_DASHBOARD_DATA_API,
     CREATE_ANNOUNCEMENT_API,
     DELETE_ANNOUNCEMENT_API,
     GET_PENDING_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
-    GET_ACCEPTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
-    GET_REJECTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
-    APPROVE_PENDING_OUTING_APPLICATION_API,
+    GET_COMPLETED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
+    GET_INPROGRESS_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
+    GET_RETURNED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,
+    ACCEPT_PENDING_OUTING_APPLICATION_API,
     REJECT_PENDING_OUTING_APPLICATION_API,
+    MARK_COMPLETD_OUTING_WITHOUT_DELAY_API,
+    MARK_COMPLETD_OUTING_WITH_DELAY_API,
     GET_ALL_UNRESOLVED_COMPLAINTS_BY_HOSTEL_BLOCK_API,
     GET_ALL_RESOLVED_COMPLAINTS_BY_HOSTEL_BLOCK_API,
     RESOLVE_HOSTEL_COMPLAINT_API,
@@ -86,11 +89,11 @@ export const getAllPendingApplicationByHostelBlock = (token,toast) => {
     }
 }
 
-export const getAllAcceptedApplicationByHostelBlock = (token,toast) => {
+export const getAllCompletedApplicationByHostelBlock = (token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
         try{    
-            const response = await APIconnector("GET",GET_ACCEPTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,null,{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("GET",GET_COMPLETED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.hide(id);
                 toast.show(response?.data?.message,{type:"danger"});
@@ -108,11 +111,11 @@ export const getAllAcceptedApplicationByHostelBlock = (token,toast) => {
     }
 }
 
-export const getAllRejectedApplicationByHostelBlock = (token,toast) => {
+export const getAllInprogressApplicationByHostelBlock = (token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
         try{    
-            const response = await APIconnector("GET",GET_REJECTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,null,{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("GET",GET_INPROGRESS_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.hide(id);
                 toast.show(response?.data?.message,{type:"danger"});
@@ -130,11 +133,11 @@ export const getAllRejectedApplicationByHostelBlock = (token,toast) => {
     }
 }
 
-export const approvePendingOutingApplication = (applicationId,token,toast) => {
+export const getAllReturnedApplicationByHostelBlock = (token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
         try{    
-            const response = await APIconnector("PUT",APPROVE_PENDING_OUTING_APPLICATION_API,{applicationId},{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("GET",GET_RETURNED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API,null,{Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.hide(id);
                 toast.show(response?.data?.message,{type:"danger"});
@@ -142,22 +145,44 @@ export const approvePendingOutingApplication = (applicationId,token,toast) => {
             }
 
             toast.hide(id);
-            toast.show("Approved Application Successfully",{type:"success"});
+            toast.show("Fetched Applications Successfully",{type:"success"});
             return response?.data?.data;
+        }catch(e){
+            toast.hide(id);
+            toast.show("Unable to fetch Applications",{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const acceptPendingOutingApplication = (applicationId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",ACCEPT_PENDING_OUTING_APPLICATION_API,{applicationId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
         }catch(e){
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to approve Applications",{type:"danger"});
-            return null;
+            toast.show("Unable to Accept Application",{type:"danger"});
+            return false;
         }
     }
 }
 
-export const rejectPendingOutingApplication = (applicationId,token,toast) => {
+export const rejectPendingOutingApplication = (formData,token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
         try{    
-            const response = await APIconnector("PUT",REJECT_PENDING_OUTING_APPLICATION_API,{applicationId},{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("PUT",REJECT_PENDING_OUTING_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
             if(!response?.data?.success){
                 toast.hide(id);
                 toast.show(response?.data?.message,{type:"danger"});
@@ -165,12 +190,60 @@ export const rejectPendingOutingApplication = (applicationId,token,toast) => {
             }
 
             toast.hide(id);
-            toast.show("Rejected Application Successfully",{type:"success"});
-            return response?.data?.data;
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
         }catch(e){
+            console.log(e);
             toast.hide(id);
-            toast.show("Unable to reject Applications",{type:"danger"});
-            return null;
+            toast.show("Unable to reject Application",{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const markCompletedWithoutDelayOutingApplication = (applicationId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",MARK_COMPLETD_OUTING_WITHOUT_DELAY_API,{applicationId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            console.log(e);
+            toast.hide(id);
+            toast.show("Unable to mark completed",{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const markCompletedWithDelayOutingApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            console.log("HERE");
+            const response = await APIconnector("PUT",MARK_COMPLETD_OUTING_WITH_DELAY_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            console.log(e);
+            toast.hide(id);
+            toast.show("Unable to mark completed",{type:"danger"});
+            return false;
         }
     }
 }

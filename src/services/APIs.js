@@ -2,9 +2,9 @@
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
 
 // NEW SERVER (Backend1)
-SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
+// SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-// SERVER_BASE_URL = "http://192.168.226.208:4000/api/v1"
+SERVER_BASE_URL = "http://192.168.163.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 export const authEndPoints = {
@@ -21,13 +21,16 @@ export const studentEndPoints = {
     // OUTING APPILICATION APIs
     CREATE_OUTING_APPLICATION_API : SERVER_BASE_URL + '/student/createOutingApplication',
     GET_STUDENT_ALL_OUTING_APPLICATIONS_API : SERVER_BASE_URL + '/student/getStudentAllOutingApplications',
+    DELETE_PENDING_OUTING_APPLICATION_API : SERVER_BASE_URL + '/student/deletePendingOutingApplication',
+    MARK_RETURN_FROM_OUTING_API : SERVER_BASE_URL + '/student/markReturnOutingApplication',
 
     // HOSTEL COMPLAINTS APIs
     CREATE_HOSTEL_COMPLAINT_API : SERVER_BASE_URL + '/student/createHostelComplaint',
-    DELETE_HSOTEL_COMPLAINT_API : SERVER_BASE_URL + '/student/deleteHostelComplaint',
+    DELETE_HOSTEL_COMPLAINT_API : SERVER_BASE_URL + '/student/deleteHostelComplaint',
     SHOW_ALL_STUDENT_COMPLAINT_API : SERVER_BASE_URL + '/student/showAllStudentComplaints',
 
     // MESS FEEDBACK APIs
+    FETCH_STUDENT_MESS_HALL_API : SERVER_BASE_URL + '/student/fetchMessHall',
     CREATE_MESS_FEEDBACK_API : SERVER_BASE_URL + '/student/createMessFeedBack',
     DELETE_MESS_FEEDBACK_API : SERVER_BASE_URL + '/student/deleteMessFeedBack',
 
@@ -52,10 +55,13 @@ export const officialEndPoints = {
 
     // OUTING APPLICATION APIs
     GET_PENDING_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getPendingOutingApplicationsByWardenBlock',
-    GET_ACCEPTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getAcceptedOutingApplicationsByWardenBlock',
-    GET_REJECTED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getRejectedOutingApplicationsByWardenBlock',
-    APPROVE_PENDING_OUTING_APPLICATION_API : SERVER_BASE_URL + '/official/approvePendingOutingApplication',
+    GET_COMPLETED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getCompletedOutingApplicationsByWardenBlock',
+    GET_INPROGRESS_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getInProgressOutingApplicationsByWardenBlock',
+    GET_RETURNED_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getReturnedOutingApplicationsByWardenBlock',
+    ACCEPT_PENDING_OUTING_APPLICATION_API : SERVER_BASE_URL + '/official/acceptPendingOutingApplication',
     REJECT_PENDING_OUTING_APPLICATION_API : SERVER_BASE_URL + '/official/rejectPendingOutingApplication',
+    MARK_COMPLETD_OUTING_WITHOUT_DELAY_API : SERVER_BASE_URL + '/official/markOutingApplicationCompletedWithoutDelay',
+    MARK_COMPLETD_OUTING_WITH_DELAY_API : SERVER_BASE_URL + '/official/markOutingApplicationCompletedWithDelay',
 
     // HOSTEL COMPLAINT APIs
     GET_ALL_UNRESOLVED_COMPLAINTS_BY_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/official/getAllUnresolvedComplaintsByHostelBlock',
