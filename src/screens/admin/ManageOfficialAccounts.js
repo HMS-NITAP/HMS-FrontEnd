@@ -37,7 +37,11 @@ const ManageOfficialAccounts = ({navigation}) => {
                         <View style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
                             <Text style={{fontWeight:"600",color:"black",fontSize:15}}>Total Official Account</Text>
                             {
-                                accounts && <Text style={{paddingVertical:5, paddingHorizontal:10, backgroundColor:"#9c89b8", color:"white", fontWeight:"800", borderRadius:100}}>{accounts.length}</Text>
+                                accounts && (
+                                    <View style={{height:25, width:25, borderRadius:100, display:"flex", justifyContent:"center", alignItems:"center",backgroundColor:"#9c89b8"}}>
+                                        <Text style={{color:"white", fontWeight:"800", fontSize:14}}>{accounts.length}</Text>
+                                    </View>
+                                )
                             }
                         </View>
                         <TouchableOpacity onPress={() => navigation.navigate("Create Official Accounts")} style={{paddingHorizontal:10, paddingVertical:10, borderRadius:10, borderColor:"black", borderWidth:0.5, backgroundColor:"#023e8a"}}>

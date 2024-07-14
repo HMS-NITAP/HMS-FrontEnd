@@ -10,7 +10,6 @@ import { useFocusEffect } from '@react-navigation/native';
 const GiveMessFeedback = ({}) => {
 
   const [loading, setLoading] = useState(true);
-  const [messHallData, setMessHallData] = useState(null);
   const [displaySession, setDisplaySession] = useState('');
   const [rating, setRating] = useState('');
   const [review, setReview] = useState('');
@@ -37,18 +36,8 @@ const GiveMessFeedback = ({}) => {
     }
   }
 
-  const fetchMessHall = async() => {
-    const response = await dispatch(fetchStudentMessHall(token,toast));
-    console.log("Mess",response);
-    if(response){
-      setMessHallData(response);
-    }
-    setLoading(false);
-  }
-
   useFocusEffect(
     useCallback(() => {
-      fetchMessHall();
       findSession();
     }, [token,toast])
   );
@@ -69,18 +58,16 @@ const GiveMessFeedback = ({}) => {
     }
     
     let formData = new FormData();
-    formData.append("messHallId",messHallData?.messHallId);
+    // formData.append("messHallId",messHallData?.messHallId);
     formData.append("rating",rating);
     formData.append("review",review);
     formData.append("session",displaySession);
-    console.log("FORMDATA",formData);
     await dispatch(createMessFeedBack(formData,token,toast));
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-        {
-          loading ? (<Text style={{color:"black", fontSize:15, fontWeight:"600"}}>Please Wait...</Text>) : (
+        
             <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}}>
               <View style={{borderRadius:30, width:"90%", justifyContent:"center", padding:15, backgroundColor:"#e9f5db", borderColor:"black", borderWidth:0.25}} >
                 <Text style={{color:"black", textAlign:"center", fontSize:16}}>Let us know how you find the food quality at mess, by sharing your valuable feedback.</Text>
@@ -90,7 +77,6 @@ const GiveMessFeedback = ({}) => {
                 <View>
                   <Text style={styles.label}>Date: <Text style={{fontWeight:"600", color:"#6c757d"}}> {currentDate}</Text></Text>
                   <Text style={styles.label}>Session:<Text style={{fontWeight:"600", color:"#6c757d"}}> {displaySession}</Text></Text>
-                  <Text style={styles.label}>Mess Hall:<Text style={{fontWeight:"600", color:"#6c757d"}}> {messHallData?.messHallId ? <Text>{messHallData?.messHall?.hallName}</Text> : <Text style={{color:"red"}}>Not Alloted</Text>}</Text></Text>
                 </View>
 
                 <View style={styles.subFormView}>
@@ -122,14 +108,10 @@ const GiveMessFeedback = ({}) => {
                   </View>
 
                 <View style={styles.subFormView}>
-                  {
-                    messHallData?.messHallId && <MainButton text={"Submit"} onPress={onSubmit}/>
-                  }
+                  <MainButton text={"Submit"} onPress={onSubmit}/>
                 </View>
               </View>
             </View>
-          )
-        }
     </ScrollView>
   )
 }

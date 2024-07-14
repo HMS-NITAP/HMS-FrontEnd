@@ -8,9 +8,11 @@ const { CREATE_OUTING_APPLICATION_API,
     CREATE_HOSTEL_COMPLAINT_API,
     DELETE_HOSTEL_COMPLAINT_API,
     SHOW_ALL_STUDENT_COMPLAINT_API,
-    FETCH_STUDENT_MESS_HALL_API,
+    FETCH_MESS_HALLS_AND_GENDER_API,
     CREATE_MESS_FEEDBACK_API,
     DELETE_MESS_FEEDBACK_API,
+    GENERATE_MESS_SESSION_RECEIPT_API,
+    FETCH_MESS_RECEIPTS_API,
     GET_STUDENT_DASHBOARD_DATA_APT,
     EDIT_STUDENT_PROFILE_API,
     GET_STUDENT_ATTENDENCE_API,
@@ -206,11 +208,11 @@ export const editStudentProfile = (formData,token,toast) => {
     }
 }
 
-export const fetchStudentMessHall = (token,toast) => {
+export const fetchMessHallsAndStudentGender = (token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type: "normal"});
         try{
-            const response = await APIconnector("GET",FETCH_STUDENT_MESS_HALL_API,null,{Authorization: `Bearer ${token}`});
+            const response = await APIconnector("GET",FETCH_MESS_HALLS_AND_GENDER_API,null,{Authorization: `Bearer ${token}`});
 
             if(!response.data.success){
                 toast.hide(id);
@@ -247,6 +249,52 @@ export const createMessFeedBack = (formData,token,toast) => {
             toast.hide(id);
             toast.show("Failed to Mess Feedback", {type: "danger"});
             console.log("Eror",e);
+        }
+    }
+}
+
+export const generateMessSessionReceipt = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Generating receipt...",{type: "normal"});
+        try{
+            const response = await APIconnector("POST",GENERATE_MESS_SESSION_RECEIPT_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, {type: "danger"});
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message, {type: "success"});
+
+        }catch(e){
+            toast.hide(id);
+            toast.show("Failed to Generate Receipt", {type: "danger"});
+            console.log("Error",e);
+        }
+    }
+}
+
+export const fetchStudentMessReceipts = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type: "normal"});
+        try{
+            const response = await APIconnector("GET",FETCH_MESS_RECEIPTS_API,null,{Authorization: `Bearer ${token}`});
+
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, {type: "danger"});
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message, {type: "success"});
+            return response?.data?.data;
+        }catch(e){
+            toast.hide(id);
+            toast.show("unable to fetch Receipts", {type: "danger"});
+            return null;
         }
     }
 }

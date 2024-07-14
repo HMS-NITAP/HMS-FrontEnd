@@ -28,14 +28,6 @@ const StudentRegistrationApplications = () => {
         }, [token,toast])
     );
 
-    const acceptHandler = async() => {
-
-    }
-
-    const rejectHandler = async() => {
-
-    }
-
     return (
         <>
             {

@@ -2,10 +2,11 @@
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
 
 // NEW SERVER (Backend1)
-// SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
+SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-SERVER_BASE_URL = "http://192.168.163.208:4000/api/v1"
+// SERVER_BASE_URL = "http://192.168.51.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
+
 
 export const authEndPoints = {
     SENDOTP_API : SERVER_BASE_URL + "/auth/sendOTP",
@@ -29,10 +30,12 @@ export const studentEndPoints = {
     DELETE_HOSTEL_COMPLAINT_API : SERVER_BASE_URL + '/student/deleteHostelComplaint',
     SHOW_ALL_STUDENT_COMPLAINT_API : SERVER_BASE_URL + '/student/showAllStudentComplaints',
 
-    // MESS FEEDBACK APIs
-    FETCH_STUDENT_MESS_HALL_API : SERVER_BASE_URL + '/student/fetchMessHall',
+    // MESS APIs
+    FETCH_MESS_HALLS_AND_GENDER_API : SERVER_BASE_URL + '/student/fetchAllMessHallsAndStudentGender',
     CREATE_MESS_FEEDBACK_API : SERVER_BASE_URL + '/student/createMessFeedBack',
     DELETE_MESS_FEEDBACK_API : SERVER_BASE_URL + '/student/deleteMessFeedBack',
+    GENERATE_MESS_SESSION_RECEIPT_API : SERVER_BASE_URL + '/student/generateMessSessionReceipt',
+    FETCH_MESS_RECEIPTS_API : SERVER_BASE_URL + '/student/fetchStudentMessReceipts',
 
     // ATTENDENCE APIs
     GET_STUDENT_ATTENDENCE_API : SERVER_BASE_URL + '/student/getStudentAttendance',
@@ -74,10 +77,7 @@ export const officialEndPoints = {
     MARK_STUDENT_PRESENT_API : SERVER_BASE_URL + '/official/markStudentPresent',
     MARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/markStudentAbsent',
     UNMARK_STUDENT_PRESENT_API : SERVER_BASE_URL + '/official/unMarkStudentPresent',
-    UNMARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/unMarkStudentAbsent',
-
-    // NEW ATTENDENCE APIs
-    
+    UNMARK_STUDENT_ABSENT_API : SERVER_BASE_URL + '/official/unMarkStudentAbsent',    
 }
 
 export const adminEndPoints = {
@@ -105,7 +105,7 @@ export const adminEndPoints = {
 export const commonEndPoints = {
     GET_ALL_ANNOUNCEMENTS_API : SERVER_BASE_URL + '/common/getAllAnnouncements',
     FETCH_ALL_HOSTEL_DATA_API : SERVER_BASE_URL + '/common/fetchAllHostelData',
-    FETCH_MESS_DATA_AND_FEEDBACK : SERVER_BASE_URL + '/common/fetchMessDataAndFeedback',
     FETCH_HOSTEL_BLOCKS_NAME : SERVER_BASE_URL + '/common/fetchHostelBlockNames',
     FETCH_HOSTEL_BLOCKS_ROOMS : SERVER_BASE_URL + '/common/fetchHostelBlockRooms',
+    FETCH_CURRENT_DATE_MESS_RATING_AND_REVIEW : SERVER_BASE_URL + '/common/fetchCurrentDateRatingsAndReviews',
 }

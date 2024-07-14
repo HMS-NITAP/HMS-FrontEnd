@@ -77,7 +77,7 @@ const Login = ({ navigation }) => {
           <></>
           <Text style={{ textAlign: 'right', fontSize: 14, fontWeight: "600" }} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
         </View>
-        <View style={styles.subFormView}>
+        <View style={{display:"flex", justifyContent:"center", alignContent:"stretch"}}>
           <MainButton text="Log In" onPress={handleSubmit(onSubmit)} />
         </View>
       </View>
@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   input: {
+    width:"100%",
     padding: 10,
     paddingHorizontal: 10,
     borderWidth: 1,
