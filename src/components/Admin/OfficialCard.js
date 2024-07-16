@@ -11,6 +11,8 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
   const [hostelData, setHostelData] = useState([]);
   const [selectedHostelBlock, setSelectedHostelBlock] = useState(null);
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleConfirmDelete = async() => {
@@ -34,6 +36,7 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
   };
 
   const handleUnallocate = async() => {
+    setIsButtonDisabled(true);
     let formData = new FormData();
     formData.append("removeWardenId",data?.id);
     formData.append("hostelBlockId",data?.hostelBlock?.id);
@@ -44,10 +47,12 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
     }finally{
       fetchData();
       setEditModalVisible(false);
+      setIsButtonDisabled(false);
     }
   };
 
   const handleAllocate = async() => {
+    setIsButtonDisabled(true);
     let formData = new FormData();
     formData.append("newWardenId",data?.id);
     formData.append("hostelBlockId",selectedHostelBlock);
@@ -58,6 +63,7 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
     }finally{
       fetchData();
       setEditModalVisible(false);
+      setIsButtonDisabled(false);
     }
   };
 
@@ -79,12 +85,12 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
         }
       </View>
       <View style={{maxWidth:"20%", display:"flex", flexDirection:"column", gap:20}}>
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={styles.trashButton} 
           onPress={() => setModalVisible(true)}
         >
           <Icon name='trash' size={25} style={styles.icon} color='#c1121f' />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         {
           data?.hostelBlockId ? 
             <TouchableOpacity 
@@ -142,13 +148,15 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
                   <Text style={styles.modalText}>Are you sure, you want to unallocate this Official from the hostel block?</Text>
                   <View style={styles.modalButtons}>
                     <TouchableOpacity
-                      style={styles.confirmButton}
+                      style={[styles.confirmButton, {opacity:isButtonDisabled?0.5:1}]}
+                      isButtonDisabled={isButtonDisabled}
                       onPress={handleUnallocate}
                     >
                       <Text style={styles.buttonText}>Yes</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={styles.cancelButton}
+                      style={[styles.cancelButton, {opacity:isButtonDisabled?0.5:1}]}
+                      isButtonDisabled={isButtonDisabled}
                       onPress={() => setEditModalVisible(false)}
                     >
                       <Text style={styles.buttonText}>No</Text>
@@ -175,13 +183,15 @@ const OfficialCard = ({ data,token,toast,fetchData }) => {
                   </ScrollView>
                   <View style={styles.modalButtons}>
                     <TouchableOpacity
-                      style={styles.confirmButton}
+                      style={[styles.confirmButton, {opacity:isButtonDisabled?0.5:1}]}
+                      isButtonDisabled={isButtonDisabled}
                       onPress={handleAllocate}
                     >
                       <Text style={styles.buttonText}>Confirm</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={styles.cancelButton}
+                      style={[styles.cancelButton, {opacity:isButtonDisabled?0.5:1}]}
+                      isButtonDisabled={isButtonDisabled}
                       onPress={() => setEditModalVisible(false)}
                     >
                       <Text style={styles.buttonText}>Cancel</Text>

@@ -11,6 +11,7 @@ const RoomAllotment = ({}) => {
 
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const [hostelBlocks, setHostelBlocks] = useState(null);
   const [hostelBlockRooms, setHostelBlockRooms] = useState(null);
@@ -43,6 +44,7 @@ const RoomAllotment = ({}) => {
   }
 
   const fetchRooms = async() => {
+    setIsButtonDisabled(true);
     setSelectedCot(null);
     const filterData = hostelBlocks.filter((block) => block.id === selectedBlock);
     const floors = parseInt(filterData[0].floorCount);
@@ -55,6 +57,7 @@ const RoomAllotment = ({}) => {
       floorNo : null,
       roomNo : null,
     });
+    setIsButtonDisabled(false);
   }
 
   useEffect(() => {
@@ -102,6 +105,9 @@ const RoomAllotment = ({}) => {
     if(!registrationData){
       return;
     }
+
+    setIsButtonDisabled(true);
+
     const formdata = new FormData();
     formdata.append("email",registrationData?.email);
     formdata.append("password",registrationData?.password);
@@ -140,7 +146,7 @@ const RoomAllotment = ({}) => {
       toast.show("Refresh the page from the above icon to check if the room is already booked by someone else.",{type:"warning"});
       setModalVisible(false);
     }
-    
+    setIsButtonDisabled(false);
   }
 
   return (
@@ -187,7 +193,7 @@ const RoomAllotment = ({}) => {
             }
 
             {
-              selectedBlock && selectedFloor!==null && <View style={{width:"90%",marginHorizontal:"auto",display:"flex",flexDirection:"row",justifyContent:"flex-end",alignItems:"center"}}><TouchableOpacity onPress={() => fetchRooms()}><Icon name="arrows-rotate" style={{color:"#003049",fontSize:20}} /></TouchableOpacity></View>
+              selectedBlock && selectedFloor!==null && <View style={{width:"90%",marginHorizontal:"auto",display:"flex",flexDirection:"row",justifyContent:"flex-end",alignItems:"center"}}><TouchableOpacity disabled={isButtonDisabled} onPress={() => fetchRooms()}><Icon name="arrows-rotate" style={{color:"#003049",fontSize:20}} /></TouchableOpacity></View>
             }
 
             {
@@ -232,13 +238,15 @@ const RoomAllotment = ({}) => {
                 </View>
                 <View style={styles.modalButtons}>
                   <TouchableOpacity 
-                      style={styles.confirmButton} 
+                      disabled={isButtonDisabled}
+                      style={[styles.confirmButton, { opacity:isButtonDisabled?0.5:1 }]}
                       onPress={handleSubmit}
                   >
                       <Text style={styles.buttonText}>Submit</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
-                      style={styles.cancelButton} 
+                      disabled={isButtonDisabled}
+                      style={[styles.cancelButton, {opacity:isButtonDisabled?0.5:1}]} 
                       onPress={cancelHandler}
                   >
                       <Text style={styles.buttonText}>Cancel</Text>
@@ -332,6 +340,7 @@ const styles = StyleSheet.create({
     gap:15
   },
   modalText: {
+    color:"#6c757d",
     fontSize: 18,
     textAlign: "center"
   },
@@ -346,7 +355,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
-    marginRight: 10
+    marginRight: 10,
   },
   cancelButton: {
     flex: 1,

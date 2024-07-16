@@ -4,7 +4,7 @@
 // NEW SERVER (Backend1)
 SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-// SERVER_BASE_URL = "http://192.168.51.208:4000/api/v1"
+// SERVER_BASE_URL = "http://192.168.5.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 

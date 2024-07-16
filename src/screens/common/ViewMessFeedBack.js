@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentDateRatingsAndReviews, fetchMessAndFeedBackData } from '../../services/operations/CommonAPI';
 import { useToast } from 'react-native-toast-notifications';
 import { AirbnbRating } from 'react-native-ratings';
@@ -15,9 +15,11 @@ const ViewMessFeedBack = ({navigation}) => {
   const dispatch = useDispatch();
   const toast = useToast();
 
+  const {token} = useSelector((state) => state.Auth);
+  const {user} = useSelector((state) => state.Profile);
+
   const fetchData = async() => {
     const data = await dispatch(fetchCurrentDateRatingsAndReviews(toast));
-    console.log(JSON.stringify(data));
     if(!data) return;
     setData(data);
     setLoading(false);
@@ -31,12 +33,16 @@ const ViewMessFeedBack = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={{width:"100%", paddingVertical:25, paddingHorizontal:20, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20}}>
-      <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"flex-end"}}>
-        <TouchableOpacity onPress={() => navigation.navigate("Give Mess Feedback")} style={{display:"flex", padding:10, flexDirection:"row", justifyContent:"flex-end", alignItems:"center", gap:5, borderRadius:15, backgroundColor:"#ccd5ae"}}>
-          <Icon name="circle-plus" size={20} color="grey" solid />
-          <Text style={{color:"black", textAlign:"right", fontSize:16, fontWeight:"600"}}>Give Feedback</Text>
-        </TouchableOpacity>
-      </View>
+      {
+        toast && user && user?.accountType==="STUDENT" && (
+          <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"flex-end"}}>
+            <TouchableOpacity onPress={() => navigation.navigate("Give Mess Feedback")} style={{display:"flex", padding:10, flexDirection:"row", justifyContent:"flex-end", alignItems:"center", gap:5, borderRadius:15, backgroundColor:"#ccd5ae"}}>
+              <Icon name="circle-plus" size={20} color="grey" solid />
+              <Text style={{color:"black", textAlign:"right", fontSize:16, fontWeight:"600"}}>Give Feedback</Text>
+            </TouchableOpacity>
+          </View>
+        )
+      }
       {
         loading ? (<Text style={{textAlign:"center", fontWeight:"700", fontSize:18}}>Please Wait...</Text>) : (
           <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:15}}>

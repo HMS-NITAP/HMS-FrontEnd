@@ -12,13 +12,16 @@ const Login = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
   const [secureText, setSecureText] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handlePress = () => {
     navigation.navigate("Student Registration");
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async(data) => {
+    setIsButtonDisabled(true);
     await dispatch(login(data.email, data.password, toast));
+    setIsButtonDisabled(false);
   };
 
   return (
@@ -75,13 +78,13 @@ const Login = ({ navigation }) => {
         </View>
         <View style={{ display: "flex", justifyContent: "space-between" }}>
           <></>
-          <Text style={{ textAlign: 'right', fontSize: 14, fontWeight: "600" }} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
+          <Text style={{ textAlign: 'right', fontSize: 14, fontWeight: "600", color:"#495057" }} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
         </View>
         <View style={{display:"flex", justifyContent:"center", alignContent:"stretch"}}>
-          <MainButton text="Log In" onPress={handleSubmit(onSubmit)} />
+          <MainButton text="Log In" onPress={handleSubmit(onSubmit)} isButtonDisabled={isButtonDisabled} />
         </View>
       </View>
-      <TouchableOpacity style={styles.createAccount} onPress={handlePress}><Text style={{textAlign:"center"}}>Are you a student and haven't registered yet? Click here to register!</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.createAccount} onPress={handlePress}><Text style={{textAlign:"center",color:"#4a4e69"}}>Are you a student and haven't registered yet? Click here to register!</Text></TouchableOpacity>
     </ScrollView>
   );
 }

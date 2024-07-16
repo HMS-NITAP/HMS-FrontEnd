@@ -15,9 +15,12 @@ const CreateOfficialAccount = () => {
     const {token} = useSelector((state) => state.Auth);
     const toast = useToast();
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const [selectedGender, setSelectedGender] = useState('M');
 
     const submitHandler = async (data) => {
+        setIsButtonDisabled(true);
         let formData = new FormData();
         formData.append("email",data.email);
         formData.append("password",data.password);
@@ -27,6 +30,7 @@ const CreateOfficialAccount = () => {
         formData.append("phone",data.phone);
         await dispatch(createOfficialAccount(formData,token,toast));
         reset();
+        setIsButtonDisabled(false);
     };
 
     const [secureText,setSecureText] = useState(true);
@@ -188,7 +192,7 @@ const CreateOfficialAccount = () => {
                     {errors.phone && <Text style={styles.errorText}>Phone Number is required.</Text>}
                 </View>
 
-                <MainButton text={"Create Account"} onPress={handleSubmit(submitHandler)} />
+                <MainButton isButtonDisabled={isButtonDisabled} text={"Create Account"} onPress={handleSubmit(submitHandler)} />
             </View>
         </View>
         </ScrollView>

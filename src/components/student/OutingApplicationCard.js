@@ -9,6 +9,7 @@ const OutingApplicationCard = ({application,token,toast,fetchData}) => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [markReturnModalOpen, setMarkReturnModalOpen] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -18,17 +19,21 @@ const OutingApplicationCard = ({application,token,toast,fetchData}) => {
     }
 
     const handleConfirmDelete = async() => {
+      setIsButtonDisabled(true);
         const response = await dispatch(deletePendingOutingApplication(application?.id,token,toast));
         if(response){
             fetchData();
         }
+        setIsButtonDisabled(false);
     }
 
     const handleMarkReturn = async() => {
+      setIsButtonDisabled(true);
       const response = await dispatch(markReturnFromOuting(application?.id,token,toast));
       if(response){
         fetchData();
       }
+      setIsButtonDisabled(false);
     }
 
   return (
@@ -114,7 +119,7 @@ const OutingApplicationCard = ({application,token,toast,fetchData}) => {
 
         {
           application?.status === "INPROGRESS" && (
-            <View style={{marginTop:15, display:"flex", justifyContent:"center", alignItems:"center"}}><MainButton onPress={() => setMarkReturnModalOpen(true)} backgroundColor={"#95d5b2"} text={"Mark Return"}  /></View>
+            <View style={{marginTop:15, display:"flex", justifyContent:"center", alignItems:"center"}}><MainButton isButtonDisabled={isButtonDisabled} onPress={() => setMarkReturnModalOpen(true)} backgroundColor={"#95d5b2"} text={"Mark Return"}  /></View>
           )
         }
 
@@ -122,7 +127,8 @@ const OutingApplicationCard = ({application,token,toast,fetchData}) => {
             application?.status === "PENDING" && (
                 <View style={{marginTop:15}}>
                     <TouchableOpacity 
-                        style={styles.trashButton} 
+                        disabled={isButtonDisabled}
+                        style={[styles.trashButton,{opacity:isButtonDisabled?0.5:1}]} 
                         onPress={() => setModalVisible(true)}
                         >
                         <Icon name='trash' size={25} style={styles.icon} color='#c1121f' />
@@ -143,13 +149,15 @@ const OutingApplicationCard = ({application,token,toast,fetchData}) => {
                     <Text style={styles.modalText}>Are you sure you want to delete this Outing Application?</Text>
                     <View style={styles.modalButtons}>
                     <TouchableOpacity 
-                        style={styles.confirmButton} 
+                        disabled={isButtonDisabled}
+                        style={[styles.confirmButton,{opacity:isButtonDisabled?0.5:1}]} 
                         onPress={handleConfirmDelete}
                     >
                         <Text style={styles.buttonText}>Yes</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        style={styles.cancelButton} 
+                        disabled={isButtonDisabled}
+                        style={[styles.cancelButton,{opacity:isButtonDisabled?0.5:1}]} 
                         onPress={() => setModalVisible(false)}
                     >
                         <Text style={styles.buttonText}>No</Text>
@@ -170,13 +178,15 @@ const OutingApplicationCard = ({application,token,toast,fetchData}) => {
                     <Text style={styles.modalText}>Are you sure, you want to log return from vacation?</Text>
                     <View style={styles.modalButtons}>
                     <TouchableOpacity 
-                        style={{flex: 1, backgroundColor: "#52b788", padding: 10, borderRadius: 5, alignItems: "center", marginRight: 10}} 
+                        disabled={isButtonDisabled}
+                        style={{flex: 1, backgroundColor: "#52b788", padding: 10, borderRadius: 5, alignItems: "center", marginRight: 10, opacity:isButtonDisabled?0.5:1}} 
                         onPress={handleMarkReturn}
                     >
                         <Text style={styles.buttonText}>Yes</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
-                        style={styles.cancelButton} 
+                        disabled={isButtonDisabled}
+                        style={[styles.cancelButton,{opacity:isButtonDisabled?0.5:1}]} 
                         onPress={() => setMarkReturnModalOpen(false)}
                     >
                         <Text style={styles.buttonText}>No</Text>

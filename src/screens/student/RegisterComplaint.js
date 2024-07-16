@@ -8,7 +8,7 @@ import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { createHostelComplaint } from '../../services/operations/StudentAPI';
 
-const RegisterComplaint = () => {
+const RegisterComplaint = ({navigation}) => {
   const dropdownOptions = [
                             'General', 
                             'Food Issues',
@@ -25,6 +25,8 @@ const RegisterComplaint = () => {
 
   const [category, setCategory] = useState('');
   const [fileResponse, setFileResponse] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const dispatch = useDispatch();
   const {token} = useSelector((state) => state.Auth);
 
@@ -40,6 +42,9 @@ const RegisterComplaint = () => {
       toast.show("Give description of complaint",{type:"warning"});
       return;
     }
+
+    setIsButtonDisabled(true);
+
     let formData = new FormData();
     formData.append("category",category);
     formData.append("about",data?.about);
@@ -51,7 +56,9 @@ const RegisterComplaint = () => {
       setCategory(null);
       setFileResponse(null);
       reset();
+      navigation.navigate("Complaints Registered");
     }
+    setIsButtonDisabled(false);
   }
 
   const pickUpFile = useCallback(async () => {
@@ -125,7 +132,7 @@ const RegisterComplaint = () => {
           </View>
         </View>
         <View style={styles.subFormView}>
-          <MainButton text={"Generate Complaint"} onPress={handleSubmit(onSubmit)}/>
+          <MainButton isButtonDisabled={isButtonDisabled} text={"Generate Complaint"} onPress={handleSubmit(onSubmit)}/>
         </View>
         </View>
     </View>

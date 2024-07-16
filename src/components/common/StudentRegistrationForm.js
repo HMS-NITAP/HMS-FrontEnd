@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import MainButton from '../../components/common/MainButton';
 import ModalDropdown from 'react-native-modal-dropdown';
@@ -11,6 +11,9 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import DatePicker from 'react-native-date-picker'
 import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
 import { sendOtpToStudent } from '../../services/operations/AuthAPI';
+
+const MAX_FILE_SIZE = 150 * 1024;
+const MAX_IMAGE_SIZE = 250 * 1024;
 
 const StudentRegistrationForm = () => {
 
@@ -51,14 +54,21 @@ const StudentRegistrationForm = () => {
     const [paymentMode, setPaymentMode] = useState(null);
     const [paymentDate, setPaymentDate] = useState(null);
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const pickUpImage = useCallback(async () => {
-        try {
+        try{
           const response = await DocumentPicker.pick({
             type: [DocumentPicker.types.images],
             presentationStyle: 'fullScreen',
-          });
-          setImageResponse(response);
-        } catch (err) {
+          })
+
+          if(response[0].size > MAX_IMAGE_SIZE){
+            toast.show('File size exceeds the limit of 250KB. Please select a smaller file.', { type: 'warning' });
+          }else{
+            setImageResponse(response);
+          }
+        }catch(err){
           console.warn(err);
         }
     }, []);
@@ -69,20 +79,28 @@ const StudentRegistrationForm = () => {
             type: [DocumentPicker.types.pdf],
             presentationStyle: 'fullScreen',
           });
-          setHostelFeeReceiptResponse(response);
-        } catch (err) {
+          if(response[0].size > MAX_FILE_SIZE){
+            toast.show('File size exceeds the limit of 150KB. Please select a smaller file.', { type: 'warning' });
+          }else{
+            setHostelFeeReceiptResponse(response);
+          }
+        }catch(err){
           console.warn(err);
         }
     }, []);
 
     const pickUpInstituteFeeReceipt = useCallback(async () => {
-        try {
+        try{
           const response = await DocumentPicker.pick({
             type: [DocumentPicker.types.pdf],
             presentationStyle: 'fullScreen',
           });
-          setInstituteFeeReceiptResponse(response);
-        } catch (err) {
+          if(response[0].size > MAX_FILE_SIZE){
+            toast.show('File size exceeds the limit of 150KB. Please select a smaller file.', { type: 'warning' });
+          }else{
+            setInstituteFeeReceiptResponse(response);
+          }
+        }catch(err){
           console.warn(err);
         }
     }, []);
@@ -95,27 +113,49 @@ const StudentRegistrationForm = () => {
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
 
+    useEffect(() => {
+        console.log("DOB",dob);
+    },[]);
+
     const submitHandler = async(data) => {
 
         if(data?.password !== data?.confirmPassword){
             toast.show("Passwords are not matching",{type:"warning"});
             return;
-        }
-
-        if(!selectedBranch || !selectedCommunity || !selectedGender || !selectedYear || !dob || !pwdStatus || !paymentMode || !paymentDate){
-            toast.show("Fill all fields",{type:"warning"});
+        }else if(!selectedBranch){
+            toast.show("Select your Branch",{type:"warning"});
+            return;
+        }else if(!selectedCommunity){
+            toast.show("Select your Community",{type:"warning"});
+            return;
+        }else if(!selectedGender){
+            toast.show("Select your Gender",{type:"warning"});
+            return;
+        }else if(!selectedYear){
+            toast.show("Select your Year",{type:"warning"});
+            return;
+        }else if(!dob){
+            toast.show("Select your DOB",{type:"warning"});
+            return;
+        }else if(!pwdStatus){
+            toast.show("Select your PWD status",{type:"warning"});
+            return;
+        }else if(!paymentMode){
+            toast.show("Select Hostel Fee Payment Mode",{type:"warning"});
+            return;
+        }else if(!paymentDate){
+            toast.show("Select Hostel Fee Payment Date",{type:"warning"});
+            return;
+        }else if(!instituteFeeReceiptResponse || !hostelfeeReceiptResponse){
+            toast.show("Upload Fee Receipt",{type:"warning"});
+            return;
+        }else if(!imageResponse){
+            toast.show("Upload your Profile Image",{type:"warning"});
             return;
         }
 
-        if(!instituteFeeReceiptResponse){
-            toast.show("Upload Institute Fee Receipt",{type:"warning"});
-            return;
-        }
+        setIsButtonDisabled(true);
 
-        if(!imageResponse || !hostelfeeReceiptResponse){
-            toast.show("Upload the Required Files",{type:"warning"});
-            return;
-        }
         const registrationData = {
             ...data,branch:selectedBranch,community:selectedCommunity,gender:selectedGender,year:selectedYear,dob: dob.toISOString(),pwd:pwdStatus,image:imageResponse,instituteFeeReceipt:instituteFeeReceiptResponse,hostelFeeReceipt:hostelfeeReceiptResponse,paymentMode,paymentDate:paymentDate.toISOString()
         }
@@ -124,9 +164,8 @@ const StudentRegistrationForm = () => {
         const response = await dispatch(sendOtpToStudent(data.email,toast));
         if(response){
             await dispatch(setRegistrationStep(2));
-        }else{
-            return;
         }
+        setIsButtonDisabled(false);
     }
 
   return (
@@ -135,10 +174,10 @@ const StudentRegistrationForm = () => {
             <Text style={{ textAlign: "center", fontSize: 18, fontWeight:"700", color: "black", marginBottom: 10 }}>INSTRUCTIONS:</Text>
             <Text style={{ fontSize: 16, fontWeight:"600", color: "black" }}>{'\u2022'} Please complete your Institute Registration before proceeding with the Hostel Registration.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Ensure your Institute email address is correct.</Text>
-            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Fill the details with atmost care.</Text>
-            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload a proper passport size photo of yours not exceeding 200KB size.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Fill the details with atmost care, as once saved they can't be changed.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload a recent proper passport size photo of yours not exceeding 250KB size.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload Image in JPG or JPEG format.</Text>
-            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload Your fee Receipt in PDF Format</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload Your fee Receipts in PDF Format not exceeding 150KB size each</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Contact support under Development Team, if you encounter any issues</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Do not share your OTP and credentials with anyone.</Text>
         </View>
@@ -424,6 +463,8 @@ const StudentRegistrationForm = () => {
                         <DatePicker
                             modal
                             mode='date'
+                            locale='en'
+                            maximumDate={new Date()}
                             open={isDatePickerOpen}
                             date={dob || new Date()} 
                             onConfirm={(date) => {
@@ -736,7 +777,7 @@ const StudentRegistrationForm = () => {
             </View>
             
         </View>
-        <MainButton text={"Submit Data"} backgroundColor={"#b5e48c"} onPress={handleSubmit(submitHandler)} />
+        <MainButton text={"Submit Data"} isButtonDisabled={isButtonDisabled} backgroundColor={"#b5e48c"} onPress={handleSubmit(submitHandler)} />
     </View>
   )
 }

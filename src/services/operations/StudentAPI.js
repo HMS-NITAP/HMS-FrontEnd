@@ -34,11 +34,12 @@ export const CreateOutingApplication = (formData,token,toast) => {
 
             toast.hide(id);
             toast.show("Outing Application Created Successfully", {type: "success"});
-
+            return true;
         }catch(e){
             toast.hide(id);
             toast.show("Failed to create Outing Application", {type: "danger"});
             console.log("Eror",e);
+            return false;
         }
     }
 }
@@ -244,11 +245,12 @@ export const createMessFeedBack = (formData,token,toast) => {
 
             toast.hide(id);
             toast.show(response?.data?.message, {type: "success"});
-
+            return true;
         }catch(e){
             toast.hide(id);
             toast.show("Failed to Mess Feedback", {type: "danger"});
             console.log("Eror",e);
+            return false;
         }
     }
 }
@@ -267,11 +269,12 @@ export const generateMessSessionReceipt = (formData,token,toast) => {
 
             toast.hide(id);
             toast.show(response?.data?.message, {type: "success"});
-
+            return true;
         }catch(e){
             toast.hide(id);
             toast.show("Failed to Generate Receipt", {type: "danger"});
             console.log("Error",e);
+            return false;
         }
     }
 }

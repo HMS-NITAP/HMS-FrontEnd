@@ -7,13 +7,15 @@ import { createMessFeedBack, fetchStudentMessHall } from '../../services/operati
 import { AirbnbRating } from 'react-native-ratings';
 import { useFocusEffect } from '@react-navigation/native';
 
-const GiveMessFeedback = ({}) => {
+const GiveMessFeedback = ({navigation}) => {
 
   const [loading, setLoading] = useState(true);
   const [displaySession, setDisplaySession] = useState('');
   const [rating, setRating] = useState('');
   const [review, setReview] = useState('');
   const [currentDate, setCurrentDate] = useState('');
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const findSession = () => {
     const now = new Date();
@@ -57,12 +59,16 @@ const GiveMessFeedback = ({}) => {
       return;
     }
     
+    setIsButtonDisabled(true);
     let formData = new FormData();
-    // formData.append("messHallId",messHallData?.messHallId);
     formData.append("rating",rating);
     formData.append("review",review);
     formData.append("session",displaySession);
-    await dispatch(createMessFeedBack(formData,token,toast));
+    const response = await dispatch(createMessFeedBack(formData,token,toast));
+    if(response){
+      navigation.navigate("View Mess Feedback");
+    }
+    setIsButtonDisabled(false);
   }
 
   return (
@@ -108,7 +114,7 @@ const GiveMessFeedback = ({}) => {
                   </View>
 
                 <View style={styles.subFormView}>
-                  <MainButton text={"Submit"} onPress={onSubmit}/>
+                  <MainButton isButtonDisabled={isButtonDisabled} text={"Submit"} onPress={onSubmit}/>
                 </View>
               </View>
             </View>

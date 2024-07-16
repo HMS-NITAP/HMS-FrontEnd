@@ -15,6 +15,8 @@ const OtpVerification = () => {
     const {registrationData} = useSelector((state) => state.Auth);
 
     const dispatch = useDispatch();
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     
     const submitHandler = async() => {
         let formData = new FormData();
@@ -29,11 +31,13 @@ const OtpVerification = () => {
             toast.show("Enter Correct OTP", {type:"warning"});
             return;
         }
+
+        setIsButtonDisabled(true);
         const response = await dispatch(verifyOtp(formData,toast));
-        if(response === true){
-            dispatch(setRegistrationStep(3));
+        if(response){
+            await dispatch(setRegistrationStep(3));
         }
-        return;
+        setIsButtonDisabled(false);
     }
 
   return (
@@ -49,7 +53,7 @@ const OtpVerification = () => {
                     handleTextChange={(value) => setOTP(value)}
                     textInputStyle={{ color: 'black', borderWidth: 1, width:"13%", height:"auto", borderColor: 'gray', borderRadius: 10 }}
             />
-            <View style={{display:"flex",justifyContent:"center",alignItems:"center"}}><MainButton text={"Submit"} onPress={submitHandler} backgroundColor={"#eddea4"} /></View>
+            <View style={{display:"flex",justifyContent:"center",alignItems:"center"}}><MainButton isButtonDisabled={isButtonDisabled} text={"Submit"} onPress={submitHandler} backgroundColor={"#eddea4"} /></View>
         </View>
     </View>
   )

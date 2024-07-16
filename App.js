@@ -44,10 +44,8 @@ import CreateOfficialAccount from './src/screens/admin/CreateOfficialAccount';
 import StudentRegistration from './src/screens/auth/StudentRegistration';
 import StudentRegistrationApplications from './src/screens/admin/StudentRegistrationApplications';
 import OfficialDashboard from './src/screens/official/OfficialDashboard';
-import PieChartTesting from './src/screens/common/PieChartTesting';
 import GiveMessFeedback from './src/screens/student/GiveMessFeedback';
 import GenerateMessReceipt from './src/screens/student/GenerateMessReceipt';
-import ViewGeneratedReceipts from './src/screens/student/MessReceiptsHistory';
 import MessReceiptsHistory from './src/screens/student/MessReceiptsHistory';
 
 const Drawer = createDrawerNavigator();
@@ -88,7 +86,6 @@ const App = () => {
           <NavigationContainer independent={true} initialRouteName={"HostelsBlocks"}>
             <Drawer.Navigator>
               {/* Visible Home Screens */}
-              {/* <Drawer.Screen name="Pie Chart" component={PieChartTesting} options={{drawerLabel:"Login", drawerIcon: ({ size }) => (<Icon name='Pie Chart' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} /> */}
               <Drawer.Screen name="Login" component={Login} options={{drawerLabel:"Login", drawerIcon: ({ size }) => (<Icon name='right-to-bracket' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="Student Registration" component={StudentRegistration} options={{drawerLabel:"Student Registration", drawerIcon: ({ size }) => (<Icon name='address-card' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
               <Drawer.Screen name="Announcements" component={Announcements} options={{drawerLabel:"Announcements", drawerIcon: ({ size }) => (<Icon name='bullhorn' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />

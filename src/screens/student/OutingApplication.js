@@ -234,7 +234,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MainButton from "../../components/common/MainButton"; 
 import { CreateOutingApplication } from "../../services/operations/StudentAPI";
 
-const OutingApplication = ({}) => {
+const OutingApplication = ({navigation}) => {
   const [type, setType] = useState("Local");
   const toast = useToast();
   const dispatch = useDispatch();
@@ -245,6 +245,7 @@ const OutingApplication = ({}) => {
   const [fromOpen, setFromOpen] = useState(false);
   const [toDate, setToDate] = useState(new Date());
   const [toOpen, setToOpen] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const { control, handleSubmit, formState: { errors } } = useForm();
 
@@ -254,14 +255,18 @@ const OutingApplication = ({}) => {
       return;
     }
     
+    setIsButtonDisabled(true);
     let formData = new FormData();
     formData.append('type', type);
     formData.append('from', fromDate.toISOString());
     formData.append('to', toDate.toISOString());
     formData.append('purpose', data.purpose);
     formData.append('placeOfVisit', data.placeOfVisit);
-    console.log("FormData", formData);
-    await dispatch(CreateOutingApplication(formData, token, toast));
+    const response = await dispatch(CreateOutingApplication(formData, token, toast));
+    if(response){
+      navigation.navigate("Application History");
+    }
+    setIsButtonDisabled(false);
   }
 
   useEffect(() => {
@@ -271,7 +276,7 @@ const OutingApplication = ({}) => {
 
   const getMaxToDate = () => {
     const maxDate = new Date();
-    maxDate.setHours(22, 0, 0, 0); // 10:00 PM
+    maxDate.setHours(22, 0, 0, 0);
     return maxDate;
   };
 
@@ -381,7 +386,7 @@ const OutingApplication = ({}) => {
         </View>
 
         <View style={styles.subFormView}>
-          <MainButton text={"Apply"} onPress={handleSubmit(submitHandler)} />
+          <MainButton isButtonDisabled={isButtonDisabled} text={"Apply"} onPress={handleSubmit(submitHandler)} />
         </View>
       </View>
     </ScrollView>

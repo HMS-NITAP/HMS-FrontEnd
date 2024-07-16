@@ -10,24 +10,30 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [acceptModalVisible, setAcceptModalVisible] = useState(false);
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const { control, handleSubmit, reset, formState: { errors } } = useForm();
     const dispatch = useDispatch();
 
     const acceptHandler = async() => {
+        setIsButtonDisabled(true);
         let formdata = new FormData();
         formdata.append("userId",application?.id);
         await dispatch(acceptRegistrationApplication(formdata,token,toast));
         fetchData();
         setAcceptModalVisible(false);
+        setIsButtonDisabled(false);
     }
 
     const rejectHandler = async(data) => {
+        setIsButtonDisabled(true);
         let formdata = new FormData();
         formdata.append("userId",application?.id);
         formdata.append("remarks",data?.remarks);
         await dispatch(rejectRegistrationApplication(formdata,token,toast,fetchData));
         fetchData();
         setRejectModalVisible(false);
+        setIsButtonDisabled(false);
     }
 
     return (
@@ -111,10 +117,10 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
                         />
                         {errors.remarks && <Text style={{fontSize:14, color:"red"}}>Remarks is required.</Text>}
                         <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity onPress={handleSubmit(rejectHandler)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={handleSubmit(rejectHandler)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color: 'white', fontWeight:"600" }}>Reject</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setRejectModalVisible(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setRejectModalVisible(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
@@ -134,10 +140,10 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
                     <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
                         <Text style={{ fontSize: 18, textAlign:"center", fontWeight: '500', marginBottom: 10, color:"black" }}>Are you sure, this application will be accepted.</Text>
                         <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity onPress={acceptHandler} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={acceptHandler} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Accept</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setAcceptModalVisible(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setAcceptModalVisible(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>

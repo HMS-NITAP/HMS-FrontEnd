@@ -33,6 +33,8 @@ const CreateHostelBlock = () => {
     const [selectedFloorCount, setSelectedFloorCount] = useState(2);
     const [selectedYear, setSelectedYear] = useState(1);
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const pickUpFile = useCallback(async () => {
         try {
           const response = await DocumentPicker.pick({
@@ -46,6 +48,7 @@ const CreateHostelBlock = () => {
       }, []);
 
     const submitHandler = async (data) => {
+        setIsButtonDisabled(true);
         let formData = new FormData();
         formData.append("name",data.name);
         if(!fileResponse) toast.show("Select an Image",{type:"warning"});
@@ -58,6 +61,7 @@ const CreateHostelBlock = () => {
         await dispatch(createHostelBlock(formData,token,toast));
         setFileResponse(null);
         reset();
+        setIsButtonDisabled(false);
     };
 
   return (
@@ -249,7 +253,7 @@ const CreateHostelBlock = () => {
                         {errors.capacity && <Text style={styles.errorText}>Block Capacity is required.</Text>}
                 </View>
 
-                <MainButton text={"Create Block"} onPress={handleSubmit(submitHandler)} />
+                <MainButton isButtonDisabled={isButtonDisabled} text={"Create Block"} onPress={handleSubmit(submitHandler)} />
             </View>
         </View>
         </ScrollView>

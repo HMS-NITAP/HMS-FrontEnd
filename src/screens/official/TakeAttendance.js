@@ -10,6 +10,7 @@ import MainButton from '../../components/common/MainButton';
 const TakeAttendance = () => {
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.Auth);
@@ -78,37 +79,45 @@ const TakeAttendance = () => {
 
   const handleMarkPresent = async(id) => {
     if(dateFormat){
+      setIsButtonDisabled(true);
       const response = await dispatch(markStudentPresent(dateFormat,id,token,toast));
       if(response){
         fetchData();
       }
+      setIsButtonDisabled(false);
     }
   }
 
   const handleMarkAbsent = async(id) => {
     if(dateFormat){
+      setIsButtonDisabled(true);
       const response = await dispatch(markStudentAbsent(dateFormat,id,token,toast));
       if(response){
         fetchData();
       }
+      setIsButtonDisabled(false);
     }
   }
 
   const handleUnmarkPresent = async(id) => {
     if(dateFormat){
+      setIsButtonDisabled(true);
       const response = await dispatch(unmarkStudentPresent(dateFormat,id,token,toast));
       if(response){
         fetchData();
       }
+      setIsButtonDisabled(false);
     }
   }
 
   const handleUnmarkAbsent = async(id) => {
     if(dateFormat){
+      setIsButtonDisabled(true);
       const response = await dispatch(unmarkStudentAbsent(dateFormat,id,token,toast));
       if(response){
         fetchData();
       }
+      setIsButtonDisabled(false);
     }
   }
 
@@ -152,6 +161,7 @@ const TakeAttendance = () => {
                     modal
                     mode='date'
                     locale='en'
+                    maximumDate={new Date()}
                     open={isDatePickerOpen}
                     date={selectedDate || new Date()}
                     onConfirm={(date) => {
@@ -183,20 +193,20 @@ const TakeAttendance = () => {
                               {
                                 findStatus(cot?.student?.attendence?.presentDays,cot?.student?.attendence?.absentDays)==="NM" ? (
                                   <View style={{display:"flex", flexDirection:"row", justifyContent:"flex-end", alignItems:"center", gap:10}}>
-                                    <TouchableOpacity onPress={() => handleMarkPresent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"#b5e48c", paddingHorizontal:9, paddingVertical:4, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                    <TouchableOpacity disabled={isButtonDisabled} onPress={() => handleMarkPresent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"#b5e48c", paddingHorizontal:9, paddingVertical:4, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center", opacity:isButtonDisabled?0.5:1}}>
                                       <Text style={{color:"black", fontWeight:"700", fontSize:15}}>P</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => handleMarkAbsent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"#ffccd5", paddingHorizontal:9, paddingVertical:4, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                    <TouchableOpacity disabled={isButtonDisabled} onPress={() => handleMarkAbsent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"#ffccd5", paddingHorizontal:9, paddingVertical:4, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center", opacity:isButtonDisabled?0.5:1}}>
                                       <Text style={{color:"black", fontWeight:"700", fontSize:15}}>A</Text>
                                     </TouchableOpacity>
                                   </View>
                                 ) : (
                                   findStatus(cot?.student?.attendence?.presentDays,cot?.student?.attendence?.absentDays)==="PRESENT" ? (
-                                    <TouchableOpacity onPress={() => handleUnmarkPresent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"white", paddingHorizontal:8, paddingVertical:8, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                    <TouchableOpacity disabled={isButtonDisabled} onPress={() => handleUnmarkPresent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"white", paddingHorizontal:8, paddingVertical:8, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center", opacity:isButtonDisabled?0.5:1}}>
                                       <Text style={{color:"black", fontWeight:"700", fontSize:15}}>UP</Text>
                                     </TouchableOpacity>
                                   ) : (
-                                    <TouchableOpacity onPress={() => handleUnmarkAbsent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"white", paddingHorizontal:8, paddingVertical:8, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center"}}>
+                                    <TouchableOpacity disabled={isButtonDisabled} onPress={() => handleUnmarkAbsent(cot?.student?.attendence?.id)} style={{borderWidth:1, borderColor:"black", backgroundColor:"white", paddingHorizontal:8, paddingVertical:8, borderRadius:20, display:"flex", justifyContent:"center", alignItems:"center", opacity:isButtonDisabled?0.5:1}}>
                                       <Text style={{color:"black", fontWeight:"700", fontSize:15}}>UA</Text>
                                     </TouchableOpacity>
                                   )

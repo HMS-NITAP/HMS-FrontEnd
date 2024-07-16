@@ -9,6 +9,9 @@ const HostelComplaints = () => {
 
     const [complaintStatus, setComplaintStatus] = useState("UNRESOLVED");
     const [registeredComplaints,setRegisteredComplaints] = useState([]);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const dispatch = useDispatch();
 
     const {token} = useSelector((state) => state.Auth);
@@ -30,13 +33,17 @@ const HostelComplaints = () => {
     },[complaintStatus]);
 
     const resolveHandler = async (complaintId) => {
+        setIsButtonDisabled(true);
         await dispatch(resolveHostelComplaint(complaintId,token,toast));
         fetchRegisteredComplaints();
+        setIsButtonDisabled(false);
     }
 
     const unresolveHandler = async (complaintId) => {
+        setIsButtonDisabled(true);
         await dispatch(unResolveHostelComplaint(complaintId,token,toast));
         fetchRegisteredComplaints();
+        setIsButtonDisabled(false);
     }
 
     const getDateFormat = (date) => {
@@ -47,8 +54,8 @@ const HostelComplaints = () => {
   return (
     <ScrollView contentContainerStyle={{width:"100%", paddingHorizontal:10,paddingVertical:10,justifyContent:'start',alignItems:"center",gap:15}}>
         <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", overflow:'hidden', borderWidth:1, borderColor:"black", borderRadius:10}}>
-            <TouchableOpacity style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="UNRESOLVED" ? "#ffb703" : "white",}} onPress={() => setComplaintStatus("UNRESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Unresolved</Text></TouchableOpacity>
-            <TouchableOpacity style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="RESOLVED" ? "#ffb703" : "white",}} onPress={() => setComplaintStatus("RESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Resolved</Text></TouchableOpacity>
+            <TouchableOpacity disabled={isButtonDisabled} style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="UNRESOLVED" ? "#ffb703" : "white", opacity:isButtonDisabled?0.5:1}} onPress={() => setComplaintStatus("UNRESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Unresolved</Text></TouchableOpacity>
+            <TouchableOpacity disabled={isButtonDisabled} style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="RESOLVED" ? "#ffb703" : "white", opacity:isButtonDisabled?0.5:1}} onPress={() => setComplaintStatus("RESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Resolved</Text></TouchableOpacity>
         </View>
         {
             registeredComplaints  && complaintStatus==="UNRESOLVED" && 
@@ -94,11 +101,11 @@ const HostelComplaints = () => {
                             {
                                 complaint?.status==='UNRESOLVED' ? (
                                     <View style={{display:"flex", marginVertical:10, flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-                                        <MainButton text="Resolve" backgroundColor={"#99d98c"} onPress={() => resolveHandler(complaint?.id)} />
+                                        <MainButton isButtonDisabled={isButtonDisabled} text="Resolve" backgroundColor={"#99d98c"} onPress={() => resolveHandler(complaint?.id)} />
                                     </View>
                                 ) : (
                                     <View style={{display:"flex", marginVertical:10, flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-                                        <MainButton text="Unresolve" backgroundColor={"#f27059"} onPress={() => unresolveHandler(complaint?.id)} />
+                                        <MainButton isButtonDisabled={isButtonDisabled} text="Unresolve" backgroundColor={"#f27059"} onPress={() => unresolveHandler(complaint?.id)} />
                                     </View>
                                 )
                             }

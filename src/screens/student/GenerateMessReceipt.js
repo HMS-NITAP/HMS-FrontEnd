@@ -12,6 +12,7 @@ const GenerateMessReceipt = ({navigation}) => {
   const [messHalls, setMessHalls] = useState(null);
   const [selectedMessHallName, setSelectedMessHallName] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const dispatch = useDispatch();
   const toast = useToast();
@@ -68,6 +69,8 @@ const GenerateMessReceipt = ({navigation}) => {
       return;
     }
 
+    setIsButtonDisabled(true);
+
     let formData = new FormData();
     formData.append("session",displaySession);
     formData.append("date",sessionDate);
@@ -77,6 +80,8 @@ const GenerateMessReceipt = ({navigation}) => {
     if(response){
       navigation.navigate("Mess Receipts History");
     }
+
+    setIsButtonDisabled(false);
   }
 
   return (
@@ -109,7 +114,7 @@ const GenerateMessReceipt = ({navigation}) => {
                 <Text style={styles.label}>Date: <Text style={{fontWeight:"600", color:"#6c757d"}}> {currentDate}</Text></Text>
                 <Text style={styles.label}>Session:<Text style={{fontWeight:"600", color:"#6c757d"}}> {displaySession}</Text></Text>
               </View>
-              <MainButton text={"Generate"} onPress={handleGenerate} />
+              <MainButton isButtonDisabled={isButtonDisabled} text={"Generate"} onPress={handleGenerate} />
             </View>
           )
         }

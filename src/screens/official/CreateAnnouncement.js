@@ -14,17 +14,21 @@ const CreateAnnouncement = () => {
   const [fileResponse, setFileResponse] = useState(null);
   const toast = useToast();
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
   const onSubmit = async (data) => {
+    setIsButtonDisabled(true);
     let formData = new FormData();
     formData.append("title",data.title);
     formData.append("textContent",data.textContent);
     if(fileResponse){
       formData.append("file",{uri:fileResponse[0]?.uri, type:fileResponse[0]?.type, name:fileResponse[0]?.name});
     }
-    dispatch(createAnnouncement(formData, token, toast));
+    await dispatch(createAnnouncement(formData, token, toast));
     setValue("title","");
     setValue("textContent","");
     setFileResponse(null);
+    setIsButtonDisabled(false);
   };
 
   const pickUpFile = useCallback(async () => {
@@ -108,7 +112,7 @@ const CreateAnnouncement = () => {
         </View>
 
         <View style={styles.subFormView}>
-          <MainButton text="Create Announcement" onPress={handleSubmit(onSubmit)} />
+          <MainButton isButtonDisabled={isButtonDisabled} text="Create Announcement" onPress={handleSubmit(onSubmit)} />
         </View>
       </View>
     </View>

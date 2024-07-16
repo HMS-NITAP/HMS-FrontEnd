@@ -8,14 +8,14 @@ import { useDispatch } from 'react-redux';
 
 const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
 
-    // console.log("Appliaction Data",application);
-
     const { control, handleSubmit, reset, formState: { errors } } = useForm();
 
     const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
     const [isReturnWithDelayModalOpen, setIsReturnWithDelayModalOpen] = useState(false);
     const [isReturnWithoutDelayModalOpen, setIsReturnWithoutDelayModalOpen] = useState(false);
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -26,13 +26,17 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
     }
 
     const acceptPendingApplicationHandler = async () => {
+        setIsButtonDisabled(true);
         const response = await dispatch(acceptPendingOutingApplication(application?.id,token,toast));
         if(response){
             fetchOutingRequest();
         }
+        setIsAcceptModalOpen(false);
+        setIsButtonDisabled(false);
     }
 
     const rejectPendingApplicationHandler = async(data) => {
+        setIsButtonDisabled(true);
         const formData = new FormData();
         formData.append("applicationId",application?.id);
         formData.append("remarks",data?.remarks);
@@ -40,16 +44,22 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
         if(response){
             fetchOutingRequest();
         }
+        setIsRejectModalOpen(false);
+        setIsButtonDisabled(false);
     }
 
     const markCompletedWithoutDelay = async () => {
+        setIsButtonDisabled(true);
         const response = await dispatch(markCompletedWithoutDelayOutingApplication(application?.id,token,toast));
         if(response){
             fetchOutingRequest();
         }
+        setIsReturnWithoutDelayModalOpen(false);
+        setIsButtonDisabled(false);
     }
 
     const markCompletedWithDelay = async(data) => {
+        setIsButtonDisabled(true);
         const formData = new FormData();
         formData.append("applicationId",application?.id);
         formData.append("remarks",data?.remarks);
@@ -57,6 +67,8 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
         if(response){
             fetchOutingRequest();
         }
+        setIsReturnWithDelayModalOpen(false);
+        setIsButtonDisabled(false);
     }
 
 
@@ -118,16 +130,16 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
         {
             application?.status==="PENDING" && (
                 <View style={{display:"flex", marginTop:10, flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-                    <MainButton text="Accept" backgroundColor={"#99d98c"} onPress={() => setIsAcceptModalOpen(true)} />
-                    <MainButton text="Reject" backgroundColor={"#f27059"} onPress={() => setIsRejectModalOpen(true)} />
+                    <MainButton isButtonDisabled={isButtonDisabled} text="Accept" backgroundColor={"#99d98c"} onPress={() => setIsAcceptModalOpen(true)} />
+                    <MainButton isButtonDisabled={isButtonDisabled} text="Reject" backgroundColor={"#f27059"} onPress={() => setIsRejectModalOpen(true)} />
                 </View>
             )
         }
         {
             application?.status==="RETURNED" && (
                 <View style={{display:"flex", marginTop:10, flexDirection:"column", justifyContent:"center", alignItems:"center", gap:10}}>
-                    <MainButton text="Returned Without Delay" backgroundColor={"#99d98c"} onPress={() => setIsReturnWithoutDelayModalOpen(true)} />
-                    <MainButton text="Returned With Delay" backgroundColor={"#f27059"} onPress={() => setIsReturnWithDelayModalOpen(true)} />
+                    <MainButton isButtonDisabled={isButtonDisabled} text="Returned Without Delay" backgroundColor={"#99d98c"} onPress={() => setIsReturnWithoutDelayModalOpen(true)} />
+                    <MainButton isButtonDisabled={isButtonDisabled} text="Returned With Delay" backgroundColor={"#f27059"} onPress={() => setIsReturnWithDelayModalOpen(true)} />
                 </View>
             )
         }
@@ -145,10 +157,10 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
                     <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
                         <Text style={{ fontSize: 18, textAlign:"center", fontWeight: '500', marginBottom: 10, color:"black" }}>Are you sure, this application will be accepted.</Text>
                         <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity onPress={acceptPendingApplicationHandler} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={acceptPendingApplicationHandler} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Accept</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIsAcceptModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsAcceptModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
@@ -168,10 +180,10 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
                     <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
                         <Text style={{ fontSize: 18, textAlign:"center", fontWeight: '500', marginBottom: 10, color:"black" }}>Are you sure, this student has returned to hostel.</Text>
                         <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity onPress={markCompletedWithoutDelay} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={markCompletedWithoutDelay} style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Yes</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIsReturnWithoutDelayModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsReturnWithoutDelayModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>No</Text>
                             </TouchableOpacity>
                         </View>
@@ -209,10 +221,10 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
                         />
                         {errors.remarks && <Text style={{fontSize:14, color:"red"}}>Remarks is required.</Text>}
                         <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity onPress={handleSubmit(rejectPendingApplicationHandler)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={handleSubmit(rejectPendingApplicationHandler)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color: 'white', fontWeight:"600" }}>Reject</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIsRejectModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsRejectModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
@@ -250,10 +262,10 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
                         />
                         {errors.remarks && <Text style={{fontSize:14, color:"red"}}>Remarks is required.</Text>}
                         <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
-                            <TouchableOpacity onPress={handleSubmit(markCompletedWithDelay)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={handleSubmit(markCompletedWithDelay)} style={{ padding: 10, backgroundColor: '#c9184a', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color: 'white', fontWeight:"600" }}>Yes</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIsReturnWithDelayModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8 }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsReturnWithDelayModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
                                 <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>No</Text>
                             </TouchableOpacity>
                         </View>

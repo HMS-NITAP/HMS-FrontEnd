@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet,TouchableOpacity,Text } from 'react-native'
 
-const MainButton = ({text,textColor,backgroundColor,onPress}) => {
+const MainButton = ({text,textColor,backgroundColor,onPress,isButtonDisabled=false}) => {
   return (
-    <TouchableOpacity style={[styles.button,{backgroundColor:backgroundColor || "#ffb703"}]} onPress={onPress} >
+    <TouchableOpacity style={[styles.button,{backgroundColor:backgroundColor || "#ffb703", opacity:isButtonDisabled?0.5:1}]} onPress={onPress} disabled={isButtonDisabled} >
         <Text style={[styles.buttonText,{color:textColor || "#000000"}]}>{text}</Text>
     </TouchableOpacity>
   )
