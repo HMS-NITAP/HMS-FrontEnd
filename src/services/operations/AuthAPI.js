@@ -18,8 +18,8 @@ export const sendOTP = (email,navigation,toast) => {
             toast.show("OTP Sent Successfully", {type: "success"});
             navigation.navigate("OtpInput");
         }catch(e){
-            toast.show("OTP generation Unsuccessful", {type: "danger"});
-            console.log("ERROR");
+            const errorMessage = e?.response?.data?.message || "OTP generation Unsuccessful";
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
         }
     }
@@ -41,8 +41,9 @@ export const signUp = (data,otp,navigation,toast) => {
             toast.show("Account created Successfully", {type: "success"});
             navigation.navigate("Login");
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Signup Unsuccessful";
             toast.hide(id);
-            toast.show("Account creation failed", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
         }
     }
@@ -68,9 +69,9 @@ export const login = (email,password,toast) => {
             toast.hide(id);
             toast.show("Login Successful", {type: "success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Login Failed";
             toast.hide(id);
-            toast.show("Login Failed", {type: "danger"});
-            console.log(e);
+            toast.show(errorMessage, {type: "danger"});
         }
     }
 }
@@ -139,8 +140,9 @@ export const sendOtpToStudent = (email,toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Send OTP to Student";
             toast.hide(id);
-            toast.show("Unable to Send OTP to Student", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
             return false;
         }
@@ -162,8 +164,9 @@ export const verifyOtp = (formData,toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Invalid OTP";
             toast.hide(id);
-            toast.show("Invalid OTP", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Error",e);
             return false;
         }
@@ -185,8 +188,9 @@ export const createStudentAccount = (formData,toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Complete Registration";
             toast.hide(id);
-            toast.show("Unable to Complete Registration", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Error",e);
             return false;
         }

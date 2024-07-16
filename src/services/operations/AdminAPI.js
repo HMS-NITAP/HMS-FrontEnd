@@ -35,9 +35,10 @@ export const fetchAllHostelBlocksData = (token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch data";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to fetch data",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -57,9 +58,10 @@ export const createHostelBlock = (formData,token,toast) => {
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to create Hostel Block";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to create Hostel Block",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
         }
     }
 }
@@ -79,9 +81,10 @@ export const deleteHostelBlock = (hostelBlockId,token,toast) => {
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to delete hostel block";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to delete hostel block",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
         }
     }
 }
@@ -101,9 +104,10 @@ export const fetchOfficialAccounts = (token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Accounts";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to fetch Accounts",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -123,9 +127,10 @@ export const createOfficialAccount = (formData,token,toast) => {
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to create account";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to create account",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
         }
     }
 }
@@ -144,9 +149,10 @@ export const deleteOfficialAccount = (officialId,token,toast) => {
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to delete account";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to delete account",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
         }
     }
 }
@@ -165,9 +171,10 @@ export const addWardenToHostelBlock = (formData,token,toast) => {
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to make changes";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to make changes",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
         }
     }
 }
@@ -186,9 +193,10 @@ export const removeWardenFromHostelBlock = (formData,token,toast) => {
             toast.hide(id);
             toast.show(response?.data?.message,{type:"success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to make changes";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to make changes",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
         }
     }
 }
@@ -208,9 +216,10 @@ export const fetchStudentRegistrationApplications = (token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Application";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to fetch Application",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -231,9 +240,10 @@ export const acceptRegistrationApplication = (formData,token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Accept Application";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to Accept Application",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -254,9 +264,10 @@ export const rejectRegistrationApplication = (formData,token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Reject Application";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to Reject Application",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }

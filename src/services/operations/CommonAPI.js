@@ -23,8 +23,9 @@ export const getAllAnnouncements = (toast) => {
             console.log("fdsf",response?.data?.data);
             return (response?.data?.data);            
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Fetched all Announcements Successfully";
             toast.hide(id);
-            toast.show("Fetched all Announcements Successfully",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             console.log(e);
             return [];
         }
@@ -47,8 +48,9 @@ export const fetchHostelData = (toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return response?.data?.data;
         } catch (e) {
+            const errorMessage = e?.response?.data?.message || "Failed to Fetch Hostel Data";
             toast.hide(id);
-            toast.show("Failed to Fetch Hostel Data", { type: "danger" });
+            toast.show(errorMessage, { type: "danger" });
             console.log("Error", e);
             return null;
         }
@@ -70,8 +72,9 @@ export const fetchHostelBlockNames = (toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Blocks";
             toast.hide(id);
-            toast.show("Unable to fetch Hostel Blocks", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
             return null;
         }
@@ -93,8 +96,9 @@ export const fetchHostelBlockRooms = (hostelBlockId,toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Block Rooms";
             toast.hide(id);
-            toast.show("Unable to fetch Hostel Block Rooms", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Erroiror",e);
             return null;
         }
@@ -116,8 +120,9 @@ export const fetchCurrentDateRatingsAndReviews = (toast) => {
             toast.show(response?.data?.message, { type: "success" });
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Hostel Block Rooms";
             toast.hide(id);
-            toast.show("Unable to fetch Hostel Block Rooms", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Error",e);
             return null;
         }

@@ -2,9 +2,9 @@
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
 
 // NEW SERVER (Backend1)
-SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
+// SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-// SERVER_BASE_URL = "http://192.168.5.208:4000/api/v1"
+SERVER_BASE_URL = "http://192.168.39.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 

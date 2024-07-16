@@ -36,8 +36,9 @@ export const CreateOutingApplication = (formData,token,toast) => {
             toast.show("Outing Application Created Successfully", {type: "success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Failed to create Outing Application";
             toast.hide(id);
-            toast.show("Failed to create Outing Application", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Eror",e);
             return false;
         }
@@ -60,8 +61,9 @@ export const getStudentAllOutingApplication = (token,toast) => {
             toast.show("Fetched All Applications",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Application";
             toast.hide(id);
-            toast.show("Unable to fetch Application");
+            toast.show(errorMessage,{type:"danger"});
             console.log(e)
         }
     }
@@ -84,8 +86,9 @@ export const deletePendingOutingApplication = (applicationId,token,toast) => {
             return true;
             
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Delete Outing Application";
             toast.hide(id);
-            toast.show("Unable to Delete Outing Application", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             return false;
         }
     }
@@ -108,9 +111,10 @@ export const markReturnFromOuting = (applicationId,token,toast) => {
             return true;
             
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Mark Return";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to Mark Return", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             return false;
         }
     }
@@ -132,8 +136,9 @@ export const createHostelComplaint = (formData,token,toast) => {
             toast.show("Created Hostel Complaint Successfully",{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to create hostel Complaint";
             toast.hide(id);
-            toast.show("Unable to create hostel Complaint",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             console.log(e);
             return false;
         }
@@ -156,8 +161,9 @@ export const getAllStudentHostelComplaint = (token,toast) => {
             toast.show("Fetched Complaints Successfully",{type:"success"});
             return response.data.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch hostel Complaints";
             toast.hide(id);
-            toast.show("Unable to fetch hostel Complaints",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             console.log(e)
         }
     }
@@ -179,8 +185,9 @@ export const getStudentDashboardData = (token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response.data.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch student dashboard data";
             toast.hide(id);
-            toast.show("Unable to fetch student dashboard data",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             console.log(e)
         }
     }
@@ -202,8 +209,9 @@ export const editStudentProfile = (formData,token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response.data.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Edit student Profile data";
             toast.hide(id);
-            toast.show("Unable to Edit student Profile data",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             console.log(e)
         }
     }
@@ -224,9 +232,10 @@ export const fetchMessHallsAndStudentGender = (token,toast) => {
             toast.hide(id);
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Failed to fetch Mess Hall";
             toast.hide(id);
-            toast.show("Failed to fetch Mess Hall", {type: "danger"});
-            console.log("Eror",e);
+            toast.show(errorMessage, {type: "danger"});
+            console.log("Error",e);
         }
     }
 }
@@ -247,8 +256,9 @@ export const createMessFeedBack = (formData,token,toast) => {
             toast.show(response?.data?.message, {type: "success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Failed to Mess Feedback";
             toast.hide(id);
-            toast.show("Failed to Mess Feedback", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Eror",e);
             return false;
         }
@@ -271,8 +281,9 @@ export const generateMessSessionReceipt = (formData,token,toast) => {
             toast.show(response?.data?.message, {type: "success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Failed to Generate Receipt";
             toast.hide(id);
-            toast.show("Failed to Generate Receipt", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log("Error",e);
             return false;
         }
@@ -295,8 +306,9 @@ export const fetchStudentMessReceipts = (token,toast) => {
             toast.show(response?.data?.message, {type: "success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "unable to fetch Receipts";
             toast.hide(id);
-            toast.show("unable to fetch Receipts", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             return null;
         }
     }
@@ -318,8 +330,9 @@ export const getStudentAttendance = (token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response.data.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch student attendance data";
             toast.hide(id);
-            toast.show("Unable to fetch student attendance data",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             console.log(e)
         }
     }

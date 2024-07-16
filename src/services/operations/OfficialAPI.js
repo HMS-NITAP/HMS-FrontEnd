@@ -38,8 +38,9 @@ export const fetchDashboardData = (token,toast) => {
             toast.show(response.data.message,{type: "success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Fetch Dashbaord Data";
             toast.hide(id);
-            toast.show("Unable to Fetch Dashbaord Data", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
             return null;
         }
@@ -60,8 +61,9 @@ export const createAnnouncement = (formData,token,toast) => {
             toast.hide(id);
             toast.show("Announcement created Successfully",{type: "success"});
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Announcement creation failed";
             toast.hide(id);
-            toast.show("Announcement creation failed", {type: "danger"});
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
         }
     }
@@ -82,8 +84,9 @@ export const getAllPendingApplicationByHostelBlock = (token,toast) => {
             toast.show("Fetched Applications Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
             toast.hide(id);
-            toast.show("Unable to fetch Applications",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -104,8 +107,9 @@ export const getAllCompletedApplicationByHostelBlock = (token,toast) => {
             toast.show("Fetched Applications Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
             toast.hide(id);
-            toast.show("Unable to fetch Applications",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -126,8 +130,9 @@ export const getAllInprogressApplicationByHostelBlock = (token,toast) => {
             toast.show("Fetched Applications Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
             toast.hide(id);
-            toast.show("Unable to fetch Applications",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -148,8 +153,9 @@ export const getAllReturnedApplicationByHostelBlock = (token,toast) => {
             toast.show("Fetched Applications Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Applications";
             toast.hide(id);
-            toast.show("Unable to fetch Applications",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -170,9 +176,10 @@ export const acceptPendingOutingApplication = (applicationId,token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Accept Application";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to Accept Application",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -193,9 +200,10 @@ export const rejectPendingOutingApplication = (formData,token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to reject Application";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to reject Application",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -216,9 +224,10 @@ export const markCompletedWithoutDelayOutingApplication = (applicationId,token,t
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to mark completed";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to mark completed",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -240,9 +249,10 @@ export const markCompletedWithDelayOutingApplication = (formData,token,toast) =>
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to mark completed";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to mark completed",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -263,8 +273,9 @@ export const getAllUnresolvedHostelComplaints = (token,toast) => {
             toast.show("Fetched All Unresolved issues Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Unresolved Issues";
             toast.hide(id);
-            toast.show("Unable to fetch Unresolved Issues",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -285,8 +296,9 @@ export const getAllResolvedHostelComplaints = (token,toast) => {
             toast.show("Fetched All resolved issues Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch resolved Issues";
             toast.hide(id);
-            toast.show("Unable to fetch resolved Issues",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -307,9 +319,10 @@ export const resolveHostelComplaint = (complaintId,token,toast) => {
             toast.show("Resolved Complaint Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to resolve complaint";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to resolve complaint",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -330,9 +343,10 @@ export const unResolveHostelComplaint = (complaintId,token,toast) => {
             toast.show("Unresolved Complaint Successfully",{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to unresolve complaint";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to unresolve complaint",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
@@ -353,9 +367,10 @@ export const markStudentPresent = (presentDate,attendenceRecordId,token,toast) =
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to mark present";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to mark present",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -376,9 +391,10 @@ export const markStudentAbsent = (absentDate,attendenceRecordId,token,toast) => 
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to mark absent";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to mark absent",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -399,9 +415,10 @@ export const unmarkStudentPresent = (presentDate,attendenceRecordId,token,toast)
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to unmark present";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to unmark present",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -422,9 +439,10 @@ export const unmarkStudentAbsent = (absentDate,attendenceRecordId,token,toast) =
             toast.show(response?.data?.message,{type:"success"});
             return true;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to unmark absent";
             console.log(e);
             toast.hide(id);
-            toast.show("Unable to unmark absent",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return false;
         }
     }
@@ -445,8 +463,9 @@ export const fetchHostelBlockRoomsForAttendance = (token,toast) => {
             toast.show(response?.data?.message,{type:"success"});
             return response?.data?.data;
         }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Data";
             toast.hide(id);
-            toast.show("Unable to fetch Data",{type:"danger"});
+            toast.show(errorMessage,{type:"danger"});
             return null;
         }
     }
