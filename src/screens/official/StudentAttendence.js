@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     gap:10,
   },
   input: {
+    // width:"100%",
     height: 40,
     borderWidth: 1,
     borderColor: '#ccc',

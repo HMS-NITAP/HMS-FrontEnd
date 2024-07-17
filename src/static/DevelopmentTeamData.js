@@ -3,6 +3,7 @@ import Abhiram from '../assets/developmentTeam/Abhiram.jpeg'
 import PlaceholderUser from '../assets/developmentTeam/PlaceholderUser.jpg'
 import Pavan from '../assets/developmentTeam/Pavan.jpeg'
 import Sreeram from '../assets/developmentTeam/Sreeram.jpeg'
+import Lithin from '../assets/developmentTeam/Lithin.jpeg'
 
 export const hostelOfficeAdvisorsData = [
     {
@@ -31,7 +32,7 @@ export const developmentTeamData = [
         linkedIn : "https://www.linkedin.com/in/mohith-m-0b2b74288/"
     },
     {
-        image : PlaceholderUser,
+        image : Lithin,
         name : "Lithin Adari",
         designation : "Backend Developer",
         email : "422102@student.nitandhra.ac.in",

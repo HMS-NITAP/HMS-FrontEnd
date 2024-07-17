@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
         fontSize:100,
     },
     subFormView:{
+        width:"100%",
         display:'flex',
         justifyContent:'center',
         flexDirection:'column',
@@ -243,6 +244,7 @@ const styles = StyleSheet.create({
         color:'#000000',
     },
     input:{
+        width:"100%",
         padding:10,
         paddingHorizontal:10,
         borderWidth:1,
@@ -295,7 +297,7 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         position:"absolute",
-        bottom:15,
+        bottom: Platform.OS === 'ios' ? 10 : 15,
         right:10,
         zIndex:10,
         elevation:100,

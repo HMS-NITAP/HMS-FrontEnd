@@ -399,7 +399,7 @@ const StudentRegistrationForm = () => {
                 <Text style={styles.label}>Gender <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
                 <View style={styles.radioContainer}>
                     <View style={styles.radioOption}>
-                        <RadioButton
+                        <RadioButton.Android
                             value="M"
                             status={selectedGender === 'M' ? 'checked' : 'unchecked'}
                             onPress={() => setSelectedGender('M')}
@@ -407,7 +407,7 @@ const StudentRegistrationForm = () => {
                         <Text style={styles.radioLabel}>Male</Text>
                     </View>
                     <View style={styles.radioOption}>
-                        <RadioButton
+                        <RadioButton.Android
                             value="F"
                             status={selectedGender === 'F' ? 'checked' : 'unchecked'}
                             onPress={() => setSelectedGender('F')}
@@ -786,6 +786,7 @@ export default StudentRegistrationForm
 
 const styles = StyleSheet.create({
     subFormView:{
+        width:"100%",
         display:'flex',
         justifyContent:'center',
         flexDirection:'column',
@@ -806,6 +807,7 @@ const styles = StyleSheet.create({
         color:'#000000',
     },
     input:{
+        width:"100%",
         padding:10,
         paddingHorizontal:10,
         borderWidth:1,
@@ -858,7 +860,7 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         position:"absolute",
-        bottom:15,
+        bottom: Platform.OS === 'ios' ? 10 : 15,
         right:10,
         zIndex:10,
         elevation:100,

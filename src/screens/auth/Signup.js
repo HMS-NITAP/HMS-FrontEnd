@@ -185,10 +185,9 @@ const styles = StyleSheet.create({
     color:"black",
   },
   form:{
-    width:"100%",
     paddingTop:60,
     paddingBottom:30,
-    width:"80%",
+    width:"90%",
     display:'flex',
     justifyContent:'center',
     alignItems:'start',
@@ -210,6 +209,7 @@ const styles = StyleSheet.create({
     marginBottom:10,
   },
   input:{
+    width:"100%",
     padding:10,
     paddingHorizontal:10,
     borderWidth:1,
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position:"absolute",
-    bottom:15,
+    bottom: Platform.OS === 'ios' ? 10 : 15,
     right:10,
     zIndex:10,
     elevation:100,

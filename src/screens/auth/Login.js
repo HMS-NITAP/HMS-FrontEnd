@@ -84,7 +84,7 @@ const Login = ({ navigation }) => {
           <MainButton text="Log In" onPress={handleSubmit(onSubmit)} isButtonDisabled={isButtonDisabled} />
         </View>
       </View>
-      <TouchableOpacity style={styles.createAccount} onPress={handlePress}><Text style={{textAlign:"center",color:"#4a4e69"}}>Are you a student and haven't registered yet? Click here to register!</Text></TouchableOpacity>
+      <TouchableOpacity style={styles.createAccount} onPress={handlePress}><Text style={{textAlign:"center",color:"#4a4e69", marginTop:15}}>Are you a student and haven't registered yet? Click here to register!</Text></TouchableOpacity>
     </ScrollView>
   );
 }
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingTop: 60,
-    paddingBottom: 30,
-    width: "80%",
+    paddingBttom: 30,
+    width: "90%",
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'start',
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     gap: 30,
   },
   subFormView: {
+    width:"100%",
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: "absolute",
-    bottom: 15,
+    bottom: Platform.OS === 'ios' ? 10 : 15,
     right: 10,
     zIndex: 10,
     elevation: 100,

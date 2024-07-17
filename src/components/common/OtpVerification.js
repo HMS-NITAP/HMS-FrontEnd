@@ -5,7 +5,7 @@ import MainButton from './MainButton';
 import {useSelector,useDispatch} from 'react-redux';
 import { verifyOtp } from '../../services/operations/AuthAPI';
 import { useToast } from 'react-native-toast-notifications';
-import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
+import { setRegistrationStep } from '../../reducer/slices/AuthSlice';
 
 const OtpVerification = () => {
 
@@ -51,7 +51,7 @@ const OtpVerification = () => {
                     tintColor={"#6c757d"}
                     offTintColor={"#ced4da"}
                     handleTextChange={(value) => setOTP(value)}
-                    textInputStyle={{ color: 'black', borderWidth: 1, width:"13%", height:"auto", borderColor: 'gray', borderRadius: 10 }}
+                    textInputStyle={{ color: 'black', borderWidth: 1, width:"13%", height:"100%", borderColor: 'gray', borderRadius: 10 }}
             />
             <View style={{display:"flex",justifyContent:"center",alignItems:"center"}}><MainButton isButtonDisabled={isButtonDisabled} text={"Submit"} onPress={submitHandler} backgroundColor={"#eddea4"} /></View>
         </View>

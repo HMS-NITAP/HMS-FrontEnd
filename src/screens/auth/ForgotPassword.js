@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
       gap:40,
     },
     subFormView:{
+      width:"100%",
       display:'flex',
       justifyContent:'center',
       flexDirection:'column',
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
       color:'#000000',
     },
     input:{
+      width:"100%",
       padding:10,
       paddingHorizontal:10,
       borderWidth:1,
