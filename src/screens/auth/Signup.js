@@ -139,7 +139,7 @@ const Signup = ({navigation}) => {
               {
                 AccountType.map((account,index) => (
                 <View key={index} style={styles.radioButtonContainer}>
-                  <RadioButton
+                  <RadioButton.Android
                     value={account.value}
                     status={accountType === account.value ? 'checked' : 'unchecked'}
                     onPress={() => handleRadioPress(account.value)}

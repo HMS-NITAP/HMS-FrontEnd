@@ -141,7 +141,7 @@ const CreateOfficialAccount = () => {
                         render={({ field: { onChange } }) => (
                             <View style={styles.radioContainer}>
                                 <View style={styles.radioOption}>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="M"
                                         status={selectedGender === 'M' ? 'checked' : 'unchecked'}
                                         onPress={() => {
@@ -152,7 +152,7 @@ const CreateOfficialAccount = () => {
                                     <Text style={styles.radioLabel}>M</Text>
                                 </View>
                                 <View style={styles.radioOption}>
-                                    <RadioButton
+                                    <RadioButton.Android
                                         value="F"
                                         status={selectedGender === 'F' ? 'checked' : 'unchecked'}
                                         onPress={() => {

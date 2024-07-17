@@ -437,7 +437,7 @@ const StudentRegistrationForm = () => {
                 <Text style={styles.label}>PWD Status <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
                 <View style={styles.radioContainer}>
                     <View style={styles.radioOption}>
-                        <RadioButton
+                        <RadioButton.Android
                             value="Yes"
                             status={pwdStatus === 'Yes' ? 'checked' : 'unchecked'}
                             onPress={() => setPwdStatus('Yes')}
@@ -445,7 +445,7 @@ const StudentRegistrationForm = () => {
                         <Text style={styles.radioLabel}>Yes</Text>
                     </View>
                     <View style={styles.radioOption}>
-                        <RadioButton
+                        <RadioButton.Android
                             value="No"
                             status={pwdStatus === 'No' ? 'checked' : 'unchecked'}
                             onPress={() => setPwdStatus('No')}
