@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import MainButton from '../common/MainButton';
 import { useDispatch } from 'react-redux';
 import { acceptRegistrationApplication, rejectRegistrationApplication } from '../../services/operations/AdminAPI';
+import { Students } from '../../static/IndisciplinaryStudents';
 
 const ApplicationCard = ({ application, toast, token, fetchData }) => {
     const [imageLoading, setImageLoading] = useState(false);
@@ -37,7 +38,7 @@ const ApplicationCard = ({ application, toast, token, fetchData }) => {
     }
 
     return (
-        <View style={{ width: "100%", paddingHorizontal: 10, paddingVertical: 15, borderRadius: 10, borderColor: "black", borderWidth: 1 }}>
+        <View style={{ width: "100%", paddingHorizontal: 10, paddingVertical: 15, borderRadius: 10, borderColor:Students.includes(application?.instituteStudent?.rollNo) ? "red" : "black", borderWidth: Students.includes(application?.instituteStudent?.rollNo) ? 2 : 1  }}>
             <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "center", gap: 15 }}>
                 <View style={{ width: 80, height: 80, borderRadius: 40, overflow: 'hidden', justifyContent: 'center', alignItems: 'center', }}>
                     {imageLoading && (

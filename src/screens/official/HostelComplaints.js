@@ -54,14 +54,14 @@ const HostelComplaints = () => {
   return (
     <ScrollView contentContainerStyle={{width:"100%", paddingHorizontal:10,paddingVertical:10,justifyContent:'start',alignItems:"center",gap:15}}>
         <View style={{width:"100%", marginHorizontal:"auto", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", overflow:'hidden', borderWidth:1, borderColor:"black", borderRadius:10}}>
-            <TouchableOpacity disabled={isButtonDisabled} style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="UNRESOLVED" ? "#ffb703" : "white", opacity:isButtonDisabled?0.5:1}} onPress={() => setComplaintStatus("UNRESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Unresolved</Text></TouchableOpacity>
+            <TouchableOpacity disabled={isButtonDisabled} style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="UNRESOLVED" ? "#ffb703" : "white", opacity:isButtonDisabled?0.5:1}} onPress={() => setComplaintStatus("UNRESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>In Review</Text></TouchableOpacity>
             <TouchableOpacity disabled={isButtonDisabled} style={{width:"50%", textAlign:"center", paddingVertical:8, backgroundColor:complaintStatus==="RESOLVED" ? "#ffb703" : "white", opacity:isButtonDisabled?0.5:1}} onPress={() => setComplaintStatus("RESOLVED")}><Text style={{textAlign:'center', width:"100%", color:"black"}}>Resolved</Text></TouchableOpacity>
         </View>
         {
             registeredComplaints  && complaintStatus==="UNRESOLVED" && 
                 <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", paddingHorizontal:15, paddingVertical:15}}>
                     <View style={{display:"flex",flexDirection:"row",gap:15,justifyContent:"center",alignItems:"center"}}>
-                        <Text style={{fontWeight:"600",color:"black",fontSize:16}}>Unresolved Complaints</Text>
+                        <Text style={{fontWeight:"600",color:"black",fontSize:16}}>Complaints In Review</Text>
                         <Text style={{paddingVertical:5, paddingHorizontal:10, backgroundColor:"#9c89b8", color:"white", fontWeight:"800", borderRadius:100}}>{registeredComplaints?.length}</Text>
                     </View>
                 </View>
@@ -90,7 +90,7 @@ const HostelComplaints = () => {
                                     <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Attachments : <Text style={{ fontWeight: 'normal', color: 'blue' }} onPress={() => Linking.openURL(complaint?.fileUrl[0])}>Click Here to See</Text></Text>
                             }
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Status: <Text style={{ fontWeight: '800', color: complaint?.status==="UNRESOLVED" ? "orange"  : "green"}}>{complaint.status}</Text>
+                                Status: <Text style={{ fontWeight: '800', color: complaint?.status==="UNRESOLVED" ? "orange"  : "green"}}>{complaint.status==="RESOLVED" ? "RESOLVED" : "IN REVIEW"}</Text>
                             </Text>
                             {
                                 complaint?.resolvedBy && <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>Resolved By: <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint?.resolvedBy?.name} ({complaint?.resolvedBy?.designation})</Text></Text>
@@ -101,11 +101,11 @@ const HostelComplaints = () => {
                             {
                                 complaint?.status==='UNRESOLVED' ? (
                                     <View style={{display:"flex", marginVertical:10, flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-                                        <MainButton isButtonDisabled={isButtonDisabled} text="Resolve" backgroundColor={"#99d98c"} onPress={() => resolveHandler(complaint?.id)} />
+                                        <MainButton isButtonDisabled={isButtonDisabled} text="Resolve Complaint" backgroundColor={"#99d98c"} onPress={() => resolveHandler(complaint?.id)} />
                                     </View>
                                 ) : (
                                     <View style={{display:"flex", marginVertical:10, flexDirection:"row", justifyContent:"space-evenly", alignItems:"center"}}>
-                                        <MainButton isButtonDisabled={isButtonDisabled} text="Unresolve" backgroundColor={"#f27059"} onPress={() => unresolveHandler(complaint?.id)} />
+                                        <MainButton isButtonDisabled={isButtonDisabled} text="Move to In Review" backgroundColor={"#f27059"} onPress={() => unresolveHandler(complaint?.id)} />
                                     </View>
                                 )
                             }

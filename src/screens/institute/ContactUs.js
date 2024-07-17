@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Text } from 'react-native'
-import {hostelCommiteeData,medicalAndSecurityOfficerData,securitySepervisorsData} from '../../static/ContactUsData'
+import {hostelCommiteeData,medicalAndSecurityOfficerData,securitySepervisorsData,hostelOfficeStaffData} from '../../static/ContactUsData'
 import AnimatedCardPerson from '../../components/common/AnimatedCardPerson'
 
 const ContactUs = () => {
@@ -16,6 +16,17 @@ const ContactUs = () => {
                 <View style={styles.cardContainer}>
                     {
                         hostelCommiteeData.map((data,index) => (
+                            <AnimatedCardPerson key={index} data={data} />
+                        ))
+                    }  
+                </View>
+            </View>
+            <View style={styles.hr} />
+            <View style={styles.subContainer}>
+                <Text style={{fontSize:18,fontWeight:'700',color:'#000000', textAlign:'center'}}>Hostel Office Staff</Text>
+                <View style={styles.cardContainer}>
+                    {
+                        hostelOfficeStaffData.map((data,index) => (
                             <AnimatedCardPerson key={index} data={data} />
                         ))
                     }  

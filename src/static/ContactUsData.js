@@ -2,13 +2,15 @@ import Veeresh from '../assets/contactUs/veeresh.jpg'
 import Srilatha from '../assets/contactUs/srilatha.jpg'
 import JKM from '../assets/contactUs/JKM.jpg'
 import RMD from '../assets/contactUs/RMD.jpg'
-import placeholder from '../assets/contactUs/placeholder.jpg'
+import PlaceholderMale from '../assets/contactUs/PlaceholderMale.jpg'
+import PlaceholderFemale from '../assets/contactUs/PlaceholderFemale.jpeg'
 import Sateesh from '../assets/contactUs/sateesh.jpeg'
 import Pothuraju from '../assets/contactUs/pothuraju.jpeg'
 import RadhaKrishna from '../assets/contactUs/radhakrishna.jpeg'
 import Mohanrao from '../assets/contactUs/mohanrao.jpeg'
 import Satyanarayana from '../assets/contactUs/IS_narayana.jpeg'
 import Srinivasu from '../assets/contactUs/srinivasu.jpeg'
+import Dinesh from '../assets/developmentTeam/dinesh.jpeg'
 
 export const hostelCommiteeData = [
     {
@@ -41,9 +43,41 @@ export const hostelCommiteeData = [
     }
 ]
 
+export const hostelOfficeStaffData = [
+    {
+        image : Dinesh,
+        name : "K. Venkata Dinesh Babu",
+        designation : "Senior Assistant",
+        phone : "+91-9492744492",
+        email : "venkatdinesh.nts@nitandhra.ac.in"
+    },
+    {
+        image : PlaceholderMale,
+        name : "CH. Varma",
+        designation : "Hostel Staff (Outsourcing)",
+        phone : "+91 9030713869",
+    },
+    {
+        image : PlaceholderMale,
+        name : "B. Srinu",
+        designation : "Hostel Staff (Outsourcing)",
+        phone : "+91-9553637028",
+    },
+    {
+        image : PlaceholderFemale,
+        name : "G. Karunakar",
+        designation : "Hostel Staff (Outsourcing)",
+    },
+    {
+        image : PlaceholderFemale,
+        name : "Y. Devi Durga",
+        designation : "Attendant (Outsourcing)",
+    }
+]
+
 export const medicalAndSecurityOfficerData = [
     {
-        image : placeholder,
+        image : PlaceholderMale,
         name : "Dr. Dharma Teja",
         designation : "Medical and Security Officer",
         phone : "+91-9666144305",
@@ -92,6 +126,5 @@ export const securitySepervisorsData = [
         name : "Karinki Srinivasu",
         designation : "Security Supervisor",
         phone : "+91-9421410184",
-        email : " @gmail.com"
     }
 ]

@@ -14,6 +14,7 @@ const {
     FETCH_REGISTRATION_APPLICATIONS_API,
     ACCEPT_REGISTRATION_APPLICATION_API,
     REJECT_REGISTRATION_APPLICATION_API,
+    DELETE_ANNOUNCEMENT_API,
 } = adminEndPoints;
 
 const {
@@ -265,6 +266,30 @@ export const rejectRegistrationApplication = (formData,token,toast) => {
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to Reject Application";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const deleteAnnouncement = (announcementId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("DELETE",DELETE_ANNOUNCEMENT_API,{announcementId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Delete Announcement";
             console.log(e);
             toast.hide(id);
             toast.show(errorMessage,{type:"danger"});

@@ -27,7 +27,9 @@ const AnimatedCardPerson = ({ data }) => {
                 isExpanded && 
                 <ScrollView contentContainerStyle={styles.details}>
                     <Text style={styles.detailText}>Full Name: {data.name}</Text>
-                    <Text style={styles.detailText}>Email: <Text style={styles.link} onPress={() => Linking.openURL(`mailto:${data.email}`)}>{data.email}</Text></Text>
+                    {
+                        data.email && <Text style={styles.detailText}>Email: <Text style={styles.link} onPress={() => Linking.openURL(`mailto:${data.email}`)}>{data.email}</Text></Text>
+                    }
                     {
                         data.phone && <Text style={styles.detailText}>Phone: <Text style={styles.link} onPress={() => Linking.openURL(`tel:${data.phone}`)}>{data.phone}</Text></Text>
                     }
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
         paddingVertical:10,
     },
     detailText: {
-        fontSize: 14,
+        fontSize: 16,
         marginVertical: 5,
     },
     link: {

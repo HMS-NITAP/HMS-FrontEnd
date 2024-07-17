@@ -5,7 +5,6 @@ import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudentRegistrationApplications } from '../../services/operations/AdminAPI';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import MainButton from '../../components/common/MainButton';
 import ApplicationCard from '../../components/Admin/ApplicationCard';
 
 const StudentRegistrationApplications = () => {

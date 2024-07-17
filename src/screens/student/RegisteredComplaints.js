@@ -55,7 +55,7 @@ const RegisterComplaints = () => {
                                 About : <Text style={{ fontWeight: 'normal', color: '#666' }}>{complaint.about}</Text>
                             </Text>
                             <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4, color: '#333' }}>
-                                Status: <Text style={{ fontWeight: '800', color: complaint?.status==="RESOLVED" ? "green" : "red"}}>{complaint.status}</Text>
+                                Status: <Text style={{ fontWeight: '800', color: complaint?.status==="RESOLVED" ? "green" : "red"}}>{complaint.status==="RESOLVED" ? "RESOLVED" : "IN REVIEW"}</Text>
                             </Text>
                             {
                                 complaint?.fileUrl[0] && 

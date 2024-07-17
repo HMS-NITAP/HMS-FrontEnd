@@ -1,18 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet, Text, View, Linking, Animated } from 'react-native'
+import { StyleSheet, Text, View, Linking, Animated, TouchableOpacity, Modal } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getAllAnnouncements } from '../../services/operations/CommonAPI'
 import { useToast } from 'react-native-toast-notifications'
 import { useFocusEffect } from '@react-navigation/native'
 import { useCallback } from 'react'
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import { deleteAnnouncement } from '../../services/operations/AdminAPI'
 
 const Announcements = () => {
 
     const [announcementData, setAnnouncementData] = useState([]);
+    const [announcementId, setAnnouncementId] = useState(null);
     const dispatch = useDispatch();
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
     const toast = useToast();
+    const {token} = useSelector((state) => state.Auth);
+    const {user} = useSelector((state) => state.Profile);
 
     const fetchAnnouncements = async() => {
         const data = await dispatch(getAllAnnouncements(toast));
@@ -48,6 +56,25 @@ const Announcements = () => {
         return () => clearInterval(interval);
     }, []);
 
+    const selectedDeleteButton = (announcementId) => {
+        setAnnouncementId(announcementId);
+        setIsModalOpen(true);
+    }
+
+    const deleteAnnouncementHandler = async() => {
+        if(!announcementId){
+            return;
+        }
+        
+        setIsButtonDisabled(true);
+        const response = await dispatch(deleteAnnouncement(announcementId,token,toast));
+        if(response){
+            fetchAnnouncements();
+        }
+        setIsButtonDisabled(false);
+        setIsModalOpen(false);
+    }
+
 
   return (
     <ScrollView style={styles.container}>
@@ -69,11 +96,41 @@ const Announcements = () => {
                                 announcement?.fileUrl[0] && 
                                     <Text>Attachments : <Text style={{color:"blue"}} onPress={() => Linking.openURL(announcement?.fileUrl[0])}>Click Here to See</Text></Text>
                             }
+                            {
+                                toast && user?.accountType==="ADMIN" && (
+                                    <TouchableOpacity onPress={() => selectedDeleteButton(announcement?.id)} style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", backgroundColor:"#ffb3c1", padding:10, borderRadius:15}}>
+                                        <Icon color="#a4133c" size={20} name={"trash"} />
+                                    </TouchableOpacity>
+                                )
+                            }
                         </View>
                     ))
                 )
             }
         </View>
+
+        <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isModalOpen}
+                onRequestClose={() => {
+                    setIsModalOpen(!isModalOpen);
+                }}
+            >
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                    <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+                        <Text style={{ fontSize: 18, textAlign:"center", fontWeight: '500', marginBottom: 10, color:"black" }}>Are you sure, this announcement will be deleted.</Text>
+                        <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={deleteAnnouncementHandler} style={{ padding: 10, backgroundColor: '#ff4d6d', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
+                                <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity disabled={isButtonDisabled} onPress={() => setIsModalOpen(false)} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
+                                <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
     </ScrollView>
   )
 }
@@ -87,6 +144,7 @@ const styles = StyleSheet.create({
         gap:10,
     },
     card : {
+        width:"100%",
         borderColor :"black",
         borderRadius:10,
         paddingHorizontal:15,

@@ -4,7 +4,7 @@
 // NEW SERVER (Backend1)
 // SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-SERVER_BASE_URL = "http://192.168.39.208:4000/api/v1"
+SERVER_BASE_URL = "http://192.168.140.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 
@@ -54,7 +54,6 @@ export const officialEndPoints = {
 
     // ANNOUNCEMENTS APIs
     CREATE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/official/createAnnouncement',
-    DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/official/deleteAnnouncement',
 
     // OUTING APPLICATION APIs
     GET_PENDING_OUTING_APPLICATION_BY_WARDEN_BLOCK_API : SERVER_BASE_URL + '/official/getPendingOutingApplicationsByWardenBlock',
@@ -100,6 +99,9 @@ export const adminEndPoints = {
     FETCH_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchRegistrationApplications',
     ACCEPT_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/acceptRegistrationApplication',
     REJECT_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/rejectRegistrationApplication',
+
+    // ANNOUCEMENT APIs : 
+    DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/admin/deleteAnnouncement',
 }
 
 export const commonEndPoints = {
