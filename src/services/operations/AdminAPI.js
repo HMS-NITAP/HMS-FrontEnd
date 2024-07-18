@@ -14,7 +14,11 @@ const {
     FETCH_REGISTRATION_APPLICATIONS_API,
     ACCEPT_REGISTRATION_APPLICATION_API,
     REJECT_REGISTRATION_APPLICATION_API,
+    FETCH_FREEZED_REGISTRATION_APPLICATIONS_API,
+    FREEZE_REGISTRATION_APPILICATION_API,
+    CONFIRM_FREEZED_REGISTRATION_APPLICATION_API,
     DELETE_ANNOUNCEMENT_API,
+    FETCH_DASHBOARD_DATA_API
 } = adminEndPoints;
 
 const {
@@ -274,6 +278,78 @@ export const rejectRegistrationApplication = (formData,token,toast) => {
     }
 }
 
+export const fetchFreezedStudentRegistrationApplications = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("GET",FETCH_FREEZED_REGISTRATION_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Application";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const freezeRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",FREEZE_REGISTRATION_APPILICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+            console.log("DSFD");
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Freeze Application";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const confirmFreezeRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",CONFIRM_FREEZED_REGISTRATION_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Confirm Freeze Application";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
+        }
+    }
+}
+
 export const deleteAnnouncement = (announcementId,token,toast) => {
     return async() => {
         let id = toast.show("Please Wait...",{type:"normal"});
@@ -294,6 +370,30 @@ export const deleteAnnouncement = (announcementId,token,toast) => {
             toast.hide(id);
             toast.show(errorMessage,{type:"danger"});
             return false;
+        }
+    }
+}
+
+export const fetchDashboardData = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("GET",FETCH_DASHBOARD_DATA_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Dashboard Data";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
         }
     }
 }

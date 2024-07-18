@@ -4,7 +4,10 @@
 // NEW SERVER (Backend1)
 // SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-SERVER_BASE_URL = "http://192.168.140.208:4000/api/v1"
+// PURCHASED SERVER 
+SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
+
+// SERVER_BASE_URL = "http://192.168.190.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 
@@ -80,6 +83,10 @@ export const officialEndPoints = {
 }
 
 export const adminEndPoints = {
+
+    // DASHBOARD APIs
+    FETCH_DASHBOARD_DATA_API : SERVER_BASE_URL + '/admin/getDashboardData',
+
     // HOSTEL BLOCK APIs
     CREATE_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/admin/createHostelBlock',
     DELETE_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/admin/deleteHostelBlock',
@@ -99,6 +106,9 @@ export const adminEndPoints = {
     FETCH_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchRegistrationApplications',
     ACCEPT_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/acceptRegistrationApplication',
     REJECT_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/rejectRegistrationApplication',
+    FETCH_FREEZED_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchFreezedApplications',
+    FREEZE_REGISTRATION_APPILICATION_API : SERVER_BASE_URL + '/admin/freezeRegistrationApplication',
+    CONFIRM_FREEZED_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/confirmFreezedStudentRegistration',
 
     // ANNOUCEMENT APIs : 
     DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/admin/deleteAnnouncement',

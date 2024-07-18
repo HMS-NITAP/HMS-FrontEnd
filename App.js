@@ -47,6 +47,8 @@ import OfficialDashboard from './src/screens/official/OfficialDashboard';
 import GiveMessFeedback from './src/screens/student/GiveMessFeedback';
 import GenerateMessReceipt from './src/screens/student/GenerateMessReceipt';
 import MessReceiptsHistory from './src/screens/student/MessReceiptsHistory';
+import FreezedApplications from './src/screens/admin/FreezedApplications';
+import AdminDashboard from './src/screens/admin/AdminDashboard';
 
 const Drawer = createDrawerNavigator();
 
@@ -112,6 +114,7 @@ const App = () => {
         token && user && user.accountType==='ADMIN' && (
           <NavigationContainer independent={true} initialRouteName='Manage Official Accounts'>
             <Drawer.Navigator>
+                <Drawer.Screen name="Dashboard" component={AdminDashboard} options={{drawerLabel:"Dashboard", headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>), drawerIcon: ({ size }) => (<Icon name='id-badge' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="Registation Applications" component={StudentRegistrationApplications} options={{drawerLabel:"Registation Applications", headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>), drawerIcon: ({ size }) => (<Icon name='address-card' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="Manage Official Accounts" component={ManageOfficialAccounts} options={{drawerLabel:"Manage Official Accounts", headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>), drawerIcon: ({ size }) => (<Icon name='users-rays' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="Create Official Accounts" component={CreateOfficialAccount} options={{drawerItemStyle:{display:'none'},headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>)}} />
@@ -125,6 +128,7 @@ const App = () => {
                 <Drawer.Screen name="Gallary" component={Gallery} options={{drawerLabel:"Gallary",headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>), drawerIcon: ({ size }) => (<Icon name='image' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="View Mess Feedback" component={ViewMessFeedBack} options={{drawerLabel:"View Mess Feedback",headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>), drawerIcon: ({ size }) => (<Icon name='star' size={size} style={{ width: 30, textAlign: 'center' }} color='gray' />) }} />
                 <Drawer.Screen name="Detailed Mess Menu" component={DetailedMessMenu} options={{drawerItemStyle:{display:'none', headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>)}}} />
+                <Drawer.Screen name="Freezed Applications" component={FreezedApplications} options={{drawerItemStyle:{display:'none', headerRight: () => (<TouchableOpacity onPress={() => setLogoutModalVisible(true)} style={{ marginRight: 15 }}><Icon name='right-from-bracket' size={25} color='gray' /></TouchableOpacity>)}}} />
             </Drawer.Navigator>
             <LogoutModal logoutModalVisible={logoutModalVisible} setLogoutModalVisible={setLogoutModalVisible} animationType={"fade"} transparent={true} />
           </NavigationContainer>

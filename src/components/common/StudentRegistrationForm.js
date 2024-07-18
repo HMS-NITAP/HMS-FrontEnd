@@ -113,11 +113,18 @@ const StudentRegistrationForm = () => {
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
 
-    useEffect(() => {
-        console.log("DOB",dob);
-    },[]);
+    const covertToLocalDate = (date) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const formattedDate = date.toLocaleDateString('en-CA', options);
+        return formattedDate
+    }
 
     const submitHandler = async(data) => {
+
+        if(!data?.email.endsWith("@student.nitandhra.ac.in")){
+            toast.show("Please Use Your Institute Email ID",{type:"warning"});
+            return;
+        }
 
         if(data?.password !== data?.confirmPassword){
             toast.show("Passwords are not matching",{type:"warning"});
@@ -157,7 +164,7 @@ const StudentRegistrationForm = () => {
         setIsButtonDisabled(true);
 
         const registrationData = {
-            ...data,branch:selectedBranch,community:selectedCommunity,gender:selectedGender,year:selectedYear,dob: dob.toISOString(),pwd:pwdStatus,image:imageResponse,instituteFeeReceipt:instituteFeeReceiptResponse,hostelFeeReceipt:hostelfeeReceiptResponse,paymentMode,paymentDate:paymentDate.toISOString()
+            ...data,branch:selectedBranch,community:selectedCommunity,gender:selectedGender,year:selectedYear,dob: covertToLocalDate(dob),pwd:pwdStatus,image:imageResponse,instituteFeeReceipt:instituteFeeReceiptResponse,hostelFeeReceipt:hostelfeeReceiptResponse,paymentMode,paymentDate:covertToLocalDate(paymentDate)
         }
 
         await dispatch(setRegistrationData(registrationData));
@@ -468,11 +475,11 @@ const StudentRegistrationForm = () => {
                             open={isDatePickerOpen}
                             date={dob || new Date()} 
                             onConfirm={(date) => {
-                            setIsDatePickerOpen(false);
-                            setDob(date);
+                                setIsDatePickerOpen(false);
+                                setDob(date);
                             }}
                             onCancel={() => {
-                            setIsDatePickerOpen(false);
+                                setIsDatePickerOpen(false);
                             }}
                         />
                     </View>

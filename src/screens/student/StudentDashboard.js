@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Linking, TouchableOpacity, Modal, Pressable, ActivityIndicator } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, ActivityIndicator } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +46,6 @@ const StudentDashboardScreen = () => {
   const [showBirthdayModal, setShowBirthdayModal] = useState(false);
 
   const checkIsDob = (dobString) => {
-    console.log("dobString", dobString);
     const [_, birthMonth, birthDay] = dobString.split('-').map(Number);
 
     const now = Date.now(); 
@@ -54,9 +53,6 @@ const StudentDashboardScreen = () => {
 
     const date = currentDate.getDate();
     const month = currentDate.getMonth() + 1; 
-
-    console.log("BB",birthDay,date);
-    console.log("MM",birthMonth,month);
 
     if(birthDay===date && birthMonth===month){
       setShowBirthdayModal(true);
