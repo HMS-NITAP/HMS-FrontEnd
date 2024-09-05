@@ -78,7 +78,7 @@ const Login = ({ navigation }) => {
         </View>
         <View style={{ display: "flex", justifyContent: "space-between" }}>
           <></>
-          <Text style={{ textAlign: 'right', fontSize: 14, fontWeight: "600", color:"#495057" }} onPress={() => navigation.navigate("ForgotPassword")}>Forgot Password?</Text>
+          <Text style={{ textAlign: 'right', fontSize: 14, fontWeight: "600", color:"#495057" }} onPress={() => navigation.navigate("Forgot Password")}>Forgot Password?</Text>
         </View>
         <View style={{display:"flex", justifyContent:"center", alignContent:"stretch"}}>
           <MainButton text="Log In" onPress={handleSubmit(onSubmit)} isButtonDisabled={isButtonDisabled} />

@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { messMenu } from '../../static/MessMenu';
+import { useDispatch } from 'react-redux';
+import { fetchCurrentSessionMessMenu } from '../../services/operations/CommonAPI';
+import { useToast } from 'react-native-toast-notifications';
+import { useFocusEffect } from '@react-navigation/native';
 
 const getCurrentSession = () => {
     const now = new Date();
@@ -22,16 +25,33 @@ const MessMenu = ({ navigation }) => {
     const [currentSession, setCurrentSession] = useState('');
     const [currentItems, setCurrentItems] = useState([]);
 
-    useEffect(() => {
-        const now = new Date();
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const currentDayName = days[now.getDay()];
-        const session = getCurrentSession();
+    const dispatch = useDispatch();
+    const toast = useToast();
 
-        setCurrentDay(currentDayName);
-        setCurrentSession(session);
-        setCurrentItems(messMenu[currentDayName][session]);
-    }, []);
+    const fetchData = async() => {
+        const response = await dispatch(fetchCurrentSessionMessMenu(currentDay,currentSession,toast));
+        setCurrentItems(response);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            const now = new Date();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const currentDayName = days[now.getDay()];
+            const session = getCurrentSession();
+    
+            setCurrentDay(currentDayName);
+            setCurrentSession(session);
+        },[toast])
+    );
+
+    useEffect(() => {
+        if(currentDay && currentSession){
+            fetchData();
+        }
+    },[currentDay, currentSession]);
+
+    
 
     const navigateToMenu = () => {
         navigation.navigate('Detailed Mess Menu');
@@ -42,13 +62,17 @@ const MessMenu = ({ navigation }) => {
             <Text style={styles.header}>Today's Menu</Text>
             <Text style={styles.subheader}>{currentDay}</Text>
             <Text style={styles.subheader}>{currentSession.charAt(0).toUpperCase() + currentSession.slice(1)}</Text>
-            <View style={styles.itemsContainer}>
-                {currentItems.map((item, index) => (
-                    <View key={index} style={styles.item}>
-                        <Text style={styles.itemText}>{item}</Text>
+            {
+                currentItems && (
+                    <View style={styles.itemsContainer}>
+                        {currentItems.map((item, index) => (
+                            <View key={index} style={styles.item}>
+                                <Text style={styles.itemText}>{item}</Text>
+                            </View>
+                        ))}
                     </View>
-                ))}
-            </View>
+                )
+            }
             <TouchableOpacity style={styles.button} onPress={navigateToMenu}>
                 <Text style={styles.buttonText}>View Full Menu</Text>
             </TouchableOpacity>
@@ -74,7 +98,8 @@ const styles = StyleSheet.create({
     subheader: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: 10,
+        color:"#495057"
     },
     itemsContainer: {
         marginTop: 20,
@@ -89,7 +114,8 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     itemText: {
-        fontSize: 16
+        fontSize: 16,
+        color:"#495057",
     },
     button: {
         marginTop: 20,

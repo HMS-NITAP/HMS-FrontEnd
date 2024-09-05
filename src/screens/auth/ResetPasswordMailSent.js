@@ -10,7 +10,7 @@ const ResetPasswordMailSent = ({navigation}) => {
                 <Text style={{fontSize:20,fontWeight:"600",textAlign:"center",color:"#212529"}}>We've sent you an Email with a link to reset your password and further instructions.</Text>
                 <Text style={{fontSize:16,fontWeight:"600",textAlign:"center",color:"#9d0208"}}>Please check your Email inbox.</Text>
             </View>
-            <MainButton text={"Set New Password"} onPress={() => (navigation.navigate("ResetPassword"))} />
+            <MainButton text={"Set New Password"} onPress={() => (navigation.navigate("Reset Password"))} />
         </View>
 )};
 

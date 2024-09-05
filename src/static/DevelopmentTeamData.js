@@ -4,8 +4,17 @@ import PlaceholderUser from '../assets/developmentTeam/PlaceholderUser.jpg'
 import Pavan from '../assets/developmentTeam/Pavan.jpeg'
 import Sreeram from '../assets/developmentTeam/Sreeram.jpeg'
 import Lithin from '../assets/developmentTeam/Lithin.jpeg'
+import Srilatha from '../assets/developmentTeam/srilatha.jpg'
 
 export const hostelOfficeAdvisorsData = [
+    {
+        image : Srilatha,
+        name : "Dr. Srilatha Chebrolu",
+        designation : "Assistant Professor, Department of CSE",
+        phone : "+91-8330967036",
+        email : "srilatha.chebrolu@nitandhra.ac.in",
+        linkedIn : "https://www.linkedin.com/in/dr-srilatha-chebrolu-14a58535/"
+    },
     {
         image : Dinesh,
         name : "Mr. Venkata Dinesh Babu K",

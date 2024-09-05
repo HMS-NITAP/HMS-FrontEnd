@@ -132,7 +132,9 @@ const RoomAllotment = ({}) => {
     formdata.append("hostelBlockId",selectedBlock);
     formdata.append("cotId",selectedCot);
     formdata.append("image",{uri:registrationData?.image[0]?.uri, type:registrationData?.image[0]?.type, name:registrationData?.image[0]?.name});
-    formdata.append("instituteFeeReceipt",{uri:registrationData?.instituteFeeReceipt[0]?.uri, type:registrationData?.instituteFeeReceipt[0]?.type, name:registrationData?.instituteFeeReceipt[0]?.name});
+    if(registrationData?.instituteFeeReceipt?.[0]){
+      formdata.append("instituteFeeReceipt", {uri: registrationData.instituteFeeReceipt[0].uri, type: registrationData.instituteFeeReceipt[0].type, name: registrationData.instituteFeeReceipt[0].name});
+    }
     formdata.append("hostelFeeReceipt",{uri:registrationData?.hostelFeeReceipt[0]?.uri, type:registrationData?.hostelFeeReceipt[0]?.type, name:registrationData?.hostelFeeReceipt[0]?.name});
     formdata.append("paymentMode",registrationData?.paymentMode);
     formdata.append("paymentDate",registrationData?.paymentDate);

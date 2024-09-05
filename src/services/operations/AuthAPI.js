@@ -76,35 +76,49 @@ export const login = (email,password,toast) => {
     }
 }
 
-export const sendResetPasswordEmail = (email,navigation) => {
+export const sendResetPasswordEmail = (email,navigation,toast) => {
     return async() => {
+        let id = toast.show("Please Wait...", {type:"normal"});
         try{
             const response = await APIconnector("POST",RESET_PASSWORD_TOKEN,{email});
 
             if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response.data.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
 
-            navigation.navigate("ResetPasswordEmailSent");
+            toast.hide(id);
+            toast.show(response?.data?.message, { type: "success" });
+            navigation.navigate("Reset Password Email Sent");
         }catch(e){
-            console.log("Error");
+            const errorMessage = e?.response?.data?.message || "Unable to send mail";
+            toast.hide(id);
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
         }
     }
 }
 
-export const resetPassword = (token,newPassword,confirmNewPassword,navigation) => {
+export const resetPassword = (token,newPassword,confirmNewPassword,navigation,toast) => {
     return async() => {
+        let id = toast.show("Please Wait...", {type:"normal"});
         try{
             const response = await APIconnector("POST",RESET_PASSWORD,{token,newPassword,confirmNewPassword});
 
             if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response.data.message, {type: "danger"});
                 throw new Error(response.data.message);
             }
 
-            navigation.navigate("ResetPasswordSuccess");
+            toast.hide(id);
+            toast.show(response?.data?.message, { type: "success" });
+            navigation.navigate("Reset Password Success");
         }catch(e){
-            console.log("Error");
+            const errorMessage = e?.response?.data?.message || "Unable to reset password";
+            toast.hide(id);
+            toast.show(errorMessage, {type: "danger"});
             console.log(e);
         }
     }

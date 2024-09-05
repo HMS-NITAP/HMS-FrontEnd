@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { messMenu } from '../../static/MessMenu';
+import { useDispatch } from 'react-redux';
+import { fetchDetailedMessMenu } from '../../services/operations/CommonAPI';
+import { useToast } from 'react-native-toast-notifications';
+import { useFocusEffect } from '@react-navigation/native';
 
 const days = [ 'Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const meals = ['Breakfast', 'Lunch', 'Snacks', 'Dinner'];
@@ -9,27 +12,45 @@ const getCurrentSession = () => {
     const now = new Date();
     const currentHour = now.getHours();
 
-    if (currentHour >= 0 && currentHour < 10) {
+    if(currentHour >= 0 && currentHour < 10){
         return 'Breakfast';
-    } else if (currentHour >= 10 && currentHour < 15) {
+    }else if(currentHour >= 10 && currentHour < 15){
         return 'Lunch';
-    } else if (currentHour >= 15 && currentHour < 18) {
+    }else if(currentHour >= 15 && currentHour < 18){
         return 'Snacks';
-    }else {
+    }else{
         return 'Dinner';
     }
 };
 
-const DetailedMessMenu = ({}) => {
+const DetailedMessMenu = () => {
 
     const [selectedDay, setSelectedDay] = useState(days[new Date().getDay()]);
     const [mealPeriod, setMealPeriod] = useState(getCurrentSession());
+    const [detailedMessMenu, setDetailedMessMenu] = useState(null);
+    const [menu, setMenu] = useState(null);
 
-    const [menu, setMenu] = useState(messMenu[selectedDay][mealPeriod]);
+    const dispatch = useDispatch();
+    const toast = useToast();
+
+    const fetchData = async() => {
+        const response = await dispatch(fetchDetailedMessMenu(toast));
+        setDetailedMessMenu(response);
+    }
+
+    useFocusEffect(
+        useCallback(() => {
+            setSelectedDay(days[new Date().getDay()]);
+            setMealPeriod(getCurrentSession());
+            fetchData();
+        }, [toast])
+    );
 
     useEffect(() => {
-        setMenu(messMenu[selectedDay][mealPeriod]);
-    },[selectedDay,mealPeriod]);
+        if(detailedMessMenu!==null && selectedDay && mealPeriod){
+            setMenu(detailedMessMenu[selectedDay][mealPeriod]);
+        }
+    },[selectedDay,mealPeriod,detailedMessMenu]);
 
     return (
         <ScrollView contentContainerStyle={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"center", width:"100%", gap:30, paddingHorizontal:20, paddingVertical:15}}>
@@ -64,7 +85,7 @@ const DetailedMessMenu = ({}) => {
             <View style={{display:"flex", width:"100%"}}>
                 <Text style={{fontSize:16, fontWeight:"600", color:"black", marginBottom:10}}>Menu Items :</Text>
                 <View contentContainerStyle={styles.menuContainer}>
-                    {menu.map((menuItem, index) => (
+                    {menu && menu.map((menuItem, index) => (
                         <View key={index} style={styles.menuItem}>
                             <Text style={styles.menuText}>{menuItem}</Text>
                         </View>

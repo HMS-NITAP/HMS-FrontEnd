@@ -1,17 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import { useForm,Controller } from 'react-hook-form'
 import {useDispatch} from 'react-redux'
 import { resetPassword } from '../../services/operations/AuthAPI'
+import { useToast } from 'react-native-toast-notifications'
 
 const ResetPassword = ({navigation}) => {
 
   const { control, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
+  const toast = useToast();
 
-  const onSubmit = (data) => {
-    dispatch(resetPassword(data.token,data.newPassword,data.confirmNewPassword,navigation));
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const onSubmit = async(data) => {
+    setIsButtonDisabled(true);
+    await dispatch(resetPassword(data.token,data.newPassword,data.confirmNewPassword,navigation,toast));
+    setIsButtonDisabled(false);
   }
   
   return (
@@ -78,7 +84,7 @@ const ResetPassword = ({navigation}) => {
           {errors.confirmNewPassword && <Text style={styles.errorText}>This field is required.</Text>}
         </View>
         <View style={styles.subFormView}>
-          <MainButton text={"Reset Your Password"} onPress={handleSubmit(onSubmit)} />
+          <MainButton isButtonDisabled={isButtonDisabled} text={"Reset Your Password"} onPress={handleSubmit(onSubmit)} />
         </View>
       </View>
     </View>

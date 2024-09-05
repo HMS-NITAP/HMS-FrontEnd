@@ -18,7 +18,16 @@ const {
     FREEZE_REGISTRATION_APPILICATION_API,
     CONFIRM_FREEZED_REGISTRATION_APPLICATION_API,
     DELETE_ANNOUNCEMENT_API,
-    FETCH_DASHBOARD_DATA_API
+    FETCH_DASHBOARD_DATA_API,
+    FETCH_ROOMS_IN_HOSTEL_BLOCK_API,
+    FETCH_COTS_IN_ROOM_API,
+    FETCH_STUDENT_BY_ROLL_OR_REG_NO_API,
+    DOWNLOAD_STUDENT_DATA_BY_HOSTEL_BLOCK_API,
+    SEND_ACKNOWLEDGEMENT_LETTER_API,
+    DELETE_STUDENT_ACCOUNT,
+    CHANGE_STUDENT_PROFILE_PHOTO_API,
+    FETCH_COTS_FOR_COT_CHANGE_API,
+    SWAP_OR_EXCHANGE_STUDENT_COT_API
 } = adminEndPoints;
 
 const {
@@ -394,6 +403,222 @@ export const fetchDashboardData = (token,toast) => {
             toast.hide(id);
             toast.show(errorMessage,{type:"danger"});
             return null;
+        }
+    }
+}
+
+export const fetchRoomsInHostelBlock = (hostelBlockId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("POST",FETCH_ROOMS_IN_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Data";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const fetchCotsInRooms = (roomId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("POST",FETCH_COTS_IN_ROOM_API,{roomId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Data";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const fetchStudentByRollNoAndRegNo = (idNumber,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("POST",FETCH_STUDENT_BY_ROLL_OR_REG_NO_API,{idNumber},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Student Data";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const downloadStudentDetailsInHostelBlockXlsxFile = (hostelBlockId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("POST",DOWNLOAD_STUDENT_DATA_BY_HOSTEL_BLOCK_API,{hostelBlockId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to download data";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const sendAcknowledgementLetter = (userId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",SEND_ACKNOWLEDGEMENT_LETTER_API,{userId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to send acknowledgement letter";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const deleteStudentAccount = (userId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("DELETE",DELETE_STUDENT_ACCOUNT,{userId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to delete student account";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const changeStudentProfilePhoto = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",CHANGE_STUDENT_PROFILE_PHOTO_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to change student photo";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const fetchCotsForChangeCotOption = (userId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("POST",FETCH_COTS_FOR_COT_CHANGE_API,{userId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Fetch Cots";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const swapOrExchangeCot = (currentCotId,changeToCotId,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",SWAP_OR_EXCHANGE_STUDENT_COT_API,{currentCotId,changeToCotId},{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Change Cots";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
         }
     }
 }

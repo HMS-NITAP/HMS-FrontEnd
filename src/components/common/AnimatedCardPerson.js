@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 18,
         fontWeight: 'bold',
+        color:"black",
     },
     designation: {
         fontSize: 14,
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
     detailText: {
         fontSize: 16,
         marginVertical: 5,
+        color:"grey",
     },
     link: {
         color: 'blue',

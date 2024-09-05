@@ -17,22 +17,6 @@ const StudentRegistration = () => {
 
     const toast = useToast();
 
-    const handleNext = () => {
-        if(registrationStep <= 3){
-            dispatch(setRegistrationStep(registrationStep+1));
-        }else{
-            toast.show("Registration Successful", {type:"success"});
-        }
-    }
-
-    const handleBack = () => {
-        if(registrationStep > 1){
-            dispatch(setRegistrationStep(registrationStep-1));
-        }else{
-            toast.show("Can't go back", {type:"warning"});
-        }
-    }
-
   return (
     <ScrollView contentContainerStyle={{display:"flex", flexDirection:"column",justifyContent:"center",alignItems:"center", width:"100%", paddingVertical:20}}>
         <ProgressIndicator />

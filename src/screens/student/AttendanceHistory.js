@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   monthYearText: {
     fontSize: 18,
     fontWeight: 'bold',
+    color:"black"
   },
   calendar: {
     flexDirection: 'row',
@@ -142,6 +143,7 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: 16,
+    color:"black"
   },
   goBackButton: {
     marginTop: 20,
@@ -167,6 +169,7 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 16,
+    color: "#6c757d"
   },
 });
 

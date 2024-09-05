@@ -7,6 +7,8 @@ const {
     FETCH_HOSTEL_BLOCKS_NAME,
     FETCH_HOSTEL_BLOCKS_ROOMS,
     FETCH_CURRENT_DATE_MESS_RATING_AND_REVIEW,
+    FETCH_CURRENT_SESSION_MESS_MENU_API,
+    FETCH_DETAILED_MESS_MENU_API,
 } = commonEndPoints;
 
 export const getAllAnnouncements = (toast) => {
@@ -124,6 +126,55 @@ export const fetchCurrentDateRatingsAndReviews = (toast) => {
             toast.hide(id);
             toast.show(errorMessage, {type: "danger"});
             console.log("Error",e);
+            return null;
+        }
+    }
+}
+
+export const fetchCurrentSessionMessMenu = (currentDay, currentSession, toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...", {type:'normal'});
+        try{ 
+            const response = await APIconnector("POST",FETCH_CURRENT_SESSION_MESS_MENU_API,{currentDay, currentSession});
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, { type: "danger" });
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            // toast.show(response?.data?.message, { type: "success" });
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Mess Menu For Current Session";
+            toast.hide(id);
+            toast.show(errorMessage, {type: "danger"});
+            console.log("Error",errorMessage);
+            return null;
+        }
+    }
+}
+
+export const fetchDetailedMessMenu = (toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...", {type:'normal'});
+        try{ 
+            const response = await APIconnector("GET",FETCH_DETAILED_MESS_MENU_API);
+            console.log("Res", response.data.success);
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response?.data?.message, { type: "danger" });
+                throw new Error(response.data.message);
+            }
+
+            toast.hide(id);
+            // toast.show(response?.data?.message, { type: "success" });
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Mess Menu";
+            toast.hide(id);
+            toast.show(errorMessage, {type: "danger"});
+            console.log("Error",errorMessage);
             return null;
         }
     }

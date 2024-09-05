@@ -4,10 +4,7 @@
 // NEW SERVER (Backend1)
 // SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
-// PURCHASED SERVER 
-SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
-
-// SERVER_BASE_URL = "http://192.168.190.208:4000/api/v1"
+// SERVER_BASE_URL = "http://172.50.5.81:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 
@@ -86,6 +83,9 @@ export const adminEndPoints = {
 
     // DASHBOARD APIs
     FETCH_DASHBOARD_DATA_API : SERVER_BASE_URL + '/admin/getDashboardData',
+    FETCH_ROOMS_IN_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/admin/fetchRoomsInHostelBlock',
+    FETCH_COTS_IN_ROOM_API : SERVER_BASE_URL + '/admin/fetchCotsInRooms',
+    DOWNLOAD_STUDENT_DATA_BY_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/admin/downloadStudentDetailsInHostelBlockXlsxFile',
 
     // HOSTEL BLOCK APIs
     CREATE_HOSTEL_BLOCK_API : SERVER_BASE_URL + '/admin/createHostelBlock',
@@ -101,6 +101,9 @@ export const adminEndPoints = {
     FETCH_OFFICIAL_ACCOUNTS : SERVER_BASE_URL + '/admin/fetchOfficialAccounts',
     CREATE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/createOfficialAccount',
     DELETE_OFFICIAL_ACCOUNT : SERVER_BASE_URL + '/admin/deleteOfficialAccount',
+    FETCH_STUDENT_BY_ROLL_OR_REG_NO_API : SERVER_BASE_URL + '/admin/fetchStudentByRollNoAndRegNo',
+    DELETE_STUDENT_ACCOUNT : SERVER_BASE_URL + '/admin/deleteStudentAccount',
+    CHANGE_STUDENT_PROFILE_PHOTO_API : SERVER_BASE_URL + '/admin/changeStudentProfilePhoto',
 
     // REGISTRATION APPLICATION APIs
     FETCH_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchRegistrationApplications',
@@ -109,6 +112,9 @@ export const adminEndPoints = {
     FETCH_FREEZED_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchFreezedApplications',
     FREEZE_REGISTRATION_APPILICATION_API : SERVER_BASE_URL + '/admin/freezeRegistrationApplication',
     CONFIRM_FREEZED_REGISTRATION_APPLICATION_API : SERVER_BASE_URL + '/admin/confirmFreezedStudentRegistration',
+    SEND_ACKNOWLEDGEMENT_LETTER_API : SERVER_BASE_URL + '/admin/sendAcknowledgementLetter',
+    FETCH_COTS_FOR_COT_CHANGE_API : SERVER_BASE_URL + '/admin/fetchCotsForChangeCotOption',
+    SWAP_OR_EXCHANGE_STUDENT_COT_API : SERVER_BASE_URL + '/admin/swapOrExchangeCot',
 
     // ANNOUCEMENT APIs : 
     DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/admin/deleteAnnouncement',
@@ -120,4 +126,6 @@ export const commonEndPoints = {
     FETCH_HOSTEL_BLOCKS_NAME : SERVER_BASE_URL + '/common/fetchHostelBlockNames',
     FETCH_HOSTEL_BLOCKS_ROOMS : SERVER_BASE_URL + '/common/fetchHostelBlockRooms',
     FETCH_CURRENT_DATE_MESS_RATING_AND_REVIEW : SERVER_BASE_URL + '/common/fetchCurrentDateRatingsAndReviews',
+    FETCH_CURRENT_SESSION_MESS_MENU_API : SERVER_BASE_URL + '/common/fetchCurrentSessionMessMenu',
+    FETCH_DETAILED_MESS_MENU_API : SERVER_BASE_URL + '/common/fetchDetailedMessMenu',
 }

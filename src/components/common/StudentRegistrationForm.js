@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Linking } from 'react-native';
 import MainButton from '../../components/common/MainButton';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { RadioButton } from 'react-native-paper';
@@ -31,6 +31,7 @@ const StudentRegistrationForm = () => {
         { label : "CREDIT CARD", value : "CREDIT_CARD"},
         { label : "UPI", value : "UPI"},
         { label : "NEFT", value : "NEFT"},
+        { label : "NEFT(Educational Loan)", value : "NEFT_Educational_Loan"},
         { label : "OTHER", value : "OTHER"},
     ]
 
@@ -108,7 +109,7 @@ const StudentRegistrationForm = () => {
     const formatDate = (date) => {
         if (!date) return "NO DATE IS SELECTED";
         return date.toLocaleDateString(); 
-      };
+    };
 
     const [secureText1, setSecureText1] = useState(true);
     const [secureText2, setSecureText2] = useState(true);
@@ -153,7 +154,7 @@ const StudentRegistrationForm = () => {
         }else if(!paymentDate){
             toast.show("Select Hostel Fee Payment Date",{type:"warning"});
             return;
-        }else if(!instituteFeeReceiptResponse || !hostelfeeReceiptResponse){
+        }else if(!hostelfeeReceiptResponse){
             toast.show("Upload Fee Receipt",{type:"warning"});
             return;
         }else if(!imageResponse){
@@ -180,6 +181,8 @@ const StudentRegistrationForm = () => {
         <View style={{width:"100%", backgroundColor:"#e9edc9", borderRadius:20, paddingHorizontal:15, paddingVertical:15,gap:2}}>
             <Text style={{ textAlign: "center", fontSize: 18, fontWeight:"700", color: "black", marginBottom: 10 }}>INSTRUCTIONS:</Text>
             <Text style={{ fontSize: 16, fontWeight:"600", color: "black" }}>{'\u2022'} Please complete your Institute Registration before proceeding with the Hostel Registration.</Text>
+            <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Click on the Link to Open Hostel Fee Payment Portal :</Text>
+            <TouchableOpacity onPress={() => Linking.openURL('https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15')}><Text style={{color:"blue", textAlign:"center"}}>https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</Text></TouchableOpacity>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Ensure your Institute email address is correct.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Fill the details with atmost care, as once saved they can't be changed.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Upload a recent proper passport size photo of yours not exceeding 250KB size.</Text>
@@ -686,7 +689,7 @@ const StudentRegistrationForm = () => {
             </View>
 
             <View style={styles.subFormView}>
-                <Text style={styles.label} >Institute Fee Receipt <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                <Text style={styles.label} >Institute Fee Receipt :</Text>
                 <View style={{display:'flex', marginTop:5, flexDirection:"row", width:"100%", justifyContent:"space-between", alignItems:"center",marginHorizontal:"auto", gap:20}}>
                     <MainButton text="Select File" onPress={pickUpInstituteFeeReceipt} />
                     <View>
@@ -820,6 +823,7 @@ const styles = StyleSheet.create({
         borderWidth:1,
         borderRadius:10,
         borderColor:"#adb5bd",
+        color: "black",
     },
     button:{
         textAlign:'center',

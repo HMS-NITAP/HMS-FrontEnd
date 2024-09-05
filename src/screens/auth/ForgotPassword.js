@@ -1,17 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
 import MainButton from '../../components/common/MainButton'
 import { useForm,Controller } from 'react-hook-form'
 import {useDispatch} from 'react-redux'
 import { sendResetPasswordEmail } from '../../services/operations/AuthAPI'
+import { useToast } from 'react-native-toast-notifications'
 
 const ForgotPassword = ({navigation}) => {
 
   const { control, handleSubmit, formState: { errors } } = useForm();
   const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
-    dispatch(sendResetPasswordEmail(data.email,navigation));
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const toast = useToast();
+
+  const onSubmit = async(data) => {
+    setIsButtonDisabled(true);
+    await dispatch(sendResetPasswordEmail(data.email,navigation,toast));
+    setIsButtonDisabled(false);
   }
 
   return (
@@ -39,7 +46,7 @@ const ForgotPassword = ({navigation}) => {
           {errors.email && <Text style={styles.errorText}>Email ID is required.</Text>}
         </View>
         <View style={styles.subFormView}>
-            <MainButton text={"Send Reset Password Link"} onPress={handleSubmit(onSubmit)} />
+            <MainButton isButtonDisabled={isButtonDisabled} text={"Send Reset Password Link"} onPress={handleSubmit(onSubmit)} />
         </View>
         </View>
     </View>

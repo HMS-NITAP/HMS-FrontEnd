@@ -33,6 +33,7 @@ const ViewMessFeedBack = ({navigation}) => {
 
   return (
     <ScrollView contentContainerStyle={{width:"100%", paddingVertical:25, paddingHorizontal:20, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", gap:20}}>
+      <Text style={{color:"grey", fontSize:22, fontWeight:"700"}}>Today's Feedback</Text>
       {
         toast && user && user?.accountType==="STUDENT" && (
           <View style={{width:"100%", display:"flex", flexDirection:"row", justifyContent:"flex-end"}}>

@@ -139,7 +139,7 @@ const StudentDashboardScreen = () => {
               <Text style={styles.detailsText}>Father's Name: {dashboardData?.data?.fatherName}</Text>
               <Text style={styles.detailsText}>Mother's Name: {dashboardData?.data?.motherName}</Text>
               <Text style={styles.detailsText}>Parents' Contact: {dashboardData?.data?.parentsPhone}</Text>
-              <Text style={styles.detailsText}>Emergency Contact: {dashboardData?.data?.parentsPhone}</Text>
+              <Text style={styles.detailsText}>Emergency Contact: {dashboardData?.data?.emergencyPhone}</Text>
               <Text style={styles.detailsText}>Address: {dashboardData?.data?.address}</Text>
             </View>
             <View style={styles.sectionContainer}>
@@ -171,12 +171,14 @@ const StudentDashboardScreen = () => {
                 </View>
                 <View style={styles.column}>
                   <Text style={styles.columnTitle}>Payment Details</Text>
-                  <TouchableOpacity onPress={() => openLink(data.hostelFeeReceipt)}>
+                  <TouchableOpacity>
                     <Text style={styles.link}>Hostel Fee Receipt</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => openLink(data.instituteFeeReceipt)}>
-                    <Text style={styles.link}>Institute Fee Receipt</Text>
-                  </TouchableOpacity>
+                  {
+                    dashboardData?.data?.instituteFeeReceipt && <TouchableOpacity>
+                                    <Text style={styles.link}>Institute Fee Receipt</Text>
+                                  </TouchableOpacity>
+                  }
                 </View>
               </ScrollView>
             </View>
@@ -226,11 +228,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#dcedc8',
     marginHorizontal: 5,
     elevation:10,
+    color:"#495057",
   },
   ratingLabel: {
     fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 5
+    marginBottom: 5,
+    color:"#495057",
   },
   ratingText: {
     marginTop: 5,

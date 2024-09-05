@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
       borderWidth:1,
       borderRadius:10,
       borderColor:"#adb5bd",
+      color: "black",
   },
   button:{
       textAlign:'center',

@@ -89,7 +89,7 @@ export const securitySepervisorsData = [
     {
         image : Sateesh,
         name : "Mandrajula Tarakarama Sateesh",
-        designation : "Security Field Officer",
+        designation : "Security Supervisor",
         phone : "+91-9493088186",
         email : " mtrsateesh@gmail.com"
     },

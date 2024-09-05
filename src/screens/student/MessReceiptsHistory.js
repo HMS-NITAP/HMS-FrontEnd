@@ -23,7 +23,6 @@ const MessReceiptsHistory = () => {
 
     const fetchData = async() => {
         const response = await dispatch(fetchStudentMessReceipts(token,toast));
-        console.log("response",response);
         setReceipts(response);
     }
 

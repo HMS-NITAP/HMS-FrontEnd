@@ -42,11 +42,6 @@ const OutingApplication = ({navigation}) => {
     setIsButtonDisabled(false);
   }
 
-  useEffect(() => {
-    console.log("To", toDate);
-    console.log("From", fromDate);
-  }, [toDate, fromDate]);
-
   const getMaxToDate = () => {
     const maxDate = new Date();
     maxDate.setHours(22, 0, 0, 0);
@@ -116,7 +111,9 @@ const OutingApplication = ({navigation}) => {
                 modal
                 open={fromOpen}
                 date={fromDate}
+                mode={type === "Local" ? "time" : "date"}
                 minimumDate={new Date()}
+                maximumDate={type === "Local" ? getMaxToDate() : null}
                 onConfirm={(date) => {
                   setFromOpen(false);
                   setFromDate(date);
@@ -215,6 +212,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "#adb5bd",
+    color: "black",
   },
   button: {
     textAlign: 'center',

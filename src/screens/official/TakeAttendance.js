@@ -20,7 +20,7 @@ const TakeAttendance = () => {
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [floorRooms, setFloorRooms] = useState(null);
   const [dateFormat, setDateFormat] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [floorCount, setFloorCount] = useState(null);
 
   const floorsArray = Array.from({ length: (floorCount || 0) + 1 }, (_, index) => ({
@@ -156,8 +156,8 @@ const TakeAttendance = () => {
             }
             <View style={styles.subFormView}>
               <View style={styles.datePickerContainer}>
-                  <MainButton backgroundColor={"#a9d6e5"} text={"Select Date"} onPress={() => setIsDatePickerOpen(true)} />
-                  <DatePicker
+                  {/* <MainButton backgroundColor={"#a9d6e5"} text={"Select Date"} onPress={() => setIsDatePickerOpen(true)} /> */}
+                  {/* <DatePicker
                     modal
                     mode='date'
                     locale='en'
@@ -171,8 +171,8 @@ const TakeAttendance = () => {
                     onCancel={() => {
                       setIsDatePickerOpen(false);
                     }}
-                  />
-                  <Text style={styles.selectedDateText}>{selectedDate?.toLocaleDateString() || 'No date selected'}</Text>
+                  /> */}
+                  <Text style={styles.selectedDateText}>Today : {selectedDate?.toLocaleDateString() || 'No date selected'}</Text>
               </View>
             </View>
             {
