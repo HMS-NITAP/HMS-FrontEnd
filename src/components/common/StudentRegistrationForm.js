@@ -122,10 +122,10 @@ const StudentRegistrationForm = () => {
 
     const submitHandler = async(data) => {
 
-        if(!data?.email.endsWith("@student.nitandhra.ac.in")){
-            toast.show("Please Use Your Institute Email ID",{type:"warning"});
-            return;
-        }
+        // if(!data?.email.endsWith("@student.nitandhra.ac.in")){
+        //     toast.show("Please Use Your Institute Email ID",{type:"warning"});
+        //     return;
+        // }
 
         if(data?.password !== data?.confirmPassword){
             toast.show("Passwords are not matching",{type:"warning"});
