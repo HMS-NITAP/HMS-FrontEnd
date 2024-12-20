@@ -86,15 +86,15 @@ const Announcements = () => {
                             {
                                 isNew(announcement?.createdAt) ? <View style={{position:"absolute", right:-5, top:-5, backgroundColor:bgColor?"rgba(128, 15, 47, 0.8)" : "rgba(128, 15, 47, 0.65)", paddingHorizontal:10, paddingVertical:5, borderRadius:15}}><Text style={{color:"white", fontWeight:"800"}}>New</Text></View> : ""
                             }
-                            <View style={{color:"#adb5bd"}}>
-                                <Text>Created At : <Text>{convertDate(announcement?.createdAt)}</Text></Text>
-                                <Text>Created By : <Text style={{color:"black"}}>{announcement?.createdBy?.name} ({announcement?.createdBy?.designation})</Text></Text>
+                            <View>
+                                <Text style={{color:"#6C757D"}}>Created At : <Text>{convertDate(announcement?.createdAt)}</Text></Text>
+                                <Text style={{color:"#6C757D"}}>Created By : <Text style={{color:"black", fontWeight:"600"}}>{announcement?.createdBy?.name} ({announcement?.createdBy?.designation})</Text></Text>
                             </View>
                             <Text style={{fontSize:16, color:"black", fontWeight:"700"}}>{announcement?.title}</Text>
                             <Text style={{fontSize:15, color:"black", fontWeight:"500"}}>{announcement?.textContent}</Text>
                             {
                                 announcement?.fileUrl[0] && 
-                                    <Text style={{color:"#adb5bd"}}>Attachments : <Text style={{color:"blue"}} onPress={() => Linking.openURL(announcement?.fileUrl[0])}>Click Here to See</Text></Text>
+                                    <Text style={{color:"#6C757D"}}>Attachments : <Text style={{color:"blue"}} onPress={() => Linking.openURL(announcement?.fileUrl[0])}>Click Here to See</Text></Text>
                             }
                             {
                                 toast && user?.accountType==="ADMIN" && (

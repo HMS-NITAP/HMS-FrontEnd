@@ -122,10 +122,10 @@ const StudentRegistrationForm = () => {
 
     const submitHandler = async(data) => {
 
-        // if(!data?.email.endsWith("@student.nitandhra.ac.in")){
-        //     toast.show("Please Use Your Institute Email ID",{type:"warning"});
-        //     return;
-        // }
+        if(!data?.email.endsWith("@student.nitandhra.ac.in")){
+            toast.show("Please Use Your Institute Email ID",{type:"warning"});
+            return;
+        }
 
         if(data?.password !== data?.confirmPassword){
             toast.show("Passwords are not matching",{type:"warning"});
@@ -179,7 +179,7 @@ const StudentRegistrationForm = () => {
   return (
     <View style={{width:"100%", display:"flex", flexDirection:"column", justifyContent:"center",alignItems:"center",gap:25}}>
         <View style={{width:"100%", backgroundColor:"#e9edc9", borderRadius:20, paddingHorizontal:15, paddingVertical:15,gap:2}}>
-            <Text style={{ textAlign: "center", fontSize: 18, fontWeight:"700", color: "black", marginBottom: 10 }}>INSTRUCTIONS:</Text>
+            <Text style={{ textAlign: "center", fontSize: 18, fontWeight:"700", color: "black", marginBottom: 10 }}>INSTRUCTIONS (ODD SEM REGISTRATION):</Text>
             <Text style={{ fontSize: 16, fontWeight:"600", color: "black" }}>{'\u2022'} Please complete your Institute Registration before proceeding with the Hostel Registration.</Text>
             <Text style={{ fontSize: 16, color: "black" }}>{'\u2022'} Click on the Link to Open Hostel Fee Payment Portal :</Text>
             <TouchableOpacity onPress={() => Linking.openURL('https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15')}><Text style={{color:"blue", textAlign:"center"}}>https://payments.billdesk.com/bdcollect/pay?p1=5213&p2=15</Text></TouchableOpacity>
@@ -305,7 +305,7 @@ const StudentRegistrationForm = () => {
                             <View style={{maxWidth:"100%", display:"flex",flexDirection:'row',gap:8}}>
                                 <Image source={{ uri: imageResponse[0].uri }} style={{width:80,height:80,borderRadius:40}} />
                             </View> : 
-                            <View><Text style={{fontWeight:"800", fontSize:15}}>No Image Selected</Text></View>
+                            <View><Text style={{fontWeight:"800", fontSize:15, color:"black"}}>No Image Selected</Text></View>
                     }
                     </View>
                 </View>
@@ -487,7 +487,7 @@ const StudentRegistrationForm = () => {
                         />
                     </View>
                     <View>
-                        <Text style={{ fontWeight: "800", fontSize: 15 }}>{formatDate(dob)}</Text>
+                        <Text style={{ fontWeight: "800", fontSize: 15, color:"black" }}>{formatDate(dob)}</Text>
                     </View>
                 </View>
             </View>
@@ -698,7 +698,7 @@ const StudentRegistrationForm = () => {
                             <View style={{maxWidth:"80%", display:"flex",flexDirection:'row',gap:8}}>
                                 <Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:15}}>{instituteFeeReceiptResponse[0].name}</Text>
                             </View> : 
-                            <View><Text style={{fontWeight:"800", fontSize:15}}>No File Selected</Text></View>
+                            <View><Text style={{fontWeight:"800", fontSize:15, color:"black"}}>No File Selected</Text></View>
                     }
                     </View>
                 </View>
@@ -714,7 +714,7 @@ const StudentRegistrationForm = () => {
                             <View style={{maxWidth:"80%", display:"flex",flexDirection:'row',gap:8}}>
                                 <Text style={{textAlign:"center", color:"black", fontWeight:"700", fontSize:15}}>{hostelfeeReceiptResponse[0].name}</Text>
                             </View> : 
-                            <View><Text style={{fontWeight:"800", fontSize:15}}>No File Selected</Text></View>
+                            <View><Text style={{fontWeight:"800", fontSize:15, color:"black"}}>No File Selected</Text></View>
                     }
                     </View>
                 </View>
@@ -759,7 +759,7 @@ const StudentRegistrationForm = () => {
                         />
                     </View>
                     <View>
-                        <Text style={{ fontWeight: "800", fontSize: 15 }}>{formatDate(paymentDate)}</Text>
+                        <Text style={{ fontWeight: "800", fontSize: 15, color:"black" }}>{formatDate(paymentDate)}</Text>
                     </View>
                 </View>
             </View>

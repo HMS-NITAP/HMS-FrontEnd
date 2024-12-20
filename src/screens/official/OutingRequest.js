@@ -47,7 +47,7 @@ const OutingRequest = () => {
         </View>
         <View style={{width:"100%",display:"flex",justifyContent:"center", alignItems:"center", gap:10}}>
             {
-                !outingApplication ? (<Text style={{fontWeight:"700", color:"black", fontSize:16}}>Please Wait...</Text>) : outingApplication.length===0 ? (<Text style={{fontWeight:"600", fontSize:16}}>No Applications Found</Text>) : (
+                !outingApplication ? (<Text style={{fontWeight:"700", color:"black", fontSize:16}}>Please Wait...</Text>) : outingApplication.length===0 ? (<Text style={{fontWeight:"600", fontSize:16, color:"black"}}>No Applications Found</Text>) : (
                     outingApplication.map((application,index) => (
                         <OutingRequestCard key={index} application={application} toast={toast} token={token} fetchOutingRequest={fetchOutingRequest} />
                     ))

@@ -241,7 +241,8 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 20,
     fontSize: 18,
-    textAlign: "center"
+    textAlign: "center",
+    color:"black",
   },
   modalButtons: {
     flexDirection: "row",

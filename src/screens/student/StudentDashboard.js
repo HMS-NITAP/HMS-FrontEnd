@@ -1,11 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, TextInput, ScrollView, TouchableOpacity, Modal, Pressable, ActivityIndicator, Linking } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import { useToast } from 'react-native-toast-notifications';
 import { useDispatch, useSelector } from 'react-redux';
-import { getStudentDashboardData } from '../../services/operations/StudentAPI';
+import { addEvenSemFeeReceipt, getStudentDashboardData } from '../../services/operations/StudentAPI';
 import { useFocusEffect } from '@react-navigation/native';
-
+import DocumentPicker from 'react-native-document-picker';
+import MainButton from '../../components/common/MainButton';
+import ModalDropdown from 'react-native-modal-dropdown';
+import DatePicker from 'react-native-date-picker'
+import { useForm, Controller } from 'react-hook-form';
 
 const quotes = [
   "Wishing you a day filled with immense love, joy, and countless beautiful moments! May all your dreams come true on this special day! 🎉",
@@ -14,6 +18,8 @@ const quotes = [
   "Here's to a fantastic year ahead, filled with new adventures, growth, and endless possibilities! Cheers to your bright future and all the happiness it holds! 🍰",
   "Celebrate your special day in a special way, making memories that will last a lifetime! May your birthday be filled with all the joy and love your heart can hold! 🎁"
 ];
+
+const MAX_FILE_SIZE = 150 * 1024;
 
 const getRandomQuote = () => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -44,6 +50,31 @@ const StudentDashboardScreen = () => {
   };
   
   const [showBirthdayModal, setShowBirthdayModal] = useState(false);
+  const [evenSemFeeModal, setEvenSemFeeModal] = useState(false);
+
+  const [hostelEvenSemfeeReceiptResponse, setHostelEvenSemFeeReceiptResponse] = useState(null);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+  const paymentOption = [
+    { label : "NET BANKING", value : "NET_BANKING"},
+    { label : "DEBIT CARD", value : "DEBIT_CARD"},
+    { label : "CREDIT CARD", value : "CREDIT_CARD"},
+    { label : "UPI", value : "UPI"},
+    { label : "NEFT", value : "NEFT"},
+    { label : "NEFT(Educational Loan)", value : "NEFT_Educational_Loan"},
+    { label : "OTHER", value : "OTHER"},
+  ]
+
+  const formatDate = (date) => {
+    if (!date) return "NO DATE IS SELECTED";
+    return date.toLocaleDateString(); 
+  };
+
+  const { control, handleSubmit, formState: { errors }, reset } = useForm();
+
+  const [isPaymentDatePickerOpen, setIsPaymentDatePickerOpen] = useState(false);
+  const [paymentMode2, setPaymentMode2] = useState(null);
+  const [paymentDate2, setPaymentDate2] = useState(null);
 
   const checkIsDob = (dobString) => {
     const [_, birthMonth, birthDay] = dobString.split('-').map(Number);
@@ -83,6 +114,60 @@ const StudentDashboardScreen = () => {
     setShowBirthdayModal(false);
   };
 
+  const pickUpHostelFeeReceipt = useCallback(async () => {
+    try {
+      const response = await DocumentPicker.pick({
+        type: [DocumentPicker.types.pdf],
+        presentationStyle: 'fullScreen',
+      });
+      if(response[0].size > MAX_FILE_SIZE){
+        toast.show('File size exceeds the limit of 150KB. Please select a smaller file.', { type: 'warning' });
+      }else{
+        setHostelEvenSemFeeReceiptResponse(response);
+      }
+    }catch(err){
+      toast.show("Unable to Attach File", {type:"warning"});
+      console.log("Error",e?.response?.data?.message);
+    }
+  }, []);
+
+  const covertToLocalDate = (date) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = date.toLocaleDateString('en-CA', options);
+    return formattedDate
+}
+
+  const submitModalHandler = async(data) => {
+
+    if(!paymentMode2){
+        toast.show("Select Hostel Fee Payment Mode",{type:"warning"});
+        return;
+    }else if(!paymentDate2){
+        toast.show("Select Hostel Fee Payment Date",{type:"warning"});
+        return;
+    }else if(!hostelEvenSemfeeReceiptResponse){
+        toast.show("Upload Fee Receipt",{type:"warning"});
+        return;
+    }
+
+    setIsButtonDisabled(true);
+    let formData = new FormData();
+    formData.append("evenSemHostelFeeReceipt",{uri:hostelEvenSemfeeReceiptResponse[0]?.uri, type:hostelEvenSemfeeReceiptResponse[0]?.type, name:hostelEvenSemfeeReceiptResponse[0]?.name});
+    formData.append("amountPaid2",data?.amountPaid2);
+    formData.append("paymentDate2",covertToLocalDate(paymentDate2));
+    formData.append("paymentMode2",paymentMode2);
+    await dispatch(addEvenSemFeeReceipt(formData,token,toast));
+    setEvenSemFeeModal(false);
+    setHostelEvenSemFeeReceiptResponse(null);
+    setIsButtonDisabled(false);
+    fetchData();
+  }
+
+  const cancelModalHandler = async() => {
+    setHostelEvenSemFeeReceiptResponse(null);
+    setEvenSemFeeModal(false);
+  }
+
   return (
     
     <ScrollView contentContainerStyle={{display:"flex", flexDirection:"column"}}>
@@ -99,7 +184,7 @@ const StudentDashboardScreen = () => {
                   size={20}
                 />
                 <Text style={styles.ratingText}>{getRatingLabel(dashboardData?.data?.disciplineRating)}</Text>
-                <Text>{dashboardData?.data?.disciplineRating}</Text>
+                <Text style={{color:"black", fontWeight:"800"}}>{dashboardData?.data?.disciplineRating}</Text>
               </View>
               <View style={styles.ratingBox}>
                 <Text style={styles.ratingLabel}>Outing Rating</Text>
@@ -110,7 +195,7 @@ const StudentDashboardScreen = () => {
                   size={20}
                 />
                 <Text style={styles.ratingText}>{getRatingLabel(dashboardData?.data?.outingRating)}</Text>
-                <Text>{dashboardData?.data?.outingRating}</Text>
+                <Text style={{color:"black", fontWeight:"800"}}>{dashboardData?.data?.outingRating}</Text>
               </View>
             </View>
             <View style={styles.imageContainer}>
@@ -124,6 +209,10 @@ const StudentDashboardScreen = () => {
                     onLoad={() => setIsLoading(false)}
                 />
                 <Text style={styles.name}>{dashboardData?.data?.name}</Text>
+            </View>
+            <View style={styles.imageContainer}>
+                {dashboardData?.data?.user?.status === "ACTIVE1" && !dashboardData?.data?.hostelFeeReceipt2 && <MainButton onPress={() => setEvenSemFeeModal(true)} text={"Upload Even Sem Hostel Fee Receipt"} />}
+                {dashboardData?.data?.user?.status === "ACTIVE1" && dashboardData?.data?.hostelFeeReceipt2 && <Text style={{color:"green", fontWeight:"800", fontSize:16, textAlign:"center"}}>( Even Semester Registration Under Review )</Text>}
             </View>
             <View style={styles.detailsContainer}>
               <Text style={styles.detailsText}>Reg No: {dashboardData?.data?.regNo}</Text>
@@ -171,12 +260,14 @@ const StudentDashboardScreen = () => {
                 </View>
                 <View style={styles.column}>
                   <Text style={styles.columnTitle}>Payment Details</Text>
-                  <TouchableOpacity>
-                    <Text style={styles.link}>Hostel Fee Receipt</Text>
-                  </TouchableOpacity>
                   {
-                    dashboardData?.data?.instituteFeeReceipt && <TouchableOpacity>
-                                    <Text style={styles.link}>Institute Fee Receipt</Text>
+                    dashboardData?.data?.hostelFeeReceipt && <TouchableOpacity>
+                                    <Text onPress={() => Linking.openURL(dashboardData?.data?.hostelFeeReceipt)} style={styles.link}>Odd Sem Hostel Fee Receipt</Text>
+                                  </TouchableOpacity>
+                  }
+                  {
+                    dashboardData?.data?.hostelFeeReceipt2 && <TouchableOpacity>
+                                    <Text onPress={() => Linking.openURL(dashboardData?.data?.hostelFeeReceipt2)} style={styles.link}>Even Sem Hostel Fee Receipt</Text>
                                   </TouchableOpacity>
                   }
                 </View>
@@ -196,13 +287,124 @@ const StudentDashboardScreen = () => {
                   <Text style={styles.quote}>{getRandomQuote()}</Text>
                   <Pressable
                     style={styles.closeButton}
-                    onPress={closeBirthdayModal}
+                    onPress={(closeBirthdayModal)}
                   >
                     <Text style={styles.closeButtonText}>Thank you !</Text>
                   </Pressable>
                 </View>
               </View>
             </Modal>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={evenSemFeeModal}
+              onRequestClose={() => setEvenSemFeeModal(false)}
+            >
+              <View style={styles.modalContainer}>
+                <View style={styles.modalContent}>
+                    <Text style={{color:"black", textAlign:"center", fontSize:20, fontWeight:"700"}}>Upload Even Sem Hostel Fee Receipt</Text>
+                    <View style={{width:"100%", display: "flex", flexDirection: "row", gap: 15, justifyContent: "space-between", alignItems: "center" }}>
+                      <MainButton text={"Select File"} onPress={pickUpHostelFeeReceipt} />
+                      <View style={{maxWidth:"100%", marginHorizontal:"auto"}}>
+                        {hostelEvenSemfeeReceiptResponse ? (
+                          <View style={{ maxWidth: '75%', flexWrap:"wrap", display: 'flex', flexDirection: 'row', gap: 8 }}>
+                            <Text
+                              style={{
+                                textAlign: 'center',
+                                color: 'black',
+                                fontWeight: '700',
+                                fontSize: 15,
+                              }}
+                            >
+                              {hostelEvenSemfeeReceiptResponse[0].name}
+                            </Text>
+                          </View>
+                        ) : (
+                          <View style={{maxWidth:"100%"}}>
+                            <Text style={{color:"black", fontWeight: '800', fontSize: 15, color:"red" }}>No File Selected</Text>
+                          </View>
+                        )}
+                      </View>
+                    </View>
+
+                    <View style={styles.subFormView}>
+                      <Text style={styles.label}>Hostel Fee Payment Mode <Text style={{ fontSize: 10, color: 'red' }}>*</Text> :</Text>
+                      <ModalDropdown
+                          options={paymentOption.map((mode) => mode.label)}
+                          style={styles.dropDownStyle}
+                          dropdownStyle={styles.dropdownOptions}
+                          dropdownTextStyle={{ color: "black", fontSize: 14, fontWeight: "600" }}
+                          dropdownTextHighlightStyle={{ backgroundColor: "#caf0f8" }}
+                          textStyle={{ color: "black", fontSize: 14, paddingHorizontal: 10 }}
+                          saveScrollPosition={false}
+                          // defaultIndex={0}
+                          isFullWidth={true}
+                          onSelect={(index) => {
+                              setPaymentMode2(paymentOption[index].value); 
+                          }}
+                          defaultValue="Select Your Payment Mode"
+                      />
+                  </View>
+
+                  <View style={styles.subFormView}>
+                      <Text style={styles.label} >Hostel Fee Payment Date <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                      <View style={{ display: "flex", flexDirection: "row", gap: 15, justifyContent: "space-between", alignItems: "center" }}>
+                          <View>
+                              <MainButton text={"Select Date"} onPress={() => setIsPaymentDatePickerOpen(true)} />
+                              <DatePicker
+                                  modal
+                                  mode='date'
+                                  open={isPaymentDatePickerOpen}
+                                  date={paymentDate2 || new Date()} 
+                                  onConfirm={(date) => {
+                                      setIsPaymentDatePickerOpen(false);
+                                      setPaymentDate2(date);
+                                  }}
+                                  onCancel={() => {
+                                      setIsPaymentDatePickerOpen(false);
+                                  }}
+                              />
+                          </View>
+                          <View>
+                              <Text style={{ fontWeight: "800", fontSize: 14, color:"black" }}>{formatDate(paymentDate2)}</Text>
+                          </View>
+                      </View>
+                  </View>
+
+                  <View style={styles.subFormView}>
+                      <Text style={styles.label} >Hostel Fee Payment Amount <Text style={{fontSize:10,color:'red'}}>*</Text> :</Text>
+                      <Controller
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field: { onChange, onBlur, value } }) => (
+                          <TextInput
+                              style={styles.input}
+                              placeholder="Enter amount paid"
+                              placeholderTextColor={"#adb5bd"}
+                              onBlur={onBlur}
+                              onChangeText={onChange}
+                              value={value}
+                              keyboardType='numeric'
+                          />
+                          )}
+                          name="amountPaid2"
+                          defaultValue=""
+                      />
+                      {errors.amountPaid2 && <Text style={styles.errorText}>Amount Paid is required.</Text>}
+                  </View>
+
+                  <View style={{width : "100%", display:"flex", flexDirection: 'row', marginTop:15, justifyContent: 'space-evenly', alignItems:"center" }}>
+                      <TouchableOpacity disabled={isButtonDisabled} onPress={handleSubmit(submitModalHandler)}  style={{ padding: 10, backgroundColor: '#aacc00', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
+                          <Text style={{ fontSize: 16, color: 'black', fontWeight:"600" }}>Submit</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity disabled={isButtonDisabled} onPress={cancelModalHandler} style={{ padding: 10, backgroundColor: '#ccc', borderRadius: 8, opacity:isButtonDisabled?0.5:1 }}>
+                          <Text style={{ fontSize: 16, color:"black", fontWeight:"600" }}>Cancel</Text>
+                      </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+
           </View>
         )
       }
@@ -219,6 +421,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
+  },
+  subFormView:{
+    width:"100%",
+    display:'flex',
+    justifyContent:'center',
+    flexDirection:'column',
+    alignItems:'start',
+    gap:2,
+  },
+  label:{
+    fontSize:15,
+    fontWeight:'500',
+    color:'#000000',
   },
   ratingBox: {
     alignItems: 'center',
@@ -238,11 +453,25 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     marginTop: 5,
-    fontSize: 14
+    fontSize: 14,
+    color:"black",
   },
   imageContainer: {
     alignItems: 'center',
-    marginVertical: 20
+    marginVertical: 10
+  },
+  errorText:{
+    fontSize:14,
+    color:"red",
+  },
+  input:{
+    width:"100%",
+    padding:10,
+    paddingHorizontal:10,
+    borderWidth:1,
+    borderRadius:10,
+    borderColor:"#adb5bd",
+    color: "black",
   },
   image: {
     width: 100,
@@ -340,7 +569,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
-    gap:10,
+    gap:15,
     alignItems: 'center'
   },
   quote:{
@@ -367,6 +596,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  dropDownStyle : {
+    paddingVertical:10,
+    borderWidth:1,
+    borderRadius:10,
+    borderColor:"#adb5bd",
+  },
+  dropdownOptions: {
+    paddingHorizontal:10,
+    paddingVertical:10,
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#adb5bd',
+    backgroundColor: '#ffffff',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   }
 });
 

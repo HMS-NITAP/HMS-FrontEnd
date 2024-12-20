@@ -201,7 +201,7 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
             >
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
                     <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 10,textAlign:"center" }}>Are you sure, this Application will Rejected.</Text>
+                        <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 10,textAlign:"center", color:"black" }}>Are you sure, this Application will Rejected.</Text>
                         <Text style={{ fontSize: 14, color:"black", fontWeight: '400', marginBottom: 3 }}>Reason for Rejection</Text>
                         <Controller
                             control={control}
@@ -242,7 +242,7 @@ const OutingRequestCard = ({application,token,toast,fetchOutingRequest}) => {
             >
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
                     <View style={{ width: '80%', backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                        <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 10,textAlign:"center" }}>Are you sure, this student has returned to hostel with delay.</Text>
+                        <Text style={{ fontSize: 18, fontWeight: '600', marginBottom: 10,textAlign:"center", color:"black" }}>Are you sure, this student has returned to hostel with delay.</Text>
                         <Text style={{ fontSize: 14, color:"black", fontWeight: '400', marginBottom: 3 }}>Reason for Delay</Text>
                         <Controller
                             control={control}

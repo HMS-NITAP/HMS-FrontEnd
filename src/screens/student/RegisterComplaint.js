@@ -125,7 +125,7 @@ const RegisterComplaint = ({navigation}) => {
               {
                 fileResponse && 
                   <View style={{maxWidth:"80%", display:"flex",flexDirection:'column',gap:8}}>
-                    {fileResponse.map((file) => <Text>{file?.name}</Text>)}
+                    {fileResponse.map((file) => <Text style={{color:"black", fontWeight:"700"}}>{file?.name}</Text>)}
                   </View>
               }
             </View>

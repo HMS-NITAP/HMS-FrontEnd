@@ -16,6 +16,7 @@ const { CREATE_OUTING_APPLICATION_API,
     GET_STUDENT_DASHBOARD_DATA_APT,
     EDIT_STUDENT_PROFILE_API,
     GET_STUDENT_ATTENDENCE_API,
+    ADD_EVEN_SEM_FEE_RECEIPT_API,
 } = studentEndPoints;
 
 
@@ -23,7 +24,6 @@ export const CreateOutingApplication = (formData,token,toast) => {
     return async() => {
         let id = toast.show("Creating Outing Application...",{type: "normal"});
         try{
-            console.log("FORMDAdTA",formData);
             const response = await APIconnector("POST",CREATE_OUTING_APPLICATION_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
 
             if(!response.data.success){
@@ -334,6 +334,43 @@ export const getStudentAttendance = (token,toast) => {
             toast.hide(id);
             toast.show(errorMessage,{type:"danger"});
             console.log(e)
+        }
+    }
+}
+
+export const addEvenSemFeeReceipt = (formData,token,toast) => {
+    return async () => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{
+            if (typeof formData === "object" && formData !== null) {
+                for (const key in formData) {
+                  if (formData.hasOwnProperty(key)) {
+                    console.log(`12 ${key}:`, formData[key]);
+                  }
+                }
+              } else {
+                console.error("formData is not an object or is null");
+            }
+              
+            const response = await APIconnector("PUT",ADD_EVEN_SEM_FEE_RECEIPT_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            console.log("RESPon",response);
+            if(!response.data.success){
+                toast.hide(id);
+                toast.show(response.data.message, {type: "danger"});
+                throw new Error(response.data.message);
+            }
+
+            console.log("EREF");
+            
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Attach Fee Receipt";
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            console.log("Error",e);
+            return false;
         }
     }
 }

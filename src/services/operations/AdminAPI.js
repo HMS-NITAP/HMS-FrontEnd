@@ -27,7 +27,10 @@ const {
     DELETE_STUDENT_ACCOUNT,
     CHANGE_STUDENT_PROFILE_PHOTO_API,
     FETCH_COTS_FOR_COT_CHANGE_API,
-    SWAP_OR_EXCHANGE_STUDENT_COT_API
+    SWAP_OR_EXCHANGE_STUDENT_COT_API,
+    FETCH_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
+    ACCEPT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
+    REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,
 } = adminEndPoints;
 
 const {
@@ -615,6 +618,78 @@ export const swapOrExchangeCot = (currentCotId,changeToCotId,token,toast) => {
             return true;
         }catch(e){
             const errorMessage = e?.response?.data?.message || "Unable to Change Cots";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const fetchEvenSemStudentRegistrationApplications = (token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("GET",FETCH_EVEN_SEM_REGISTRATION_APPLICATIONS_API,null,{Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return response?.data?.data;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to fetch Application";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return null;
+        }
+    }
+}
+
+export const acceptEvenSemRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",ACCEPT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Accept Application";
+            console.log(e);
+            toast.hide(id);
+            toast.show(errorMessage,{type:"danger"});
+            return false;
+        }
+    }
+}
+
+export const rejectEvenSemRegistrationApplication = (formData,token,toast) => {
+    return async() => {
+        let id = toast.show("Please Wait...",{type:"normal"});
+        try{    
+            const response = await APIconnector("PUT",REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API,formData,{"Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`});
+            if(!response?.data?.success){
+                toast.hide(id);
+                toast.show(response?.data?.message,{type:"danger"});
+                throw new Error(response?.data?.message);
+            }
+
+            toast.hide(id);
+            toast.show(response?.data?.message,{type:"success"});
+            return true;
+        }catch(e){
+            const errorMessage = e?.response?.data?.message || "Unable to Reject Application";
             console.log(e);
             toast.hide(id);
             toast.show(errorMessage,{type:"danger"});

@@ -111,7 +111,10 @@ const styles = StyleSheet.create({
       fontWeight:'800',
       color:"black"
     },
-
+    errorText:{
+      fontSize:14,
+      color:"red",
+    },
 });
   
 

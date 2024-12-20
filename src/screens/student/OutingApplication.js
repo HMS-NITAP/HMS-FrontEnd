@@ -111,7 +111,7 @@ const OutingApplication = ({navigation}) => {
                 modal
                 open={fromOpen}
                 date={fromDate}
-                mode={type === "Local" ? "time" : "date"}
+                mode={type === "Local" ? "time" : "datetime"}
                 minimumDate={new Date()}
                 maximumDate={type === "Local" ? getMaxToDate() : null}
                 onConfirm={(date) => {
@@ -124,7 +124,7 @@ const OutingApplication = ({navigation}) => {
               />
             </View>
             <View>
-              {fromDate && <Text>{fromDate.toLocaleString()}</Text>}
+              {fromDate && <Text style={{color:"black"}}>{fromDate.toLocaleString()}</Text>}
             </View>
           </View>
         </View>
@@ -138,7 +138,7 @@ const OutingApplication = ({navigation}) => {
                 modal
                 open={toOpen}
                 date={toDate}
-                mode={type === "Local" ? "time" : "date"}
+                mode={type === "Local" ? "time" : "datetime"}
                 maximumDate={type === "Local" ? getMaxToDate() : null}
                 onConfirm={(date) => {
                   setToOpen(false);
@@ -150,7 +150,7 @@ const OutingApplication = ({navigation}) => {
               />
             </View>
             <View>
-              {toDate && <Text>{toDate.toLocaleString()}</Text>}
+              {toDate && <Text style={{color:"black"}}>{toDate.toLocaleString()}</Text>}
             </View>
           </View>
         </View>
@@ -229,6 +229,10 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 10,
     borderColor: "#adb5bd",
+  },
+  errorText:{
+    fontSize:14,
+    color:"red",
   },
 })
 

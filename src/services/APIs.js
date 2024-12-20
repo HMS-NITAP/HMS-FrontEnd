@@ -2,12 +2,12 @@
 // SERVER_BASE_URL = "https://backend-lxur.onrender.com/api/v1"
 
 // NEW SERVER (Backend1)
-SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
+// SERVER_BASE_URL = "https://backend1-itzt.onrender.com/api/v1"
 
 // PURCHASED SERVER 
-// SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
+SERVER_BASE_URL = "https://backend-c938.onrender.com/api/v1"
 
-// SERVER_BASE_URL = "http://172.50.5.81:4000/api/v1"
+// SERVER_BASE_URL = "http://192.168.131.208:4000/api/v1"
 // NOTE : USE YOUR LAPTOP IPv4 host Address - cmd : ipconfig
 
 
@@ -45,6 +45,7 @@ export const studentEndPoints = {
 
     //DASHBOARD APIs
     GET_STUDENT_DASHBOARD_DATA_APT : SERVER_BASE_URL + '/student/getStudentDashboardData',
+    ADD_EVEN_SEM_FEE_RECEIPT_API : SERVER_BASE_URL + '/student/addEvenSemFeeReceipt',
 
     // PROFILE APIs
     EDIT_STUDENT_PROFILE_API : SERVER_BASE_URL + '/student//editProfile',
@@ -118,6 +119,9 @@ export const adminEndPoints = {
     SEND_ACKNOWLEDGEMENT_LETTER_API : SERVER_BASE_URL + '/admin/sendAcknowledgementLetter',
     FETCH_COTS_FOR_COT_CHANGE_API : SERVER_BASE_URL + '/admin/fetchCotsForChangeCotOption',
     SWAP_OR_EXCHANGE_STUDENT_COT_API : SERVER_BASE_URL + '/admin/swapOrExchangeCot',
+    FETCH_EVEN_SEM_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/fetchEvenSemRegistrationApplications',
+    ACCEPT_EVEN_SEM_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/acceptEvenSemRegistrationApplication',
+    REJECT_EVEN_SEM_REGISTRATION_APPLICATIONS_API : SERVER_BASE_URL + '/admin/rejectEvenSemRegistrationApplication',
 
     // ANNOUCEMENT APIs : 
     DELETE_ANNOUNCEMENT_API : SERVER_BASE_URL + '/admin/deleteAnnouncement',

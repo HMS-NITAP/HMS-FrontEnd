@@ -90,7 +90,9 @@ const GiveMessFeedback = ({navigation}) => {
                   <TextInput
                     value={review}
                     onChangeText={setReview} 
-                    editable multiline numberOfLines={2} style={styles.input}
+                    editable multiline numberOfLines={2} 
+                    placeholderTextColor={"#adb5bd"}
+                    style={styles.input}
                     placeholder='Enter your Review' 
                   />
                 </View>
@@ -172,6 +174,7 @@ const styles = StyleSheet.create({
       borderWidth:1,
       borderRadius:10,
       borderColor:"#adb5bd",
+      color:"black"
   },
   button:{
       textAlign:'center',

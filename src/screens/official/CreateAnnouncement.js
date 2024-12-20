@@ -104,7 +104,7 @@ const CreateAnnouncement = () => {
               {
                 fileResponse && 
                   <View style={{maxWidth:"80%", display:"flex",flexDirection:'column',gap:8}}>
-                    {fileResponse.map((file,index) => <Text key={index}>{file?.name}</Text>)}
+                    {fileResponse.map((file,index) => <Text style={{color:"black", fontWeight:"700"}} key={index}>{file?.name}</Text>)}
                   </View>
               }
             </View>
