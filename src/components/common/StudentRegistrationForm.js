@@ -12,7 +12,7 @@ import DatePicker from 'react-native-date-picker'
 import { setRegistrationData, setRegistrationStep } from '../../reducer/slices/AuthSlice';
 import { sendOtpToStudent } from '../../services/operations/AuthAPI';
 
-const MAX_FILE_SIZE = 150 * 1024;
+const MAX_FILE_SIZE = 250 * 1024;
 const MAX_IMAGE_SIZE = 250 * 1024;
 
 const StudentRegistrationForm = () => {
@@ -81,7 +81,7 @@ const StudentRegistrationForm = () => {
             presentationStyle: 'fullScreen',
           });
           if(response[0].size > MAX_FILE_SIZE){
-            toast.show('File size exceeds the limit of 150KB. Please select a smaller file.', { type: 'warning' });
+            toast.show('File size exceeds the limit of 250KB. Please select a smaller file.', { type: 'warning' });
           }else{
             setHostelFeeReceiptResponse(response);
           }

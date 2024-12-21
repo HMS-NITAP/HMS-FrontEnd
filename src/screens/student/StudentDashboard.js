@@ -19,7 +19,7 @@ const quotes = [
   "Celebrate your special day in a special way, making memories that will last a lifetime! May your birthday be filled with all the joy and love your heart can hold! 🎁"
 ];
 
-const MAX_FILE_SIZE = 150 * 1024;
+const MAX_FILE_SIZE = 250 * 1024;
 
 const getRandomQuote = () => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -121,7 +121,7 @@ const StudentDashboardScreen = () => {
         presentationStyle: 'fullScreen',
       });
       if(response[0].size > MAX_FILE_SIZE){
-        toast.show('File size exceeds the limit of 150KB. Please select a smaller file.', { type: 'warning' });
+        toast.show('File size exceeds the limit of 250KB. Please select a smaller file.', { type: 'warning' });
       }else{
         setHostelEvenSemFeeReceiptResponse(response);
       }
