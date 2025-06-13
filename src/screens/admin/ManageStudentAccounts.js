@@ -398,7 +398,7 @@ const ManageStudentAccounts = ({navigation}) => {
         }
 
         {
-          studentData && studentData?.user?.status==="ACTIVE" && (
+          studentData && (studentData?.user?.status==="ACTIVE" || studentData?.user?.status==="ACTIVE1") && (
             <View style={{marginTop:20, display:"flex", width:"90%", flexDirection:"column", justifyContent:"center", justifyContent:"center", gap:10}}>
                 <MainButton text={"Send Acknowledgement Letter"} backgroundColor={"#aacc00"} textColor={"black"} onPress={() => setSendAcknowledgementLetterModalVisible(true)} />
                 <MainButton text={"Delete Student Account"} backgroundColor={"#c9184a"} textColor={"white"} onPress={() => setDeleteStudentAccountModalVisible(true)} />

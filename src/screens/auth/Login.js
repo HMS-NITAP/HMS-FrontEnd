@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import MainButton from '../../components/common/MainButton';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';

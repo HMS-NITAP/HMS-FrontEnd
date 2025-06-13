@@ -55,9 +55,10 @@ import ManageStudentAccounts from './src/screens/admin/ManageStudentAccounts';
 import ChangeStudentCot from './src/screens/admin/ChangeStudentCot';
 import EvenSemRegistrationApplications from './src/screens/admin/EvenSemRegistrationApplications';
 
-const Drawer = createDrawerNavigator();
 
 const App = () => {
+
+  const Drawer = createDrawerNavigator();
 
   const {token} = useSelector((state) => state.Auth);
   const {user} = useSelector((state) => state.Profile);

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View, Text } from 'react-native'
+import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Linking } from 'react-native'
 import {hostelCommiteeData,medicalAndSecurityOfficerData,securitySepervisorsData,hostelOfficeStaffData} from '../../static/ContactUsData'
 import AnimatedCardPerson from '../../components/common/AnimatedCardPerson'
 
@@ -54,6 +54,9 @@ const ContactUs = () => {
                     }  
                 </View>
             </View>
+        </View>
+        <View style={{marginVertical:10, marginHorizontal:40}}>
+            <Text style={{color:"#4a4e69", textAlign:"center"}}>If you want to delete your account, please contact us on <TouchableOpacity style={{color:"blue"}} onPress={() => Linking.openURL("mailto:hmsnitap@gmail.com")}><Text style={{color:"blue"}}>hmsnitap@gmail.com</Text></TouchableOpacity> from your registered mail ID and reason for account deletion.</Text>
         </View>
     </ScrollView>
   )

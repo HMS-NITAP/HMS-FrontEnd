@@ -273,6 +273,9 @@ const StudentDashboardScreen = () => {
                 </View>
               </ScrollView>
             </View>
+            <View style={{marginVertical:10, marginHorizontal:40}}>
+              <Text style={{color:"#4a4e69", textAlign:"center"}}>If you want to delete your account, please contact us on <TouchableOpacity style={{color:"blue"}} onPress={() => Linking.openURL("mailto:hmsnitap@gmail.com")}><Text style={{color:"blue"}}>hmsnitap@gmail.com</Text></TouchableOpacity> from your registered mail ID and reason for account deletion.</Text>
+            </View>
             <Modal
               animationType="slide"
               transparent={true}

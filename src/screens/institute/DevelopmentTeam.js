@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View, Text } from 'react-native'
+import { ScrollView, StyleSheet, View, Text, TouchableOpacity, Linking } from 'react-native'
 import {hostelOfficeAdvisorsData,developmentTeamData} from '../../static/DevelopmentTeamData'
 import AnimatedCardPerson from '../../components/common/AnimatedCardPerson'
 
